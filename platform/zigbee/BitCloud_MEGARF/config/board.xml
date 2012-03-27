@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<configuration>
+  <list name="Board" define="BOARD" help="Boards selection" confType="config"/>
+  <group name="Device" help="Board-specific options">
+
+    <list name="Microcontroller" define="HAL" confType="config"/>
+
+    <list name="Amplifier" define="HAL_USE_AMPLIFIER" confType="config"/>
+
+    <list name="Board revision" define="BOARD_REV" confType="config"/>
+
+    <list name="Frequency" define="HAL_FREQUENCY" confType="config"/>
+
+    <list name="RFChip" define="RFCHIP" confType="config"/>
+
+    <const name="InterfaceIDUsart" define="APP_INTERFACE_USART" default="0x01"/>
+    <const name="InterfaceIDVCP" define="APP_INTERFACE_VCP" default="0x02"/>
+    <list name="Application interface" define="APP_INTERFACE"/>
+
+    <list name="Interface channel" define="APP_USART_CHANNEL"/>
+
+    <list name="RS232 control" define="BSP_ENABLE_RS232_CONTROL"/>
+
+    <edit name="RF TX power" define="CS_RF_TX_POWER" default="3" help="Avilable values for AT86RF212 chip: -17..11, for others: -17..3"/>
+  </group>
+</configuration>

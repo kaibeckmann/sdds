@@ -1,0 +1,59 @@
+grammar de.dopsy.SDDS2 with org.eclipse.xtext.common.Terminals
+
+generate sDDS2 "http://www.dopsy.de/SDDS2"
+
+import 'http://www.eclipse.org/emf/2002/Ecore' as ecore
+
+
+Model : (systems+=System)+;
+
+System : 'namespace' name=ID (entities+=SystemEntity)+;
+
+SystemEntity :  Application | HWPlattform | Node | Env | Domain | 
+				DatatypIDL | DomainParticipant;
+ 
+Application : 'application' name=ID '{' '}';
+HWPlattform : 'hwplattform' name=ID '{' '}';
+Env : 'env' name=ID '{' '}';
+
+Node : 'node' name=ID '{' 
+			plattform=[HWPlattform] & 
+			enviroment=[Env] & 
+			(entities+=NodeEntity)+  '}';
+
+Domain : 'domain' name=ID '{' '}';
+
+DatatypIDL : 'idl' '{' (entities+=TopicField)+ '}';
+
+DomainParticipant : 'domainP' name=ID '{' '}';
+
+NodeEntity : NodeApp | NodeDP;
+
+NodeApp : 'app' entity=[Application];
+NodeDP : 'domainparticipant' entity=[DomainParticipant];
+
+TopicField: ConstructedType | SimpleType  | CollectionType; // TypeDef |  | ;
+
+ConstructedType: TopicType ;//| StructType;
+//StructType: 'struct' name=ID '{' (fields+=TopicField)+ '}'';';
+TopicType: 'struct' name=ID '{' (fields+=TopicField)+ '}' ';' '#pragma' pragma=ID ;
+
+SimpleType: (Boolean_t | Char_t | Enum_t | IntType | Octet_t) ';';
+IntType: SignedIntType | UnsignedIntType;
+SignedIntType: Short_t | Long_t | LongLong_t;
+UnsignedIntType: ULongLong_t | UShort_t | ULong_t;
+Boolean_t: 'boolean' name=ID;
+Char_t: 'char' name=ID;
+Enum_t: 'enum' name=ID; // TODO sequence;
+Octet_t: 'octet' name=ID;
+Short_t: 'short' name=ID;
+Long_t: 'long' name=ID;
+LongLong_t: 'long' 'long' name=ID;
+ULongLong_t: 'unsigned' 'long' 'long' name=ID;
+UShort_t: 'unsigned' 'short' name=ID;
+ULong_t: 'unsigned' 'long' name=ID;
+
+CollectionType: SequenceType  | String_t;// | Array;
+
+SequenceType: 'sequence' '<' type=SimpleType',' length=INT '>' name=ID';';
+String_t: 'string' '<' length=INT '>' name=ID';';

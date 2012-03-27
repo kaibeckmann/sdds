@@ -1,0 +1,96 @@
+«IMPORT sDDSSystem»;
+
+«EXTENSION templates::Extensions»
+
+«REM» for each application there will be a own folder system«ENDREM»
+«DEFINE genApp(String namespace, System sys) FOR Application»
+«LET "./app_" + this.name + '/' AS appPath»
+«REM» create datatype header file «ENDREM»
+«EXPAND HeaderFile::createHeaderFile(namespace, appPath) FOR this»
+«REM» create constants «ENDREM»
+«EXPAND ConstantsFile::createConstantsFile(namespace, appPath, sys) FOR this»
+«REM» create application «ENDREM»
+«EXPAND createApplFile(namespace, appPath, sys) FOR this»
+«REM» create gen file «ENDREM»
+«EXPAND GenImplFile::createGenImplFile(namespace, appPath, sys) FOR this»
+«REM» create makefile «ENDREM»
+«EXPAND MakeFile::createAppMF(namespace, appPath, sys) FOR this»
+«ENDLET»
+«ENDDEFINE»
+
+
+«DEFINE createApplFile(String ns, String path, System sys) FOR Application»
+«FILE path + ns + '_' + this.name + 'App' + ".c"»
+/** Application stub file 
+    Please fill the impl code only in the prodived areas!
+*/
+#include "sDDS_«ns».h"
+«PROTECT CSTART '/*' CEND '*/' ID(this.name + "_AppSpecificIncludes")»
+«ENDPROTECT»
+
+int main (int argc, char* argv[] )
+{
+	DDS_init();
+	
+	«PROTECT CSTART '/*' CEND '*/' ID (this.name + "AppSpecificInitCode")»
+	«ENDPROTECT»
+	bool_t abort = false;
+	
+	while ( abort == false )
+	{
+		DDS_ReturnCode_t ret;
+		«PROTECT CSTART '/*' CEND '*/' ID (this.name + "AppSpecificCycleInitCode")»
+		«ENDPROTECT»
+		
+		«EXPAND datareaderCode(ns) FOREACH  this.eAllContents.typeSelect(DataReader)»
+		
+		«EXPAND datawriterCode(ns) FOREACH  this.eAllContents.typeSelect(DataWriter)»
+	
+		«PROTECT CSTART '/*' CEND '*/' ID (this.name + "AppSpecificCycleEndCode")»
+		«ENDPROTECT»
+	}
+	
+
+}
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE datawriterCode(String ns) FOR DataWriter»
+// static DataStructure to fill with content
+«ns»_«returnDataTypeName(this)» «this.name»Data;
+«ns»_«returnDataTypeName(this)»* «this.name»Data_ptr = &(«this.name»Data);
+
+«PROTECT CSTART '/*' CEND '*/' ID (this.name + "AppSpecificDataWriterInitCode")»
+«ENDPROTECT»
+ret =  «ns»_«returnDataTypeName(this)»DataWriter_write(«this.name»DataWriter, «this.name»Data_ptr, NULL);
+
+if (ret != DDS_RETCODE_OK){
+	«PROTECT CSTART '/*' CEND '*/' ID (this.name + "AppSpecificDataWriterErrorHandlingCode")»
+	«ENDPROTECT»
+}
+«PROTECT CSTART '/*' CEND '*/' ID (this.name + "AppSpecificDataWriterExitCode")»
+«ENDPROTECT»
+«ENDDEFINE»
+
+«DEFINE datareaderCode(String ns) FOR DataReader»
+// static DataStructure where the content will be stored
+«ns»_«returnDataTypeName(this)» «this.name»Data;
+«ns»_«returnDataTypeName(this)»* «this.name»Data_ptr = &(«this.name»Data);
+
+«PROTECT CSTART '/*' CEND '*/' ID (this.name + "AppSpecificDataReaderInitCode")»
+«ENDPROTECT»
+
+ret = «ns»_«returnDataTypeName(this)»DataReader_take_next_sample ( «this.name»DataReader, &«this.name»Data_ptr, NULL); 
+
+if (ret == DDS_RETCODE_NO_DATA ) {
+	«PROTECT CSTART '/*' CEND '*/' ID (this.name + "AppSpecificDataReaderNoDataCode")»
+«ENDPROTECT»
+} else if (ret != DDS_RETCODE_OK ) {
+«PROTECT CSTART '/*' CEND '*/' ID (this.name + "AppSpecificDataReaderErrorHandlingCode")»
+«ENDPROTECT»
+}
+
+«PROTECT CSTART '/*' CEND '*/' ID (this.name + "AppSpecificDataReaderDataReceivedCode")»
+«ENDPROTECT»
+
+«ENDDEFINE»

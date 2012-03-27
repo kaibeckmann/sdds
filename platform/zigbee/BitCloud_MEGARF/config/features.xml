@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<configuration>
+  <list name="Debug" define="DEBUG" default="On" confType="config" help="Application debug mode">
+    <value name="On" value="1"/>
+    <value name="Off" value="0"/>
+  </list>
+  <list confType="config" name="OTAU" define="APP_USE_OTAU" default="Off">
+    <if option="Board" value="RCB,STK600 Atmega128RFA1,MeshBean,STK600" default="Off">
+      <value name="On" value="1"/>
+      <value name="Off" value="0"/>
+    </if>
+  </list>
+  <list name="APS acknowledgement" define="APP_USE_APS_ACK" default="Off" help="Specifies APS Acknowledgement usage (on/off)">
+    <value name="On" value="1"/>
+    <value name="Off" value="0"/>
+  </list>
+  <list name="Fragmentation" define="APP_FRAGMENTATION" default="Off" help="Specifies APS Fragmentation usage (on/off)">
+    <value name="On" value="1"/>
+    <value name="Off" value="0"/>
+  </list>
+  <if option="Fragmentation" value="On" verifyValue="true">
+    <edit name="Max data blocks amount" define="CS_APS_MAX_BLOCKS_AMOUNT" default="4" help="The maximum blocks amount the asdu could be splitted into"/>
+  </if>
+  <list name="Binding" define="APP_USE_BINDING" default="Off" help="Specifies Binding feature usage (on/off)">
+    <value name="On" value="1"/>
+    <value name="Off" value="0"/>
+  </list>
+  <if option="Binding" value="On" verifyValue="true">
+    <edit name="Binding table size" define="CS_APS_BINDING_TABLE_ENTRIES_AMOUNT" default="5" help="Binding table entries amount"/>
+    <edit name="Binding table entry size" define="CS_APS_BINDING_TABLE_ENTRY_SIZE" default="2"/>
+  </if>
+  <list name="Power failure" define="CS_POWER_FAILURE" default="Off" help="Enabales or disables the power failure feature">
+    <value name="On" value="true"/>
+    <value name="Off" value="false"/>
+  </list>
+  <list name="Auto polling" define="CS_AUTO_POLL" default="On" help="Auto polling by end device">
+    <value name="On" value="true"/>
+    <value name="Off" value="false"/>
+  </list>
+</configuration>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<configuration>
+  <string text="#include &lt;MakerulesSelector.h&gt;" confType="header"/>
+  <string text="#include &lt;BoardConfig.h&gt;" confType="header"/>
+  <string text="#endif // _IARCONFIGURATION_H_" confType="header"/>
+</configuration>

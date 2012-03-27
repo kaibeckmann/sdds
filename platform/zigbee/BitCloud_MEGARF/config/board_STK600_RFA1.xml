@@ -1,0 +1,36 @@
+<configuration>
+  <list name="Board">
+    <value name="STK600 Atmega128RFA1" value="BOARD_STK600_ATMEGA128RFA1"/>
+  </list>    
+  
+  <!--Frequency configuration-->
+  <list name="Frequency">
+    <if option="Board" value="STK600 Atmega128RFA1" default="8MHz">
+      <value name="4MHz" value="HAL_4MHz" help="Controller reference frequency"/>
+      <value name="8MHz" value="HAL_8MHz"/>
+    </if>
+  </list>
+    
+  <!--Application interaface configuration-->
+  <list name="Application interface">
+    <if option="Board" value="STK600 Atmega128RFA1" default="USART">
+      <value name="USART" value="APP_INTERFACE_USART"/>
+    </if>
+  </list>
+
+  <!--Interaface channel configuration-->
+  <list name="Interface channel" define="APP_USART_CHANNEL">
+    <if option="Board" value="STK600 Atmega128RFA1" default="Channel 1">
+      <value name="Channel 1" value="USART_CHANNEL_1"/>
+    </if>
+  </list>   
+
+  <!--Configuring RS232 level converter control (used with RCB_BB)-->
+  <list name="RS232 control" define="BSP_ENABLE_RS232_CONTROL">
+    <if option="Board" value="STK600 Atmega128RFA1" default="DISABLE">
+      <value name="ENABLE" value="1" help="Enable on boards with managed USART to RS232 converter"/>
+      <value name="DISABLE" value="0"/>
+    </if>
+  </list>
+
+</configuration>

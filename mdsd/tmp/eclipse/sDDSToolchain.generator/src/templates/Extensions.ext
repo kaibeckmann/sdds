@@ -1,0 +1,80 @@
+import sDDSSystem;
+import ecore;
+
+//listSubclasses(Entity this) :
+//	let subclasses = this.eRootContainer.eAllContents.typeSelect(Entity).select(e|e.extends == this).name:
+//		switch (subclasses.size) { 
+//			case 0: "no subclasses"
+//			case 1: "subclass: " + subclasses.toString(", ")
+//			default: subclasses.size.toString() + " subclasses: " + subclasses.toString(", ")
+//		};
+
+PIM2PSM(Model m):
+	m.eAllContents.typeSelect(SimpleType).SetDataTypeSize();
+
+SetDataTypeSize(SimpleType d):
+	switch (d.metaType){
+		case Long_t: d.setMemSize(4) 
+		case ULong_t: d.setMemSize(4)
+		case Short_t : d.setMemSize(2)
+		case UShort_t: d.setMemSize(2)
+		case Octet_t: d.setMemSize(1)
+		case LongLong_t: d.setMemSize(8)
+		case ULongLong_t: d.setMemSize(8)
+		case Boolean_t: d.setMemSize(1)
+		default: d.setMemSize(0)
+	};
+
+
+makeHeader(String fn) :
+	"/************************/\n" +
+	"/* generated file bla */\n" +
+	"/* filename: " + fn + " */\n\n\n" +
+	"#ifndef _" + fn.toUpperCase() + "_H\n" +
+	"#define _" + fn.toUpperCase() + "_H\n";
+	
+makeFooter(String fn) :
+	"#endif /* " + fn.toUpperCase() + "_H */\n";
+	
+returnDataTypeAsString(TopicField d):
+	switch (d.metaType) {
+		case Long_t: "int32_t"
+		case ULong_t: "uint32_t"
+		case Octet_t: "uint8_t"
+		case String_t: "// not supported string"
+		case Short_t: "int16_t"
+		case UShort_t: "uint16_t"
+		case LongLong_t: "int64_t"
+		case ULongLong_t: "uint64_t"
+		
+		default : "// not known datatyp so far " + d.metaType.name
+	};
+	
+returnDataTypeName(DataWriter e):
+e.topic.topicContents.typeSelect(DataType).first().dataType.name;
+
+returnDataTypeName(DataReader e):
+e.topic.topicContents.typeSelect(DataType).first().dataType.name;
+
+Collection[Topic] returnTopicList(Application app):
+	let list = app.eAllContents.typeSelect(DataWriter).topic:
+		list.union(app.eAllContents.typeSelect(DataReader).topic);
+
+MarshallingMethodeSimpleEnc(SimpleType d):
+	"Marshalling_enc_" + MarshallingDataTypeSimple(d) + MarshallingMethodeParameter(d);
+	
+MarshallingMethodeSimpleDec(SimpleType d):
+	"Marshalling_dec_" + MarshallingDataTypeSimple(d) + MarshallingMethodeParameter(d);
+	
+MarshallingDataTypeSimple(SimpleType d):
+	 switch (d.metaType) {
+		case Short_t: "int16"
+		case UShort_t: "uint16"
+		case Octet_t: "uint8"
+		case Long_t:  "int32"
+		case ULong_t:  "uint32"
+		case LongLong_t: "int64"
+		case ULongLong_t: "uint64"
+		default:   "NARF" + d.metaType.name // should not happen
+	};
+MarshallingMethodeParameter(SimpleType d) :"((buff+size), &(d->" + d.name + "));";

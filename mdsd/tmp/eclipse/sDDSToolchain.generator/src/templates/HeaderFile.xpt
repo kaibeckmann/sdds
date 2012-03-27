@@ -1,0 +1,78 @@
+«IMPORT sDDSSystem»;
+«EXTENSION templates::Extensions»
+
+
+
+«DEFINE createHeaderFile(String namespace, String path) FOR Application»
+«FILE path + 'sDDS_' + namespace + '.h'»
+«makeHeader('sDDS_' + namespace)»
+
+#include "DDS/DDS_DCPS.h"
+#include "sDDS/types.h"
+
+«REM» typedefs for the dw and dr «ENDREM»
+«FOREACH this.eAllContents.typeSelect(DataWriter) AS e-»
+typedef DDS_DataWriter «namespace»_«returnDataTypeName(e)»DataWriter;
+«ENDFOREACH»
+«FOREACH this.eAllContents.typeSelect(DataReader) AS e-»
+typedef DDS_DataReader «namespace»_«returnDataTypeName(e)»DataReader;
+«ENDFOREACH-»
+
+«REM» extern defs for the spezific dw and dr «ENDREM»
+«FOREACH this.eAllContents.typeSelect(DataWriter)  AS e-»
+«REM» extern DDS_FooDataWriter fooDataWriter;«ENDREM»
+extern «namespace»_«returnDataTypeName(e)»DataWriter «e.name»DataWriter;
+«ENDFOREACH-»
+«FOREACH this.eAllContents.typeSelect(DataReader)  AS e-»
+«REM» extern DDS_FooDataWriter fooDataWriter;«ENDREM»
+extern «namespace»_«returnDataTypeName(e)»DataReader «e.name»DataReader;
+«ENDFOREACH-»
+«REM» typesupport«ENDREM»
+«FOREACH returnTopicList(this) AS e»
+#define «namespace»_«e.topicContents.typeSelect(DataType).first().dataType.name»TypSupport DDS_TypeSupport
+«ENDFOREACH»
+«REM» generate the topic structs«ENDREM»
+«EXPAND writeTopicStructDecl(namespace) FOREACH  returnTopicList(this).topicContents.typeSelect(DataType).dataType»
+«REM» generate the dds interface for the dw and dr«ENDREM»
+«EXPAND writeDWDDSAPI(namespace) FOREACH this.eAllContents.typeSelect(DataWriter)»
+«EXPAND writeDRDDSAPI(namespace) FOREACH this.eAllContents.typeSelect(DataReader)»
+
+«makeFooter(this.name + '_sDDS')»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE writeDWDDSAPI (String ns) FOR DataWriter»
+«REM»
+DDS_ReturnCode_t DDS_FooDataWriter_write(
+    DDS_DataWriter _this,
+    const Foo* instance_data,
+    const DDS_InstanceHandle_t handle);
+
+«ENDREM»
+DDS_ReturnCode_t «ns»_«returnDataTypeName(this)»DataWriter_write(
+	«ns»_«returnDataTypeName(this)»DataWriter _this,
+	const «ns»_«returnDataTypeName(this)»* instance_data,
+	const DDS_InstanceHandle_t handle);
+«ENDDEFINE»
+
+«DEFINE writeDRDDSAPI (String ns) FOR DataReader»
+«REM»
+DDS_ReturnCode_t DDS_FooDataReader_take_next_sample (
+    DDS_DataReader _this,
+    Foo** data_values,
+    DDS_SampleInfo *sample_info);
+«ENDREM»
+DDS_ReturnCode_t «ns»_«returnDataTypeName(this)»DataReader_take_next_sample(
+	«ns»_«returnDataTypeName(this)»DataReader _this,
+	«ns»_«returnDataTypeName(this)»** data_values,
+	DDS_SampleInfo *sample_info);
+«ENDDEFINE»
+
+«DEFINE writeTopicStructDecl(String ns) FOR TopicType»
+struct «ns»_«this.name» { 
+«FOREACH this.fields.typeSelect(SimpleType) AS e-»
+«returnDataTypeAsString(e)» «e.name»;
+«ENDFOREACH-»
+};
+typedef struct «ns»_«this.name» «ns»_«this.name»;
+«ENDDEFINE»

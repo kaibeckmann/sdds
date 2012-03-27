@@ -1,0 +1,72 @@
+«IMPORT sDDSSystem»;
+
+«EXTENSION templates::Extensions»
+
+«DEFINE createConstantsFile(String ns, String path, System sys) FOR Application»
+«FILE path + 'CONSTANTS.h'»
+/** foo bla fasel */
+«makeHeader("CONSTANTS")»
+«EXPAND defEndian FOR sys-»
+«EXPAND defSNPSVersion FOR sys-»
+«EXPAND defMaxDW FOR this-»
+«EXPAND defMaxDR FOR this-»
+«EXPAND defFlagTopicHasPub FOR this-»
+«EXPAND defFlagTopicHasSub FOR this-»
+«EXPAND defNetMaxBufSize FOR this-»
+«EXPAND defNetMaxLocCount FOR this-»
+«EXPAND defNetMaxOutQueue FOR this-»
+«EXPAND defQosDW FOR this-»
+«EXPAND defTopicMaxCount FOR this-»
+«EXPAND defTopicMsgCount FOR this-»
+
+«makeFooter("CONSTANTS")»
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE defNetMaxOutQueue FOR Application-»
+#define sDDS_NET_MAX_OUT_QUEUE 2
+«ENDDEFINE»
+
+«DEFINE defNetMaxBufSize FOR Application-»
+#define sDDS_NET_MAX_BUF_SIZE 30
+«ENDDEFINE»
+«DEFINE defNetMaxLocCount FOR Application-»
+#define sDDS_NET_MAX_LOCATOR_COUNT 10
+«ENDDEFINE»
+«DEFINE defQosDW FOR Application-»
+#define sDDS_QOS_DW1_LATBUD 100
+#define sDDS_QOS_DW2_LATBUD 500
+«ENDDEFINE»
+«DEFINE defFlagTopicHasSub FOR Application-»
+«IF !this.eAllContents.typeSelect(DataReader).isEmpty-»
+#define sDDS_TOPIC_HAS_PUB
+«ENDIF-»
+«ENDDEFINE»
+«DEFINE defFlagTopicHasPub FOR Application-»
+«IF !this.eAllContents.typeSelect(DataWriter).isEmpty-»
+#define sDDS_TOPIC_HAS_SUB
+«ENDIF-»
+«ENDDEFINE»
+«DEFINE defTopicMsgCount FOR Application-»
+#define sDDS_TOPIC_APP_MSG_COUNT 2
+«ENDDEFINE»
+«DEFINE defTopicMaxCount FOR Application-»
+#define sDDS_TOPIC_MAX_COUNT «returnTopicList(this).size»
+«ENDDEFINE»
+
+
+«DEFINE defMaxDW FOR Application-»
+#define sDDS_MAX_DW_APP «this.eAllContents.typeSelect(DataWriter).size»
+«ENDDEFINE»
+
+«DEFINE defMaxDR FOR Application-»
+#define sDDS_MAX_DR_APP «this.eAllContents.typeSelect(DataReader).size»
+«ENDDEFINE»
+
+«DEFINE defEndian FOR System-»
+#define LOCAL_BYTEORDER_LITTLE_ENDIAN
+«ENDDEFINE»
+
+«DEFINE defSNPSVersion FOR System-»
+#define SDDS_NET_VERSION 0x01
+«ENDDEFINE»

@@ -1,0 +1,32 @@
+«IMPORT sDDSSystem»;
+
+«EXTENSION templates::Extensions»
+
+«DEFINE createAppMF(String ns, String path, System sys) FOR Application»
+«FILE path + 'Makefile'»
+include ../config.mk
+
+all: app
+
+HEADER=-I$(ROOT)/include
+
+OBJS:
+		$(MAKE) -C $(ROOT)/src/sDDS/
+		$(MAKE) -C $(PLATFORMPATH)/
+
+clean:  
+		rm -f *.o
+		$(MAKE) -C $(ROOT)/src/sDDS/ clean
+		$(MAKE) -C $(PLATFORMPATH)/ clean
+		rm -f «ns»_«this.name»App
+
+gen:
+		$(CC) $(CFLAGS) $(HEADER) -I. $(DDSINCLUDE)  -c gen_«this.name».c -o gen_«this.name».o
+
+«ns»_«this.name»App.o:
+		$(CC) $(CFLAGS) $(HEADER)  $(DDSINCLUDE) -c «ns»_«this.name»App.c -o «ns»_«this.name»App.o
+
+app: «ns»_«this.name»App.o gen OBJS
+		$(CC) $(CFLAGS) $(HEADER) $(DDSINCLUDE) -o «ns»_«this.name»App «ns»_«this.name»App.o $(sDDSOBJ) $(PLATFORMOBJS) gen_«this.name».o -pthread
+«ENDFILE»
+«ENDDEFINE»

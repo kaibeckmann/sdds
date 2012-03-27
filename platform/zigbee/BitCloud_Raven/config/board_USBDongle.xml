@@ -1,0 +1,18 @@
+<configuration>
+  <list name="Board">
+    <value name="USB dongle" value="BOARD_USB_DONGLE"/>
+  </list>
+    
+  <!--Application interaface configuration-->
+  <list name="Application interface">
+    <if option="Board" value="USB dongle" default="VCP">
+      <value name="VCP" value="APP_INTERFACE_VCP"/>
+    </if>
+  </list>
+  <!--Interaface channel configuration-->
+  <list name="Interface channel" define="APP_USART_CHANNEL">
+    <if option="Board" value="USB dongle" default="Channel VCP">
+      <value name="Channel VCP" value="USART_CHANNEL_VCP"/>
+    </if>
+  </list>
+</configuration>

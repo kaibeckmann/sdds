@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<configuration>
+  <group name="BitCloud security" help="BitCloud security options">
+    <list name="Security mode" define="SECURITY_MODE" default="No security" confType="config">
+      <value name="No security" value="NO_SECURITY_MODE"/>
+      <value name="Standard security" value="STANDARD_SECURITY_MODE"/>
+    </list>
+    <list name="Security key" define="CS_ZDO_SECURITY_STATUS">
+      <if option="Security mode" value="Standard security,High security" default="Preconfigured network key">
+        <value name="Preconfigured network key" value="0" help="Preconfigured network key"/>
+        <value name="Not preconfigured network key" value="3" help="Not preconfigured"/>
+      </if>
+    </list>
+    <if option="Security mode" value="Standard security">
+      <edit name="Network key" define="CS_NETWORK_KEY" default="{0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC}" type="string"/>
+      <edit name="Trust Center address" define="CS_APS_TRUST_CENTER_ADDRESS" default="0xAAAAAAAAAAAAAAAALL"/>
+      <edit name="Security timeout" define="CS_APS_SECURITY_TIMEOUT_PERIOD" default="10000" help="APS security timeout period"/>
+      <edit name="Security buffers amount" define="CS_APS_SECURITY_BUFFERS_AMOUNT" default="4" help="APS security buffers amount"/>
+    </if>
+  </group>
+</configuration>

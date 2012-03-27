@@ -1,0 +1,244 @@
+«IMPORT sDDSSystem»;
+
+«EXTENSION templates::Extensions»
+
+«DEFINE createGenImplFile(String ns, String path, System sys) FOR Application»
+«FILE path + 'gen_' + this.name + ".c"»
+«EXPAND makeImplHeader(ns) FOR this»
+
+«REM» defs for the spezific dw and dr «ENDREM»
+«FOREACH this.eAllContents.typeSelect(DataWriter)  AS e-»
+«REM» DDS_FooDataWriter fooDataWriter;«ENDREM»
+«ns»_«returnDataTypeName(e)»DataWriter «e.name»DataWriter;
+«ENDFOREACH-»
+«FOREACH this.eAllContents.typeSelect(DataReader)  AS e-»
+«REM» DDS_FooDataWriter fooDataWriter;«ENDREM»
+«ns»_«returnDataTypeName(e)»DataReader «e.name»DataReader;
+«ENDFOREACH-»
+«FOREACH returnTopicList(this) AS t-»
+DDS_Topic «t.name»Topic;
+«ENDFOREACH»
+
+«EXPAND msgDataBuffer(ns) FOR this»
+
+«EXPAND topicConstructors(ns) FOR this»
+
+«EXPAND sDDSInit(ns) FOR this»
+
+«EXPAND DataWriterWriteMethode(ns) FOREACH  this.eAllContents.typeSelect(DataWriter)»
+«EXPAND DataReaderReadMethode(ns) FOREACH this.eAllContents.typeSelect(DataReader) »
+
+«EXPAND TopicMarshallingEncode(ns) FOREACH this.eAllContents.typeSelect(DataWriter).topic.topicContents.typeSelect(DataType).dataType.typeSelect(TopicType)»
+
+«EXPAND TopicMarshallingDecode(ns) FOREACH this.eAllContents.typeSelect(DataReader).topic.topicContents.typeSelect(DataType).dataType.typeSelect(TopicType)»
+
+«EXPAND topicCreate(ns) FOR this»
+
+«ENDFILE»
+«ENDDEFINE»
+
+«DEFINE TopicMarshallingDecode(String ns) FOR TopicType »
+rc_t «this.name»TopicMarshalling_decode(byte_t* buff, Data data, size_t* decoded_size)
+{
+    «ns»_«this.name»* d = («ns»_«this.name»*) data;
+    size_t size = 0;
+    // should i check here if the size matches?
+    // Foo is 6 byte = 4 (int) + 2 short
+   // if (*size != 6){
+    //    printf("Error? size mismatch\n");
+   // }
+   «EXPAND Marshalling_DecTopicField FOREACH this.fields»
+   *decoded_size = size;
+    return SDDS_RT_OK;
+}
+rc_t Data_cpy(Data dest, Data source)
+{
+    memcpy(dest, source, sizeof(«ns»_«this.name»));
+    return SDDS_RT_OK;
+}
+
+
+«ENDDEFINE»
+
+«DEFINE TopicMarshallingEncode(String ns) FOR TopicType»
+rc_t «this.name»TopicMarshalling_encode(byte_t* buff, Data data, size_t* encoded_size)
+{
+    «ns»_«this.name»* d = («ns»_«this.name»*) data;
+    size_t size = 0;
+    «EXPAND Marshalling_encTopicField FOREACH this.fields»
+	*encoded_size = size;
+    return SDDS_RT_OK;
+}
+
+«ENDDEFINE»
+
+«DEFINE Marshalling_DecTopicField FOR TopicField»
+// should not happen
+«ENDDEFINE»
+
+«DEFINE Marshalling_DecTopicField FOR SimpleType»
+	«MarshallingMethodeSimpleDec(this)»
+	size += «this.memSize»;
+«ENDDEFINE»
+«DEFINE Marshalling_DecTopicField FOR String_t»
+// string not supported yet
+«ENDDEFINE»
+«DEFINE Marshalling_DecTopicField FOR ConstructedType»
+// constructed
+«ENDDEFINE»
+
+«DEFINE Marshalling_encTopicField FOR SimpleType»
+	«MarshallingMethodeSimpleEnc(this)»
+	size += «this.memSize»;
+«ENDDEFINE»
+«DEFINE Marshalling_encTopicField FOR String_t»
+	// datatype «this.metaType» not supportet yet
+«ENDDEFINE»
+«DEFINE Marshalling_encTopicField FOR ConstructedType»
+	// datatype «this.metaType» not supportet yet
+«ENDDEFINE»
+
+«DEFINE Marshalling_encTopicField FOR TopicField»
+// should not be called! «this.metaType.name»
+«ENDDEFINE»
+
+«DEFINE DataReaderReadMethode(String ns) FOR DataReader»
+DDS_ReturnCode_t «ns»_«returnDataTypeName(this)»DataReader_take_next_sample (
+    «ns»_«returnDataTypeName(this)»DataReader _this,
+    «ns»_«returnDataTypeName(this)»** data_values,
+    DDS_SampleInfo *sample_info)
+{
+    // find new sample
+    // invoce the methode of the datasink
+    rc_t ret = DataSink_take_next_sample((DR) _this, (Data*) data_values, (DataInfo) sample_info);
+
+    if (ret == SDDS_RT_NODATA)
+        return DDS_RETCODE_NO_DATA;
+    if (ret == SDDS_RT_OK)
+        return DDS_RETCODE_OK;
+
+    return DDS_RETCODE_ERROR;
+}
+
+«ENDDEFINE»
+
+«DEFINE DataWriterWriteMethode(String ns) FOR DataWriter»
+DDS_ReturnCode_t «ns»_«returnDataTypeName(this)»DataWriter_write(
+    «ns»_«returnDataTypeName(this)»DataWriter _this,
+    const «ns»_«returnDataTypeName(this)»* instance_data,
+    const DDS_InstanceHandle_t handle)
+{
+
+    rc_t rc; 
+
+    rc = DataSource_write((DW) _this, (Data) instance_data, (void*) handle);
+    if (rc == SDDS_RT_OK) {
+        return DDS_RETCODE_OK;
+    } else {
+        return DDS_RETCODE_ERROR;
+    }
+
+}
+«ENDDEFINE»
+
+«DEFINE sDDSInit(String ns) FOR Application»
+rc_t sDDS_init()
+{
+	Memory_init();
+    LocatorDB_init();
+    Network_init();
+    DataSource_init();
+    //ds
+    // init datasink
+    DataSink_init();
+    
+    // create the topics used within this appication
+    «FOREACH returnTopicList(this) AS e»
+    «e.name»Topic = (DDS_Topic) «ns»_«e.topicContents.typeSelect(DataType).first().dataType.name»Topic_create();
+    Topic my«e.name»Topic = (Topic)«e.name»Topic; 
+    «ENDFOREACH»
+    // create the datawriter used within this application
+    «FOREACH this.eAllContents.typeSelect(DataWriter) AS e»
+    «e.name»DataWriter = («ns»_«returnDataTypeName(e)»DataWriter) DataSource_create_datawriter( my«e.topic.name»Topic, NULL, NULL, NULL);
+    «ENDFOREACH»
+    «FOREACH this.eAllContents.typeSelect(DataReader) AS e»
+    «e.name»DataReader = («ns»_«returnDataTypeName(e)»DataReader) DataSink_create_datareader(my«e.topic.name»Topic, NULL, NULL, 0);
+    «ENDFOREACH»
+
+    return SDDS_RT_OK;
+}
+
+
+«ENDDEFINE»
+
+«DEFINE topicConstructors(String ns) FOR Application-»
+«FOREACH returnTopicList(this) AS topic»
+«REM»Topic FooTopic_create(void);«ENDREM»
+Topic «ns»_«topic.topicContents.typeSelect(DataType).first().dataType.name»Topic_create(void);
+«ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE topicCreate(String ns) FOR Application»
+«FOREACH returnTopicList(this) AS topic»
+«REM»Topic FooTopic_create(void);«ENDREM»
+Topic «ns»_«topic.topicContents.typeSelect(DataType).first().dataType.name»Topic_create(void) {
+	Topic topic;
+    topic = TopicDB_createTopic();
+«IF !this.eAllContents.typeSelect(DataWriter).isEmpty-»
+    topic->Data_encode = «topic.topicContents.typeSelect(DataType).first().dataType.name»TopicMarshalling_encode;
+«ENDIF»
+«IF !this.eAllContents.typeSelect(DataReader).isEmpty-»
+    topic->Data_decode = «topic.topicContents.typeSelect(DataType).first().dataType.name»TopicMarshalling_decode;
+    topic->Data_cpy = Data_cpy;
+«ENDIF»
+    topic->domain = 15;
+    topic->id = 1;
+    
+
+    Locator loc;
+    LocatorDB_newLocator(&loc);
+«IF !this.eAllContents.typeSelect(DataReader).isEmpty-»
+    // init the msg pool
+    for (int i = 0; i < sDDS_TOPIC_APP_MSG_COUNT; i++){
+        Msg_init(&(topic->msg.pool[i]), (Data) &(«topic.topicContents.typeSelect(DataType).dataType.first().name.toLowerCase()»BufferPool[i]));
+    }
+«ENDIF»
+«IF !this.eAllContents.typeSelect(DataWriter).isEmpty-»
+    topic->dsinks.list = loc;
+«ENDIF»
+
+    return topic;
+	
+}
+«ENDFOREACH»
+«ENDDEFINE»
+
+«DEFINE msgDataBuffer(String ns) FOR Application-»
+«IF !this.eAllContents.typeSelect(DataReader).isEmpty-»
+«FOREACH returnTopicList(this).topicContents.typeSelect(DataType).dataType AS e-»
+«ns»_«e.name» «e.name.toLowerCase()»BufferPool[sDDS_TOPIC_APP_MSG_COUNT];
+«ENDFOREACH-»
+«ENDIF-»
+«ENDDEFINE»
+
+// data buffer for the msg
+Foo fooBufferPool[sDDS_TOPIC_APP2_MSG_COUNT];
+
+«DEFINE makeImplHeader(String ns) FOR Application»
+#include "sDDS_«ns».h"
+#include "sDDS/sDDS.h"
+#include "os-ssal/Memory.h"
+#include "sDDS/LocatorDB.h"
+#include "sDDS/Network.h"
+#include "sDDS/Topic.h"
+#include "sDDS/TopicDB.h"
+#include "sDDS/LocatorDB.h"
+#include "sDDS/Msg.h"
+#include "sDDS/DataSource.h"
+#include "DDS/DDS_DCPS.h"
+#include "sDDS/Marshalling.h"
+#include "sDDS/TopicMarshalling.h"
+
+#include <stdio.h>
+#include <string.h>
+«ENDDEFINE»

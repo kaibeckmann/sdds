@@ -1,0 +1,25 @@
+grammar de.dopsy.sDDS2.MMsDDS with org.eclipse.xtext.common.Terminals
+
+generate mMsDDS "http://www.dopsy.de/sDDS2/MMsDDS"
+
+Model :
+	(imports+=Import)*
+	(elements+=Type)*;
+	
+Import :
+	'import' importURI=STRING;
+	
+Type:
+	SimpleType | Entity;
+	
+SimpleType:
+	'type' name=ID;
+	
+Entity :
+	'entity' name=ID ('extends' extends=[Entity])? '{'
+		properties+=Property*
+	'}';
+
+Property:
+	'property' name=ID ':' type=[Type] (many?='[]')?;
+	

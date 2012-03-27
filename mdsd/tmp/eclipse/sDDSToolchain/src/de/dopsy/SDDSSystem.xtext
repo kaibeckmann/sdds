@@ -1,0 +1,87 @@
+grammar de.dopsy.SDDSSystem with org.eclipse.xtext.common.Terminals
+
+generate sDDSSystem "http://www.dopsy.de/sDDSSystem"
+
+Model : (systems+=System)+;
+
+System: 'namespace' name=ID (systemEntities+=SystemEntity)+;
+
+SystemEntity: Application | Domain | IDL;
+
+Domain: 'domain' name=ID '{' (domainEntities+=DomainEntity)+ '}';
+
+DomainEntity: Topic;
+
+Topic: 'topic' name=ID '{' (topicContents+=TopicContent)+ '}';
+TopicContent: DataType | QoSRequirement; 
+DataType: 'dataType' dataType=[TopicType];
+QoSRequirement: 'qos' '{' (qosPolicies+=QosPolicy)+ '}';
+
+//Application: 'application' name=ID '{' (dps+=DomainParticipant)+ '}';
+Application: 'application' name=ID '{' (entities+=AppEntity)+ '}';
+AppEntity: DomainParticipant | NodeConfig;
+NodeConfig: 'config' '{' (confEntities+=ConfEntity)+ '}';
+ConfEntity: ConfMem | ConfKomSys | ConfOS;
+ConfOS: 'os' '{' (osFeatures+=OSFeature)+ '}';
+OSFeature: OSThread | OSSignal | OSMemory;
+OSThread: 'thread' '{' 'support' support=ID '}';
+OSSignal: 'signal' '{' 'support' support=ID '}';
+OSMemory: 'memory' '{' 'support' support=ID '}';
+ConfMem: 'memory' 'dataMem' dataMem=INT 'codeMem' codeMem=INT;
+ConfKomSys: 'network' networkType=ID;
+DomainParticipant: 'domain' domain=[Domain] '{' (enities+=DPEntity)+ '}';
+DPEntity: Publisher | Subsciber;
+Publisher: 'publisher' (name=ID)? '{' (entities+=PubEntity)+ '}';
+PubEntity: DataWriter;
+DataWriter: 'datawriter' name=ID '{' 'topic' topic=[Topic] (entities+=DWEntity)* '}';
+DWEntity: DWQOS;
+	DWQOS: 'qos' '{'
+				(history=HistoryQosPolicy)? 
+				(latency_budget=LatencyBudgetQosPolicy)?
+				'}';
+Subsciber: 'subscriber' (name=ID)? '{' (entities+=SubEntity)+ '}';
+SubEntity: DataReader;
+DataReader: 'datareader' name=ID '{' 'topic' topic=[Topic] (entities+=DREntity)* '}';
+DREntity: DRQOS;
+DRQOS: 'qos' '{' 	(history=HistoryQosPolicy)?  
+			'}';
+
+enum HistoryQosPolicyKind: KEEP_LAST |  KEEP_ALL;
+
+QosPolicy: HistoryQosPolicy | LatencyBudgetQosPolicy;
+HistoryQosPolicy: 'history' '{' 'depth' depth=INT 'kind' kind=HistoryQosPolicyKind '}';
+LatencyBudgetQosPolicy: 'latency' '{' '}';
+
+
+IDL: 'IDL' '{' (idlEntities+=TopicField)+ '}';
+
+TopicField: ConstructedType | SimpleType  | CollectionType; // TypeDef |  | ;
+
+ConstructedType: TopicType;// | StructType;
+StructType: 'struct' name=ID '{' (fields+=TopicField)+ '}'';';
+
+TopicType: 'struct' name=ID '{' (fields+=TopicField)+ '}' ';' '#pragma' pragma=ID ;
+
+SimpleType: (Boolean_t | Char_t | Enum_t | IntType | Octet_t) ';';
+IntType: SignedIntType | UnsignedIntType;
+SignedIntType: Short_t | Long_t | LongLong_t;
+UnsignedIntType: ULongLong_t | UShort_t | ULong_t;
+Boolean_t: 'boolean' name=ID;
+Char_t: 'char' name=ID;
+Enum_t: 'enum' name=ID; // TODO sequence;
+Octet_t: 'octet' name=ID;
+Short_t: 'short' name=ID;
+Long_t: 'long' name=ID;
+LongLong_t: 'long' 'long' name=ID;
+ULongLong_t: 'unsigned' 'long' 'long' name=ID;
+UShort_t: 'unsigned' 'short' name=ID;
+ULong_t: 'unsigned' 'long' name=ID;
+
+CollectionType: SequenceType  | String_t;// | Array;
+
+SequenceType: 'sequence' '<' type=SimpleType',' length=INT '>' name=ID';';
+String_t: 'string' '<' length=INT '>' name=ID';';
+
+
+
+ 

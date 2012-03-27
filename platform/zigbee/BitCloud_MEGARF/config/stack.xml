@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<configuration>
+  <group name="BitCloud stack parameters" help="BitCloud stack parameters">
+    <list name="Stack type" define="STACK_TYPE" default="All" confType="config" help="Stack library type detection">
+      <value name="All" value="ALL_DEVICES_TYPES" help="Stack library supports all device types (Coordinator, Router and EndDevice)"/>
+      <value name="Coordinator" value="COORDINATOR" help="Stack library supports Coordinator device type"/>
+      <value name="Router" value="ROUTER" help="Stack library supports Router device type"/>
+      <value name="End Device" value="ENDDEVICE" help="Stack library supports End Device device type"/>
+    </list>
+    <edit name="Channel mask" define="CS_CHANNEL_MASK" default="(1l&lt;&lt;0x0f)" help="Channel mask and page to be used to run network" type="string"/>
+    <list name="Channel page" define="CS_CHANNEL_PAGE">
+      <if option="RFChip" value="AT86RF212" default="0">
+        <value name="0" value="0" help="BPSK"/>
+        <value name="2" value="2" help="O-QPSK"/>
+        <value name="5" value="5" help="Chinese band"/>
+      </if>
+      <if option="Board revision" value="RCB212v532" default="0">
+        <value name="0" value="0" help="BPSK"/>
+        <value name="2" value="2" help="O-QPSK"/>
+        <value name="5" value="5" help="O-QPSK Chinese band"/>
+      </if>
+    </list>
+    <list name="RX on when idle" define="CS_RX_ON_WHEN_IDLE" default="On" help="Whether the stack is to enable its receiver during idle periods">
+      <value name="On" value="true"/>
+      <value name="Off" value="false"/>
+    </list>
+    <edit name="Extended PAN ID" define="CS_EXT_PANID" default="0xAAAAAAAAAAAAAAAALL" help="Extended PAN ID of the network to start or to join to"/>
+    
+    <edit name="UID" define="CS_UID" default="0x0LL" help="Device UID"/>
+    <list name="NWK unique address" define="CS_NWK_UNIQUE_ADDR" default="Off" help="Whether or not the static addressing mode will be used">
+      <value name="On" value="true"/>
+      <value name="Off" value="false"/>
+    </list>
+    <edit name="NWK short address" define="CS_NWK_ADDR" default="0x0001" help="Device's short address"/>
+    <list name="NWK predefined PAN ID" define="CS_NWK_PREDEFINED_PANID" default="Off" help="Whether or not the NWK predefined PAN ID will be used">
+      <value name="On" value="true"/>
+      <value name="Off" value="false"/>
+    </list>
+    <if option="NWK predefined PAN ID" value="On" verifyValue="true">
+      <edit name="NWK PAN ID" define="CS_NWK_PANID" default="0x1234" help="NWK PAN ID"/>
+    </if>
+    <edit name="End device sleep period" define="CS_END_DEVICE_SLEEP_PERIOD" default="10000" help="End Device sleep period, ms"/>
+    <edit name="Max children amount" define="CS_MAX_CHILDREN_AMOUNT" default="8" help="Maximum number of children that a given device (coordinator or router) may have"/>
+    <edit name="Max router children amount" define="CS_MAX_CHILDREN_ROUTER_AMOUNT" default="2" help="Maximum number of routers among the children of one device"/>
+    <edit name="APS DataReq buffer size" define="CS_APS_DATA_REQ_BUFFERS_AMOUNT" default="2" help="Number of buffers to execute data requests on APS layer"/>
+    <edit name="APS ACK frame buffer size" define="CS_APS_ACK_FRAME_BUFFERS_AMOUNT" default="2" help="Number of buffers to send APS acks"/>
+    <edit name="NWK buffers amount" define="CS_NWK_BUFFERS_AMOUNT" default="4" help="Total amount of buffers to keep MAC data indications on NWK layer"/>
+    <edit name="Group table size" define="CS_GROUP_TABLE_SIZE" default="1" help="Maximum amount of groups in the Group Table"/>
+    <edit name="Neighbor table size" define="CS_NEIB_TABLE_SIZE" default="8" help="The size of neighbor table"/>
+    <edit name="Route table size" define="CS_ROUTE_TABLE_SIZE" default="10" help="Maximum amount of records in the NWK Route Table"/>
+    <edit name="Address map table size" define="CS_ADDRESS_MAP_TABLE_SIZE" default="2" help="Maximum amount of records in the NWK Address Map Table"/>
+    <edit name="Route discovery table size" define="CS_ROUTE_DISCOVERY_TABLE_SIZE" default="3" help="Maximum amount of records in the NWK Route Discovery Table"/>
+    <edit name="Duplicate rejection table size" define="CS_DUPLICATE_REJECTION_TABLE_SIZE" default="8" help="Size of the APS Duplicate Rejection Table"/>
+    <edit name="Broadcast transaction table size" define="CS_NWK_BTT_SIZE" default="8" help="Size of the NWK Broadcast Transaction Table"/>
+    <edit name="Max network depth" define="CS_MAX_NETWORK_DEPTH" default="3" help="The maximum number of hops that a packet may travel is twice that large"/>
+    <edit name="MAC transaction time" define="CS_MAC_TRANSACTION_TIME" default="7680L" help="MAC transaction persistence time"/>
+    <edit name="Max retries by APS" define="CS_APS_MAX_FRAME_RETRIES" default="3" help="The maximum number of retries allowed after a transmission failure"/>
+    <include_with file="../../BitCloud/config/features.xml"><param name="Power failure" default="Off"/><param name="Auto polling" default="On"/></include_with>
+    
+    <edit name="Network key" define="CS_NETWORK_KEY" default="{0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC}" type="string"/>
+    <edit name="Trust Center address" define="CS_APS_TRUST_CENTER_ADDRESS" default="0xAAAAAAAAAAAAAAAALL"/>
+    <edit name="Security timeout" define="CS_APS_SECURITY_TIMEOUT_PERIOD" default="10000" help="APS security timeout period"/>
+    <edit name="Security buffers amount" define="CS_APS_SECURITY_BUFFERS_AMOUNT" default="4" help="APS security buffers amount"/>
+    <edit name="Security key pair amount" define="CS_APS_KEY_PAIR_DESCRIPTORS_AMOUNT" default="4" help="APS key pair descriptors amount"/>
+    <list name="Security key" define="CS_ZDO_SECURITY_STATUS" default="Preconfigured network key">
+      <value name="Preconfigured network key" value="0" help="Preconfigured network key"/>
+      <value name="Preconfigured trust center link key" value="1" help="Preconfigured trust center link key"/>
+      
+      <value name="Not preconfigured network key" value="3" help="Not preconfigured"/>
+    </list>
+  </group>
+</configuration>

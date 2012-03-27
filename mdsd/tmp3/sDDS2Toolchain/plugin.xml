@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<plugin>
+
+  <extension point="org.eclipse.emf.ecore.generated_package">
+    <package 
+       uri = "http://www.dopsy.de/SDDS2" 
+       class = "de.dopsy.sDDS2.SDDS2Package"
+       genModel = "de/dopsy/SDDS2.genmodel" /> 
+	
+  </extension>
+
+
+
+
+
+</plugin>

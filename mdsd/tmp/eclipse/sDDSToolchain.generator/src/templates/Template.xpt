@@ -1,0 +1,19 @@
+«IMPORT sDDSSystem»;
+
+«EXTENSION templates::Extensions»
+
+«DEFINE main FOR Model-»
+«PIM2PSM(this)»
+«FOREACH this.systems AS sys»
+«EXPAND Application::genApp(sys.name, sys) FOREACH sys.systemEntities.typeSelect(Application)»
+«REM» create the folder structure «ENDREM»
+«REM» create the datatype header«ENDREM»
+
+«REM» create the application specific source file«ENDREM»
+«REM» create the application stubs «ENDREM»
+«REM» create the Constants header file «ENDREM»
+
+«ENDFOREACH»
+
+«ENDDEFINE»
+

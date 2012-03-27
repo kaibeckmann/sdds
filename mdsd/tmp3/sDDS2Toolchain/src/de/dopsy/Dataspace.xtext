@@ -1,0 +1,11 @@
+grammar de.dopsy.sDDS2.Dataspace with org.eclipse.xtext.common.Terminals
+
+generate sDDSDataspace "http://www.dopsy.de/sDDS2/Dataspace"
+
+Dataspace : (entities+=DataspaceEntity)+;
+
+DataspaceEntity:  IDL | Domain;
+
+IDL : 'idl';
+
+Domain : 'domain';

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/de.dopsy.sdds.snps/src"
+    modelPluginID="de.dopsy.sdds.snps" modelName="Snps" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="6.0" copyrightFields="false">
+  <foreignModel>../../DDSMetaModel/model/snps.ecore</foreignModel>
+  <genPackages prefix="Snps" disposableProviderFactory="true" ecorePackage="snps.ecore#/">
+    <genClasses ecoreClass="snps.ecore#//Ack"/>
+    <genClasses ecoreClass="snps.ecore#//AckSeq">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//AckSeq/seqnr"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//Address"/>
+    <genClasses ecoreClass="snps.ecore#//Address16">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//Address16/addr"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//Data">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//Data/serializedData"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//Data/size"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//Domain">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//Domain/domainID"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//ExtDomain">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//ExtDomain/id"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//ExtTopic">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//ExtTopic/topicID"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//ExtendedSubMessage">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//ExtendedSubMessage/extType"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//FragNack">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//FragNack/fragNr"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//FragNack/void"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference snps.ecore#//FragNack/EReference0"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//Fragment">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//Fragment/fragAmount"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//Fragment/fragNr"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//Fragment/fragSize"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//Fragment/serializedData"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference snps.ecore#//Fragment/EReference1"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//Header">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//Header/countSubMsg"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//Header/version"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference snps.ecore#//Header/EReference2"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//Message"/>
+    <genClasses ecoreClass="snps.ecore#//Nack"/>
+    <genClasses ecoreClass="snps.ecore#//NackSeq">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//NackSeq/seqnr"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//Seperator"/>
+    <genClasses image="false" ecoreClass="snps.ecore#//ExtSeqNr"/>
+    <genClasses ecoreClass="snps.ecore#//SeqNr">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//SeqNr/seqnr"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//SeqNrBig">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//SeqNrBig/seqnr"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//SeqNrHUGE">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//SeqNrHUGE/seqnr"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//SeqNrSmall">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//SeqNrSmall/seqnr"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//Status">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//Status/state"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//SubMessage">
+      <genFeatures property="Readonly" createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//SubMessage/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference snps.ecore#//SubMessage/EReference3"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//SuppHeader">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//SuppHeader/suppType"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference snps.ecore#//SuppHeader/EReference4"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//SuppHeaderBigSize">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//SuppHeaderBigSize/length"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//SuppHeaderBigSize/type"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//SuppHeaderSmallSize">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//SuppHeaderSmallSize/lenght"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//SuppHeaderSmallSize/type"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//SupplementSubMessage">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference snps.ecore#//SupplementSubMessage/msg"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//TimeStampDDS">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//TimeStampDDS/nanosec"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//TimeStampDDS/sec"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//TimeStampMicroSec"/>
+    <genClasses ecoreClass="snps.ecore#//TimeStampMilliSec"/>
+    <genClasses ecoreClass="snps.ecore#//TimeStampSimple">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//TimeStampSimple/firstField"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//TimeStampSimple/secondField"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//TimeStampSimple/thirdField"/>
+    </genClasses>
+    <genClasses ecoreClass="snps.ecore#//Topic">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute snps.ecore#//Topic/topicID"/>
+    </genClasses>
+    <nestedGenPackages prefix="Types" disposableProviderFactory="true" ecorePackage="snps.ecore#//types">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="snps.ecore#//types/subMsg_t">
+        <genEnumLiterals ecoreEnumLiteral="snps.ecore#//types/subMsg_t/DOMAIN"/>
+        <genEnumLiterals ecoreEnumLiteral="snps.ecore#//types/subMsg_t/TOPIC"/>
+      </genEnums>
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="snps.ecore#//types/extSubMsg_t"/>
+      <genDataTypes ecoreDataType="snps.ecore#//types/uint16_t"/>
+      <genDataTypes ecoreDataType="snps.ecore#//types/uint32_t"/>
+      <genDataTypes ecoreDataType="snps.ecore#//types/uint64_t"/>
+      <genDataTypes ecoreDataType="snps.ecore#//types/uint4_t"/>
+      <genDataTypes ecoreDataType="snps.ecore#//types/uint8_t"/>
+      <genDataTypes ecoreDataType="snps.ecore#//types/uint1_t"/>
+      <genDataTypes ecoreDataType="snps.ecore#//types/uint7_t"/>
+      <genDataTypes ecoreDataType="snps.ecore#//types/uint3_t"/>
+      <genDataTypes ecoreDataType="snps.ecore#//types/domainID_t"/>
+      <genDataTypes ecoreDataType="snps.ecore#//types/topicID_t"/>
+      <genDataTypes ecoreDataType="snps.ecore#//types/version_t"/>
+      <genDataTypes ecoreDataType="snps.ecore#//types/dataSize_t"/>
+      <genClasses ecoreClass="snps.ecore#//types/countSubMsg_t"/>
+      <genClasses ecoreClass="snps.ecore#//types/nativeAddress_t"/>
+      <genClasses ecoreClass="snps.ecore#//types/tSSimple_t"/>
+    </nestedGenPackages>
+  </genPackages>
+</genmodel:GenModel>

@@ -1,0 +1,37 @@
+namespace Eval
+
+IDL {
+	struct Temperatur {
+	short temp;
+	octet ID;
+	unsigned short position;
+    };
+#pragma keylist 
+}
+
+domain AAL {
+	topic TempControl {
+		dataType Temperatur
+	}
+}
+
+application TemperaturSensor {
+	domain AAL {
+		publisher pub {
+			datawriter dw {
+				topic TempControl
+			}
+		}
+	}
+	
+}
+
+application TemperaturRegler {
+	domain AAL {
+		subscriber sub {
+			datareader dr {
+				topic TempControl
+			}
+		}
+	}
+}

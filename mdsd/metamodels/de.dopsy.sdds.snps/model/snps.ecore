@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="snps"
+    nsURI="sdds.snps" nsPrefix="sdds">
+  <eClassifiers xsi:type="ecore:EClass" name="Ack" eSuperTypes="#//ExtendedSubMessage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="AckSeq" eSuperTypes="#//SubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seqnr" ordered="false"
+        lowerBound="1" eType="#//types/uint4_t" defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Address" eSuperTypes="#//SuppHeaderSmallSize"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Address16" eSuperTypes="#//ExtendedSubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="addr" ordered="false" lowerBound="1"
+        eType="#//types/uint16_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Data" eSuperTypes="#//SubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serializedData" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByteArray"
+        defaultValueLiteral=""/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="size" ordered="false" lowerBound="1"
+        eType="#//types/uint4_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Domain" eSuperTypes="#//SubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="domainID" ordered="false"
+        lowerBound="1" eType="#//types/uint4_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtDomain" eSuperTypes="#//ExtendedSubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" ordered="false" lowerBound="1"
+        eType="#//types/domainID_t" defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtTopic" eSuperTypes="#//ExtendedSubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="topicID" ordered="false"
+        lowerBound="1" eType="#//types/topicID_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtendedSubMessage" eSuperTypes="#//SubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="extType" ordered="false"
+        lowerBound="1" eType="#//types/extSubMsg_t" changeable="false" defaultValueLiteral=""/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="FragNack" eSuperTypes="#//ExtendedSubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fragNr" ordered="false"
+        lowerBound="1" eType="#//types/uint4_t" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="void" ordered="false" lowerBound="1"
+        eType="#//types/uint4_t" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="EReference0" eType="#//SeqNr"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Fragment" eSuperTypes="#//ExtendedSubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fragAmount" ordered="false"
+        lowerBound="1" eType="#//types/uint4_t" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fragNr" ordered="false"
+        lowerBound="1" eType="#//types/uint4_t" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fragSize" ordered="false"
+        lowerBound="1" eType="#//types/uint8_t" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="serializedData" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EByteArray"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="EReference1" eType="#//SeqNr"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Header">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="countSubMsg" ordered="false"
+        lowerBound="1" eType="#//types/uint8_t" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="version" ordered="false"
+        lowerBound="1" eType="#//types/version_t" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="EReference2" lowerBound="1"
+        eType="#//Message"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Message">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="msgs" lowerBound="1" upperBound="-1"
+        eType="#//SubMessage" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="header" lowerBound="1"
+        eType="#//Header" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Nack" eSuperTypes="#//ExtendedSubMessage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="NackSeq" eSuperTypes="#//SubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seqnr" ordered="false"
+        lowerBound="1" eType="#//types/uint4_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Seperator" eSuperTypes="#//ExtendedSubMessage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ExtSeqNr" abstract="true" eSuperTypes="#//ExtendedSubMessage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="SeqNr" eSuperTypes="#//SubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seqnr" ordered="false"
+        lowerBound="1" eType="#//types/uint4_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SeqNrBig" eSuperTypes="#//ExtSeqNr">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seqnr" ordered="false"
+        lowerBound="1" eType="#//types/uint32_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SeqNrHUGE" eSuperTypes="#//ExtSeqNr">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seqnr" ordered="false"
+        lowerBound="1" eType="#//types/uint64_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SeqNrSmall" eSuperTypes="#//ExtSeqNr">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="seqnr" ordered="false"
+        lowerBound="1" eType="#//types/uint16_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Status" eSuperTypes="#//SubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" ordered="false"
+        lowerBound="1" eType="#//types/uint4_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" ordered="false" lowerBound="1"
+        eType="#//types/subMsg_t" changeable="false" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="" lowerBound="1" eType="#//Message"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SuppHeader">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="suppType" ordered="false"
+        lowerBound="1" eType="#//types/uint1_t" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="EReference4" eType="#//SupplementSubMessage"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SuppHeaderBigSize" eSuperTypes="#//SuppHeader">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="length" ordered="false"
+        lowerBound="1" eType="#//types/uint7_t" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" ordered="false" lowerBound="1"
+        eType="#//types/uint8_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SuppHeaderSmallSize" eSuperTypes="#//SuppHeader">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="lenght" ordered="false"
+        lowerBound="1" eType="#//types/uint3_t" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" ordered="false" lowerBound="1"
+        eType="#//types/uint4_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SupplementSubMessage" eSuperTypes="#//ExtendedSubMessage">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="msg" lowerBound="1" upperBound="-1"
+        eType="#//SuppHeader" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TimeStampDDS" eSuperTypes="#//ExtendedSubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nanosec" ordered="false"
+        lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="sec" ordered="false" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TimeStampMicroSec" eSuperTypes="#//ExtendedSubMessage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TimeStampMilliSec" eSuperTypes="#//ExtendedSubMessage"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TimeStampSimple" eSuperTypes="#//SubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="firstField" ordered="false"
+        lowerBound="1" eType="#//types/uint4_t" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="secondField" ordered="false"
+        lowerBound="1" eType="#//types/uint8_t" defaultValueLiteral="0"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="thirdField" ordered="false"
+        lowerBound="1" eType="#//types/uint8_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Topic" eSuperTypes="#//SubMessage">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="topicID" ordered="false"
+        lowerBound="1" eType="#//types/uint4_t" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eSubpackages name="types" nsURI="sdds.snps.types" nsPrefix="sdds.snps.types">
+    <eClassifiers xsi:type="ecore:EClass" name="countSubMsg_t"/>
+    <eClassifiers xsi:type="ecore:EClass" name="nativeAddress_t"/>
+    <eClassifiers xsi:type="ecore:EClass" name="tSSimple_t"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="uint16_t" instanceClassName="uint16_t"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="uint32_t" instanceClassName="uint32_t"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="uint64_t" instanceClassName="uint64_t"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="uint4_t" instanceClassName="uint4_t"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="uint8_t" instanceClassName="uint8_t"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="uint1_t" instanceClassName="uint1_t"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="uint7_t" instanceClassName="uint7_t"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="uint3_t" instanceClassName="uint3_t"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="domainID_t" instanceClassName="domainID_t"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="topicID_t" instanceClassName="topicID_t"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="version_t" instanceClassName="version_t"/>
+    <eClassifiers xsi:type="ecore:EDataType" name="dataSize_t" instanceClassName="dataSize_t"/>
+    <eClassifiers xsi:type="ecore:EEnum" name="subMsg_t">
+      <eLiterals name="DOMAIN"/>
+      <eLiterals name="TOPIC" value="1"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="extSubMsg_t"/>
+  </eSubpackages>
+</ecore:EPackage>

@@ -1,0 +1,33 @@
+import ecore;
+import ecoce::EcorePackage;
+
+process(xtext::GeneratedMetamodel this) :
+	process(ePackage);
+	
+process(EPackage this):
+	eClassifiers.typeSelect(EClass).process();
+
+process(EClass this):
+	switch (this.name) {
+		case "SimpleType": addAttribute(this, "memSize", getDataType("EInt"))// addAttribute("Size", getEcoreDataType("EInt"))
+	//case "Bla" : getDataType("EInt")
+		//case "Long":  this.eAllAttributes.select(e|e.name.matches("memSize")).set
+		default: null
+	};
+	
+//addAttribute(EClass this, String name, EClassifier type):
+	//	let a = newAttribute(name, type): doNothing(this) ;
+addAttribute(EClass this, String name, EClassifier dtName):
+	let a = new EAttribute: a.setName(name) 
+	-> a.setEType(dtName)
+	-> this.eAttributes.add(a);
+
+//create EAttribute newAttribute(EClass owner, String name, EClassifier type) :
+//	setName(name) -> setEType(type) -> owner.eAttributes.add(this);
+	
+
+ecore::EClassifier getDataType(String name):
+JAVA de.dopsy.Helper.getEcoreDataType( java.lang.String);
+
+
+	

@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<configuration>
+  <string text="#ifndef _IARCONFIGURATION_H_" confType="header"/>
+  <string text="#define _IARCONFIGURATION_H_" confType="header"/>
+</configuration>

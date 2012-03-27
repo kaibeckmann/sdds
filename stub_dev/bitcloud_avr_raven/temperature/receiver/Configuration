@@ -1,0 +1,297 @@
+
+# sDDS path
+SDDS_PATH = ../sdds/
+AVRSTUB_PATH = ../sdds/platform/BitCloud/
+
+#----------------------------------------------------
+# Application path
+#----------------------------------------------------
+#APP_PATH = /home/kai/workspace/sDDSavrStub
+#APP_PATH = C:/local/k_beckma/workspace/sDDSavrStub
+APP_PATH = $(PWD)
+#----------------------------------------------------
+# Project name
+#----------------------------------------------------
+PROJNAME = avrtest
+
+#----------------------------------------------------
+# Compiler type
+#----------------------------------------------------
+COMPILER_TYPE = GCC
+#COMPILER_TYPE = IAR
+
+#----------------------------------------------------
+# Boards selection
+#----------------------------------------------------
+BOARD = BOARD_RAVEN
+#BOARD = BOARD_USB_DONGLE
+# BOARD = BOARD_STK600_ATMEGA128RFA1
+
+#----------------------------------------------------
+# Components path definition
+#----------------------------------------------------
+ifeq ($(BOARD), BOARD_RAVEN)
+  COMPONENTS_PATH = ../BitCloud_Raven/Components
+endif #BOARD_RAVEN
+
+ifeq ($(BOARD), BOARD_STK600_ATMEGA128RFA1)
+  COMPONENTS_PATH = ../BitCloud_MEGARF/Components
+endif #BOARD_STK600_ATMEGA128RFA1
+
+#----------------------------------------------------
+# Board-specific options
+#----------------------------------------------------
+ifeq ($(BOARD), BOARD_RAVEN)
+  HAL_FREQUENCY = HAL_4MHz
+  #HAL_FREQUENCY = HAL_8MHz
+  
+  APP_INTERFACE = APP_INTERFACE_USART
+  
+  APP_USART_CHANNEL = USART_CHANNEL_1
+endif #BOARD_RAVEN
+
+APP_INTERFACE_USART = 0x01
+APP_INTERFACE_VCP = 0x02
+ifeq ($(BOARD), BOARD_USB_DONGLE)
+  APP_INTERFACE = APP_INTERFACE_VCP
+  
+  APP_USART_CHANNEL = USART_CHANNEL_VCP
+endif #BOARD_USB_DONGLE
+
+ifeq ($(BOARD), BOARD_STK600_ATMEGA128RFA1)
+  # Controller reference frequency
+  #HAL_FREQUENCY = HAL_4MHz
+  HAL_FREQUENCY = HAL_8MHz
+  
+  APP_INTERFACE = APP_INTERFACE_USART
+  
+  APP_USART_CHANNEL = USART_CHANNEL_1
+  
+  # Enable on boards with managed USART to RS232 converter
+  #BSP_ENABLE_RS232_CONTROL = 1
+  BSP_ENABLE_RS232_CONTROL = 0
+  
+  #APP_USE_OTAU = 1
+  APP_USE_OTAU = 0
+endif #BOARD_STK600_ATMEGA128RFA1
+
+#----------------------------------------------------
+# Avilable values for AT86RF212 chip: -17..11, for others: -17..3
+#----------------------------------------------------
+CS_RF_TX_POWER = 3
+
+
+#----------------------------------------------------
+# BitCloud security options
+#----------------------------------------------------
+SECURITY_MODE = NO_SECURITY_MODE
+#SECURITY_MODE = STANDARD_SECURITY_MODE
+#SECURITY_MODE = HIGH_SECURITY_MODE
+ifeq ($(SECURITY_MODE), STANDARD_SECURITY_MODE)
+  # Preconfigured network key
+  CS_ZDO_SECURITY_STATUS = 0
+  # Not preconfigured
+  #CS_ZDO_SECURITY_STATUS = 3
+  
+  CS_NETWORK_KEY = "{0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC}"
+  CS_APS_TRUST_CENTER_ADDRESS = 0xAAAAAAAAAAAAAAAALL
+  #----------------------------------------------------
+  # APS security timeout period
+  #----------------------------------------------------
+  CS_APS_SECURITY_TIMEOUT_PERIOD = 10000
+  
+  #----------------------------------------------------
+  # APS security buffers amount
+  #----------------------------------------------------
+  CS_APS_SECURITY_BUFFERS_AMOUNT = 4
+  
+endif #STANDARD_SECURITY_MODE
+
+ifeq ($(SECURITY_MODE), HIGH_SECURITY_MODE)
+  # Preconfigured trust center link key
+  CS_ZDO_SECURITY_STATUS = 1
+  # Preconfigured trust center master key
+  #CS_ZDO_SECURITY_STATUS = 2
+  
+  CS_NETWORK_KEY = "{0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC,0xCC}"
+  CS_APS_TRUST_CENTER_ADDRESS = 0xAAAAAAAAAAAAAAAALL
+  #----------------------------------------------------
+  # APS security timeout period
+  #----------------------------------------------------
+  CS_APS_SECURITY_TIMEOUT_PERIOD = 10000
+  
+  #----------------------------------------------------
+  # APS security buffers amount
+  #----------------------------------------------------
+  CS_APS_SECURITY_BUFFERS_AMOUNT = 4
+  
+  
+  #----------------------------------------------------
+  # APS key pair descriptors amount
+  #----------------------------------------------------
+  CS_APS_KEY_PAIR_DESCRIPTORS_AMOUNT = 4
+  
+endif #HIGH_SECURITY_MODE
+
+
+#----------------------------------------------------
+# BitCloud stack parameters
+#----------------------------------------------------
+#----------------------------------------------------
+# Stack library type detection
+#----------------------------------------------------
+# Stack library supports all device types (Coordinator, Router and EndDevice)
+#STACK_TYPE = ALL_DEVICES_TYPES
+# Stack library supports Coordinator device type
+# STACK_TYPE = COORDINATOR
+# Stack library supports Router device type
+STACK_TYPE = ROUTER
+# Stack library supports End Device device type
+#STACK_TYPE = ENDDEVICE
+
+#----------------------------------------------------
+# Channel mask and page to be used to run network
+#----------------------------------------------------
+CS_CHANNEL_MASK = "(1l<<0x0f)"
+
+#----------------------------------------------------
+# Extended PAN ID of the network to start or to join to
+#----------------------------------------------------
+CS_EXT_PANID = 0xAAAAAAAAAAAAAAAALL
+#----------------------------------------------------
+# Device UID
+#----------------------------------------------------
+#CS_UID = 0x0LL
+CS_UID = 0x0FFFFFFFFFFF0003LL
+#----------------------------------------------------
+# Whether or not the static addressing mode will be used
+#----------------------------------------------------
+CS_NWK_UNIQUE_ADDR = true
+#CS_NWK_UNIQUE_ADDR = false
+
+#----------------------------------------------------
+# Device's short address
+#----------------------------------------------------
+CS_NWK_ADDR = 0x0042
+
+#----------------------------------------------------
+# End Device sleep period, ms
+#----------------------------------------------------
+CS_END_DEVICE_SLEEP_PERIOD = 10000
+
+#----------------------------------------------------
+# Maximum number of children that a given device (coordinator or router) may have
+#----------------------------------------------------
+CS_MAX_CHILDREN_AMOUNT = 8
+
+#----------------------------------------------------
+# Maximum number of routers among the children of one device
+#----------------------------------------------------
+CS_MAX_CHILDREN_ROUTER_AMOUNT = 2
+
+#----------------------------------------------------
+# Number of buffers to execute data requests on APS layer
+#----------------------------------------------------
+CS_APS_DATA_REQ_BUFFERS_AMOUNT = 3
+
+#----------------------------------------------------
+# Number of buffers to send APS acks
+#----------------------------------------------------
+CS_APS_ACK_FRAME_BUFFERS_AMOUNT = 2
+
+#----------------------------------------------------
+# Total amount of buffers to keep MAC data indications on NWK layer
+#----------------------------------------------------
+CS_NWK_DATA_IND_BUFFER_SIZE = 4
+
+#----------------------------------------------------
+# The size of neighbor table
+#----------------------------------------------------
+CS_NEIB_TABLE_SIZE = 8
+
+#----------------------------------------------------
+# Maximum amount of records in the NWK Route Table
+#----------------------------------------------------
+CS_ROUTE_TABLE_SIZE = 10
+
+#----------------------------------------------------
+# Maximum amount of records in the NWK Address Map Table
+#----------------------------------------------------
+CS_ADDRESS_MAP_TABLE_SIZE = 2
+
+#----------------------------------------------------
+# Maximum amount of records in the NWK Route Discovery Table
+#----------------------------------------------------
+CS_ROUTE_DISCOVERY_TABLE_SIZE = 3
+
+#----------------------------------------------------
+# Size of the APS Duplicate Rejection Table
+#----------------------------------------------------
+CS_DUPLICATE_REJECTION_TABLE_SIZE = 8
+
+#----------------------------------------------------
+# Enabales or disables the power failure feature
+#----------------------------------------------------
+#CS_POWER_FAILURE = true
+CS_POWER_FAILURE = false
+
+#----------------------------------------------------
+# Auto polling by end device
+#----------------------------------------------------
+CS_AUTO_POLL = true
+#CS_AUTO_POLL = false
+
+
+#----------------------------------------------------
+# Application parameters
+#----------------------------------------------------
+#----------------------------------------------------
+# Application debug mode
+#----------------------------------------------------
+DEBUG = 1
+#DEBUG = 0
+
+#----------------------------------------------------
+# Device type detection (for the boards without DIP switches)
+#----------------------------------------------------
+# Device is Coordinator
+#APP_DEVICE_TYPE = DEV_TYPE_COORDINATOR
+# Device is Router
+APP_DEVICE_TYPE = DEV_TYPE_ROUTER
+# Device is End Device
+#APP_DEVICE_TYPE = DEV_TYPE_ENDDEVICE
+
+#----------------------------------------------------
+# Data sending period
+#----------------------------------------------------
+APP_TIMER_TASK_INTERVALL = 300
+
+#----------------------------------------------------
+# Amount of failed transmissions in a row to initiate the rejoin network procedure
+#----------------------------------------------------
+APP_THRESHOLD_FAILED_TRANSMISSION = 4
+
+
+ifeq ($(APP_USE_OTAU), 1)
+endif #1
+
+# ---------------------------------------
+# sDDS part
+# ---------------------------------------
+sDDS_TEST_SENSORAPP=1
+#sDDS_TEST_ACTORAPP=1
+
+sDDS_LOCAL_BYTEORDER_LITTLE_ENDIAN = 1
+SDDS_NET_VERSION = 0x01
+sDDS_MAX_DW_APP = 0
+sDDS_MAX_DR_APP = 1
+sDDS_TOPIC_HAS_PUB = 1 
+sDDS_NET_MAX_BUF_SIZE = 30
+sDDS_NET_MAX_LOCATOR_COUNT = 10
+sDDS_NET_MAX_OUT_QUEUE = 2
+sDDS_QOS_DW1_LATBUD = 100
+sDDS_QOS_DW2_LATBUD = 500
+sDDS_TOPIC_MAX_COUNT = 1
+sDDS_TOPIC_APP_MSG_COUNT = 4
+sDDS_MNG_WORKER_CYCLE_TIME = 100
+sDDS_MNG_BUILTINT_PUBCYCLE_PRESCALER=5
