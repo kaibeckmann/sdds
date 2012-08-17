@@ -2,7 +2,7 @@
 #include "twi-pcf.h"
 #include "twi.h"
 
-int twi_init_pcf(uint8_t channel)
+rc_t twi_init_pcf(uint8_t channel)
 {
 	twi_data_t data[4];
 	uint8_t failed_command;
@@ -19,12 +19,12 @@ int twi_init_pcf(uint8_t channel)
 	data[3].byte = TWI_PCF_8591P_TAP;
 
 	if (twi_communicate(data, sizeof data / sizeof *data, &failed_command) != 0)
-		return 1;
+		return SDDS_RT_FAIL;
 
-	return 0;
+	return SDDS_RT_OK;
 }
 
-int twi_read_pcf(uint8_t *value)
+rc_t twi_read_pcf(uint8_t *value)
 {
 	twi_data_t data[4];
 	uint8_t failed_command;
@@ -39,9 +39,9 @@ int twi_read_pcf(uint8_t *value)
 	data[3].type = TWI_TYPE_RECEIVE_DATA;
 
 	if (twi_communicate(data, sizeof data / sizeof *data, &failed_command) != 0)
-		return 1;
+		return SDDS_RT_FAIL;
 
 	*value = data[1].byte;
 
-	return 0;
+	return SDDS_RT_OK;
 }

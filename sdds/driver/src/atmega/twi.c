@@ -1,6 +1,6 @@
 #include "twi.h"
-#include "twi-config.h"
 
+#include "Log.h"
 #include <avr/io.h>
 #include <avr/power.h>
 
@@ -43,8 +43,8 @@ void twi_init(void)
 #endif
 
 	/* setup the scl and sda registers */
-	TWI_SCL_PORTR |= _BV(TWI_SCL_DD);
-	TWI_SDA_PORTR |= _BV(TWI_SDA_DD);
+	//TWI_SCL_PORTR |= _BV(TWI_SCL_DD);
+	//TWI_SDA_PORTR |= _BV(TWI_SDA_DD);
 
 	/* setup frequency and finally enable the twi functions */
 	TWSR = 0;
@@ -177,7 +177,7 @@ static int twi_set_start(void)
 	return 0;
 }
 
-int twi_communicate(twi_data_t *data, uint8_t amount, uint8_t *failed_command)
+int8_t twi_communicate(twi_data_t *data, uint8_t amount, uint8_t *failed_command)
 {
 	uint8_t i;
 	int result;
@@ -232,6 +232,7 @@ int twi_communicate(twi_data_t *data, uint8_t amount, uint8_t *failed_command)
 			break;
 
 		if (result == 1) /* arb lost */
+
 			break;
 
 		if (result == -1)
@@ -241,10 +242,131 @@ int twi_communicate(twi_data_t *data, uint8_t amount, uint8_t *failed_command)
 	twi_set_control(_BV(TWSTO));
 	twi_wait_stop();
 
+
 	if (result != 0)
 		*failed_command = i;
 
 	return result;
 }
 
+rc_t twi_writeByte(uint8_t addr, uint8_t reg, uint8_t data) {
 
+
+	uint8_t failed_command;
+	twi_data_t send[4];
+
+//	Log_debug("write: addr 0x%x, reg 0x%x, data 0x%x\n", addr, reg, data);
+	send[0].type = TWI_TYPE_START;
+
+	send[1].type = TWI_TYPE_TRANSMIT_ADDRESS;
+	send[1].byte = addr;
+
+	send[2].type = TWI_TYPE_TRANSMIT_DATA;
+	send[2].byte = reg;
+
+	send[3].type = TWI_TYPE_TRANSMIT_DATA;
+	send[3].byte = data;
+
+	// send wake up command
+	if (twi_communicate(send, 4, &failed_command) != 0)
+		return SDDS_RT_FAIL;
+
+	//return failed_command;
+
+	return SDDS_RT_OK;
+
+}
+
+rc_t twi_writeWord(uint8_t addr, uint8_t reg, uint16_t data) {
+
+
+	uint8_t failed_command;
+	twi_data_t send[5];
+
+	send[0].type = TWI_TYPE_START;
+
+	send[1].type = TWI_TYPE_TRANSMIT_ADDRESS;
+	send[1].byte = addr;
+
+	send[2].type = TWI_TYPE_TRANSMIT_DATA;
+	send[2].byte = reg;
+
+	send[3].type = TWI_TYPE_TRANSMIT_DATA;
+	send[3].byte = (uint8_t) (data & 0x00ff);
+
+	send[4].type = TWI_TYPE_TRANSMIT_DATA;
+	send[4].byte = (uint8_t) (data >> 8);
+
+	// send wake up command
+	if (twi_communicate(send, 5, &failed_command) != 0)
+		return SDDS_RT_FAIL;
+
+	return SDDS_RT_OK;
+}
+
+rc_t twi_readByte(uint8_t addr, uint8_t reg, uint8_t* data) {
+
+
+	uint8_t failed_command;
+	twi_data_t buf[6];
+
+	buf[0].type = TWI_TYPE_START;
+
+	buf[1].type = TWI_TYPE_TRANSMIT_ADDRESS;
+	buf[1].byte = addr;
+
+	buf[2].type = TWI_TYPE_TRANSMIT_DATA;
+	buf[2].byte = reg;
+
+	buf[3].type = TWI_TYPE_START;
+
+	buf[4].type = TWI_TYPE_RECEIVE_ADDRESS;
+	buf[4].byte = addr;
+
+	buf[5].type = TWI_TYPE_RECEIVE_DATA;
+
+	if (twi_communicate(buf, 6, &failed_command) != 0) {
+		Log_debug("command %d failed\n", failed_command);
+		return SDDS_RT_FAIL;
+	}
+
+
+	*data = buf[5].byte;
+
+	return SDDS_RT_OK;
+}
+
+rc_t twi_readWord(uint8_t addr, uint8_t reg, uint16_t* data) {
+
+
+	uint8_t failed_command;
+	twi_data_t buf[7];
+
+	buf[0].type = TWI_TYPE_START;
+
+	buf[1].type = TWI_TYPE_TRANSMIT_ADDRESS;
+	buf[1].byte = addr;
+
+	buf[2].type = TWI_TYPE_TRANSMIT_DATA;
+	buf[2].byte = reg;
+
+	buf[3].type = TWI_TYPE_START;
+
+	buf[4].type = TWI_TYPE_RECEIVE_ADDRESS;
+	buf[4].byte = addr;
+
+	buf[5].type = TWI_TYPE_RECEIVE_DATA;
+
+	buf[6].type = TWI_TYPE_RECEIVE_DATA;
+
+	if (twi_communicate(buf, 7, &failed_command) != 0) {
+		Log_debug("command %d failed\n", failed_command);
+		return SDDS_RT_FAIL;
+	}
+
+	*data = (buf[6].byte << 8);
+	*data |= buf[5].byte;
+
+
+	return SDDS_RT_OK;
+}

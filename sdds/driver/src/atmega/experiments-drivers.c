@@ -11,7 +11,7 @@
 #define TWI_TI_AUTO_INCREMENT (1 << 2)
 #endif
 
-int init_light(void)
+rc_t init_light(void)
 {
 #if 0
 	// for connection to the adc
@@ -22,25 +22,25 @@ int init_light(void)
 	twi_init();
 #endif
 
-	return 0;
+	return SDDS_RT_OK;
 }
 
-int read_light(uint8_t *value)
+rc_t read_light(uint8_t *value)
 {
 #if 0
 	// for connection to the adc input 0
 	*value = (adc_read(0) * 256) / 65536;
-	return 0;
+	return SDDS_RT_OK;
 #else
 	// for connection to the pcf channel 0
 	if (twi_init_pcf(0) != 0)
-		return 1;
+		return SDDS_RT_FAIL;
 
 	return twi_read_pcf(value);
 #endif
 }
 
-int swrst_ti(void)
+rc_t swrst_ti(void)
 {
 	twi_data_t data[4];
 	uint8_t failed_command;
@@ -57,12 +57,12 @@ int swrst_ti(void)
 	data[3].byte = 0x5A;
 
 	if (twi_communicate(data, sizeof data / sizeof *data, &failed_command) != 0)
-		return -1;
+		return SDDS_RT_FAIL;
 
-	return 0;
+	return SDDS_RT_OK;
 }
 
-int setup_ti_one(uint8_t address)
+rc_t setup_ti_one(uint8_t address)
 {
 	twi_data_t data[0x1B + 4];
 	twi_data_t *tlc_regs;
@@ -120,26 +120,26 @@ int setup_ti_one(uint8_t address)
 	tlc_regs[0x1B].byte = 0xD0;
 
 	if (twi_communicate(data, sizeof data / sizeof *data, &failed_command) != 0)
-		return -1;
+		return SDDS_RT_FAIL;
 
-	return 0;
+	return SDDS_RT_OK;
 }
 
-int setup_ti_all(void)
+rc_t setup_ti_all(void)
 {
 	if (setup_ti_one(TWI_TI0_ADDRESS) != 0)
-		return -1;
+		return SDDS_RT_FAIL;
 
 	if (setup_ti_one(TWI_TI1_ADDRESS) != 0)
-		return -1;
+		return SDDS_RT_FAIL;
 
 	if (setup_ti_one(TWI_TI2_ADDRESS) != 0)
-		return -1;
+		return SDDS_RT_FAIL;
 
-	return 0;
+	return SDDS_RT_OK;
 }
 
-int control_ti_led(uint8_t address, uint8_t led_index, uint8_t byte)
+rc_t control_ti_led(uint8_t address, uint8_t led_index, uint8_t byte)
 {
 	twi_data_t data[0x4];
 	uint8_t failed_command;
@@ -156,7 +156,7 @@ int control_ti_led(uint8_t address, uint8_t led_index, uint8_t byte)
 	data[3].byte = byte;
 
 	if (twi_communicate(data, sizeof data / sizeof *data, &failed_command) != 0)
-		return -1;
+		return SDDS_RT_FAIL;
 
-	return 0;
+	return SDDS_RT_OK;
 }

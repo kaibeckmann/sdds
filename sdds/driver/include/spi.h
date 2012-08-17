@@ -1,7 +1,7 @@
 #ifndef SPI_H_INCLUDED
 #define SPI_H_INCLUDED
 
-#include <stdint.h>
+#include "sdds_types.h"
 
 /*
  * the serial peripheral interface

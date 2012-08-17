@@ -1,7 +1,7 @@
 #ifndef ADC_H_INCLUDED
 #define ADC_H_INCLUDED
 
-#include <stdint.h>
+#include "sdds_types.h"
 
 /*
  * analog/digital conversion module
