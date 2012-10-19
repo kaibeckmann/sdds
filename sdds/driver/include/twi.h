@@ -84,4 +84,8 @@ rc_t twi_writeWord(uint8_t addr, uint8_t reg, uint16_t data);
  */
 rc_t twi_writeByte(uint8_t addr, uint8_t reg, uint8_t data);
 
+/**
+ * Activate the Pullup Resisors of the microcontroller for twi
+ */
+rc_t twi_activateInternalPullUp();
 #endif

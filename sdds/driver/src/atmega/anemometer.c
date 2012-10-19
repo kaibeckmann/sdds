@@ -8,6 +8,7 @@
 
 #include "anemometer.h"
 #include "driver.h"
+#include "sdds_types.h"
 
 #include <avr/interrupt.h>
 #include <avr/io.h>

@@ -24,6 +24,15 @@
 /* the last set status register value */
 static uint8_t g_twst;
 
+rc_t twi_activateInternalPullUp() {
+
+	TWI_SCL_PORTR |= _BV(TWI_SCL_PORT);
+	TWI_SDA_PORTR |= _BV(TWI_SDA_PORT);
+
+
+	return SDDS_RT_OK;
+}
+
 void twi_init(void)
 {
 #ifndef F_CPU
