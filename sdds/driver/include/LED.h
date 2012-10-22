@@ -12,7 +12,6 @@
 
 #include "sdds_types.h"
 
-typedef uint8_t* reg_ptr_t;
 
 struct LED_t;
 typedef struct LED_t* LED;

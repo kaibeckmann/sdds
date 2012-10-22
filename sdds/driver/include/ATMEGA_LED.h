@@ -10,7 +10,7 @@
 
 #include "LED.h"
 
-typedef uint8_t* reg_ptr_t;
+typedef volatile uint8_t* reg_ptr_t;
 
 struct LED_t {
 	reg_ptr_t port;

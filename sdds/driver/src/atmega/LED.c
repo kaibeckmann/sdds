@@ -5,9 +5,11 @@
  *      Author: k_beckma
  */
 
+#include "avr/io.h"
 
 #include "LED.h"
 #include "ATMEGA_LED.h"
+
 
 rc_t LED_init(LED _this) {
 
@@ -15,7 +17,8 @@ rc_t LED_init(LED _this) {
 		return SDDS_RT_BAD_PARAMETER;
 	}
 	// set Direction
-	_this->ddr |= _BV(_this->p);
+	(*(_this->ddr)) |= _BV(_this->p);
+	//DDRB |= _BV(PB7);
 	// set LED OFF
 	LED_switchOff(_this);
 
@@ -34,9 +37,11 @@ rc_t LED_switchOn(LED _this) {
 		return SDDS_RT_BAD_PARAMETER;
 	}
 	if (_this->sourceing) {
-		_this->port |= _BV(_this->p);
+		//PORTB |= _BV(PB7);
+		(*(_this->port)) |= _BV(_this->p);
 	} else {
-		_this->port &= ~_BV(_this->p);
+		//PORTB &= ~_BV(PB7);
+		(*(_this->port)) &= ~_BV(_this->p);
 	}
 	return SDDS_RT_OK;
 }
@@ -46,9 +51,11 @@ rc_t LED_switchOff(LED _this) {
 		return SDDS_RT_BAD_PARAMETER;
 	}
 	if (_this->sourceing) {
-		_this->port &= ~_BV(_this->p);
+		//PORTB &= ~_BV(PB7);
+		(*(_this->port)) &= ~_BV(_this->p);
 	} else {
-		_this->port |= _BV(_this->p);
+		//PORTB |= _BV(PB7);
+		(*(_this->port)) |= _BV(_this->p);
 	}
 	return SDDS_RT_OK;
 }
@@ -56,7 +63,7 @@ rc_t LED_toggle(LED _this) {
 	if (_this == NULL) {
 		return SDDS_RT_BAD_PARAMETER;
 	}
-	_this->port ^= _this->p;
+	(*(_this->port)) ^= _this->p;
 
 	return SDDS_RT_OK;
 }
@@ -67,9 +74,9 @@ rc_t LED_getState(LED _this, bool* state) {
 	}
 
 	if (_this->sourceing) {
-		*state = (_this->port & _BV(_this->p)) ? true : false;
+		*state = (*(_this->port) & _BV(_this->p)) ? true : false;
 	} else {
-		*state = (_this->port & _BV(_this->p)) ? false : true;
+		*state = (*(_this->port) & _BV(_this->p)) ? false : true;
 	}
 
 	return SDDS_RT_OK;
