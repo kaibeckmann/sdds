@@ -57,7 +57,7 @@ void twi_init(void)
 
 	/* setup frequency and finally enable the twi functions */
 	TWSR = 0;
-	TWBR = (F_CPU / TWI_BUS_SPEED - 16) / 2;
+	TWBR = (uint8_t)(F_CPU / TWI_BUS_SPEED - 16) / 2;
 	TWDR = 0xFF;
 	TWCR = _BV(TWEN);
 
@@ -189,7 +189,7 @@ static int twi_set_start(void)
 int8_t twi_communicate(twi_data_t *data, uint8_t amount, uint8_t *failed_command)
 {
 	uint8_t i;
-	int result;
+	int result = 0;
 
 	if (amount == 0)
 		return 0;
