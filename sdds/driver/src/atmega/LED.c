@@ -19,7 +19,7 @@ rc_t LED_init(LED _this) {
 
 #ifdef __AVR_ATmega128RFA1__
 
-	uint8_t mypin;
+	uint8_t mypin = 0;
 
 	switch (_this->bank) {
 	case (LED_CONF_BANK_A):
