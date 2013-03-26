@@ -43,6 +43,7 @@ struct LED_t {
 #ifdef DRV_LED_DIMMING
 	uint8_t mode		: 4; // 16 modes
 	uint8_t resolution	: 3; // 8 modes
+	uint8_t dimValue;
 #endif
 
 #ifdef DRV_LED_BLINK

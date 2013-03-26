@@ -412,6 +412,11 @@ rc_t LED_getState(LED _this, bool_t* state) {
 #ifdef DRV_LED_DIMMING
 rc_t LED_dim(LED _this, uint8_t setValue) {
 
+	if (_this == NULL ) {
+		return SDDS_RT_BAD_PARAMETER;
+	}
+	_this->dimValue = setValue;
+
 #if defined (DRV_LED_DIMMING_GAMMACORRECTION_16BIT)
 	uint16_t val;
 	GammaCorrection_getValue8to16(setValue, &val);
@@ -451,6 +456,17 @@ rc_t LED_dim(LED _this, uint8_t setValue) {
 
 	return SDDS_RT_OK;
 }
+
+rc_t LED_getDimValue(LED _this, uint8_t* value)  {
+	if (_this == NULL || value == NULL) {
+		return SDDS_RT_BAD_PARAMETER;
+	}
+
+	*value = _this->dimValue;
+
+	return SDDS_RT_OK;
+}
+
 #endif
 
 #ifdef DRV_LED_BLINK
@@ -458,3 +474,4 @@ rc_t LED_blink(LED _this, drv_led_blink_interval interval_t, drv_led_blink_mode_
 	return SDDS_RT_OK;
 }
 #endif
+
