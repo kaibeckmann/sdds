@@ -7,9 +7,17 @@
 
 #include "avr/io.h"
 
+#include "sdds/Log.h"
+
 #include "LED.h"
 #include "ATMEGA_LED.h"
 #include "GammaCorrection.h"
+
+void _switchOn(LED _this);
+void _switchOff(LED _this);
+#ifdef DRV_LED_DIMMING
+void _dim(LED _this, uint8_t setValue);
+#endif
 
 rc_t LED_init(LED _this) {
 
@@ -50,7 +58,7 @@ rc_t LED_init(LED _this) {
 			break;
 		}
 		;
-		DDRA |= mypin;
+		DDRA |= _BV(mypin);
 		_this->realpin = mypin;
 		break;
 	case (LED_CONF_BANK_B):
@@ -82,7 +90,7 @@ rc_t LED_init(LED _this) {
 			break;
 		}
 		;
-		DDRB |= mypin;
+		DDRB |= _BV(mypin);
 		break;
 	case (LED_CONF_BANK_C):
 		break;
@@ -114,7 +122,7 @@ rc_t LED_init(LED _this) {
 			break;
 		}
 		;
-		DDRD |= mypin;
+		DDRD |= _BV(mypin);
 		break;
 
 	case (LED_CONF_BANK_E):
@@ -133,10 +141,11 @@ rc_t LED_init(LED _this) {
 
 #ifdef DRV_LED_DIMMING
 
-	if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_5) {
+	if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_5 && (_this->mode & LED_CONF_DIM_ACTIVATE)) {
+		Log_debug("Conf B5 for dimming\n");
 		// timer 1
 		TCCR1A |= _BV(COM1A1);
-		if (_this->sourceing == true) {
+		if (_this->sourceing == false) {
 			// inverse
 			TCCR1A |= _BV(COM1A0);
 		}
@@ -148,7 +157,7 @@ rc_t LED_init(LED _this) {
 
 		TCCR1C |= 0;
 
-	} else if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_6) {
+	} else if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_6 && (_this->mode & LED_CONF_DIM_ACTIVATE)) {
 		// timer 1
 		TCCR1A |= _BV(COM1B1);
 		if (_this->sourceing == true) {
@@ -163,7 +172,7 @@ rc_t LED_init(LED _this) {
 
 		TCCR1C |= 0;
 
-	} else if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_7) {
+	} else if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_7 && (_this->mode & LED_CONF_DIM_ACTIVATE)) {
 		// timer 1
 		TCCR1A |= _BV(COM1C1);
 		if (_this->sourceing == true) {
@@ -178,7 +187,7 @@ rc_t LED_init(LED _this) {
 		}
 
 		TCCR1C |= 0;
-	} else if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_4) {
+	} else if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_4 && (_this->mode & LED_CONF_DIM_ACTIVATE)) {
 		// timer 2 achtung wird benötigt wenn der uC schlafen soll!
 		TCCR2A |= _BV(COM2A1);
 		if (_this->sourceing == true) {
@@ -200,117 +209,145 @@ rc_t LED_init(LED _this) {
 	return SDDS_RT_OK;
 }
 
+void _switchOn(LED _this) {
+
+	if (_this->sourceing) {
+			//PORTB |= _BV(PB7);
+			switch (_this->bank) {
+			case (LED_CONF_BANK_A):
+				PORTA |= _BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_B):
+				PORTB |= _BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_C):
+				PORTC |= _BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_D):
+				PORTD |= _BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_E):
+				PORTE |= _BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_F):
+				PORTF |= _BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_G):
+				PORTG |= _BV(_this->realpin);
+				break;
+			};
+		} else {
+			switch (_this->bank) {
+			case (LED_CONF_BANK_A):
+				PORTA &= ~_BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_B):
+				PORTB &= ~_BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_C):
+				PORTC &= ~_BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_D):
+				PORTD &= ~_BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_E):
+				PORTE &= ~_BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_F):
+				PORTF &= ~_BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_G):
+				PORTG &= ~_BV(_this->realpin);
+				break;
+			};
+		}
+}
+
 rc_t LED_switchOn(LED _this) {
 
 	if (_this == NULL ) {
 		return SDDS_RT_BAD_PARAMETER;
 	}
-	if (_this->sourceing) {
-		//PORTB |= _BV(PB7);
-		switch (_this->bank) {
-		case (LED_CONF_BANK_A):
-			PORTA |= _BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_B):
-			PORTB |= _BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_C):
-			PORTC |= _BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_D):
-			PORTD |= _BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_E):
-			PORTE |= _BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_F):
-			PORTF |= _BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_G):
-			PORTG |= _BV(_this->realpin);
-			break;
-		};
-	} else {
-		switch (_this->bank) {
-		case (LED_CONF_BANK_A):
-			PORTA &= ~_BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_B):
-			PORTB &= ~_BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_C):
-			PORTC &= ~_BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_D):
-			PORTD &= ~_BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_E):
-			PORTE &= ~_BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_F):
-			PORTF &= ~_BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_G):
-			PORTG &= ~_BV(_this->realpin);
-			break;
-		};
+	Log_debug("Lamp %x \n", _this->pin);
+
+	_switchOn(_this);
+
+#ifdef DRV_LED_DIMMING
+	if (_this->dimValue > 0 ){
+		_dim(_this, _this->dimValue);
 	}
+#endif
 	return SDDS_RT_OK;
 }
+
+void _switchOff(LED _this) {
+	if (_this->sourceing) {
+			switch (_this->bank) {
+			case (LED_CONF_BANK_A):
+				PORTA &= ~_BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_B):
+				PORTB &= ~_BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_C):
+				PORTC &= ~_BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_D):
+				PORTD &= ~_BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_E):
+				PORTE &= ~_BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_F):
+				PORTF &= ~_BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_G):
+				PORTG &= ~_BV(_this->realpin);
+				break;
+			};
+		} else {
+			switch (_this->bank) {
+			case (LED_CONF_BANK_A):
+				PORTA |= _BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_B):
+				PORTB |= _BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_C):
+				PORTC |= _BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_D):
+				PORTD |= _BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_E):
+				PORTE |= _BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_F):
+				PORTF |= _BV(_this->realpin);
+				break;
+			case (LED_CONF_BANK_G):
+				PORTG |= _BV(_this->realpin);
+				break;
+			};
+		}
+}
+
+
 rc_t LED_switchOff(LED _this) {
 
 	if (_this == NULL ) {
 		return SDDS_RT_BAD_PARAMETER;
 	}
-	if (_this->sourceing) {
-		switch (_this->bank) {
-		case (LED_CONF_BANK_A):
-			PORTA &= ~_BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_B):
-			PORTB &= ~_BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_C):
-			PORTC &= ~_BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_D):
-			PORTD &= ~_BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_E):
-			PORTE &= ~_BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_F):
-			PORTF &= ~_BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_G):
-			PORTG &= ~_BV(_this->realpin);
-			break;
-		};
-	} else {
-		switch (_this->bank) {
-		case (LED_CONF_BANK_A):
-			PORTA |= _BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_B):
-			PORTB |= _BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_C):
-			PORTC |= _BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_D):
-			PORTD |= _BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_E):
-			PORTE |= _BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_F):
-			PORTF |= _BV(_this->realpin);
-			break;
-		case (LED_CONF_BANK_G):
-			PORTG |= _BV(_this->realpin);
-			break;
-		};
+	Log_debug("Lamp %x \n", _this->pin);
+
+	_switchOff(_this);
+
+
+#ifdef DRV_LED_DIMMING
+	if (_this->dimValue > 0) {
+		_dim(_this, 0);
 	}
+#endif
 	return SDDS_RT_OK;
 }
 rc_t LED_toggle(LED _this) {
@@ -410,12 +447,7 @@ rc_t LED_getState(LED _this, bool_t* state) {
 }
 
 #ifdef DRV_LED_DIMMING
-rc_t LED_dim(LED _this, uint8_t setValue) {
-
-	if (_this == NULL ) {
-		return SDDS_RT_BAD_PARAMETER;
-	}
-	_this->dimValue = setValue;
+void _dim(LED _this, uint8_t setValue) {
 
 #if defined (DRV_LED_DIMMING_GAMMACORRECTION_16BIT)
 	uint16_t val;
@@ -434,15 +466,15 @@ rc_t LED_dim(LED _this, uint8_t setValue) {
 
 	// check if dimm value is 0, deactivate the port
 	if (setValue > 0) {
-		LED_switchOn(_this);
+		_switchOn(_this);
 	} else {
-		LED_switchOff(_this);
+		_switchOff(_this);
 	}
 
 
 	if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_5) {
 		// timer 1
-		OCR1A = val;
+		OCR1A = (uint16_t) val;
 	} else if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_6) {
 		// timer 1
 		OCR1B = val;
@@ -453,6 +485,17 @@ rc_t LED_dim(LED _this, uint8_t setValue) {
 		// timer 2
 		OCR2A = val;
 	}
+}
+rc_t LED_dim(LED _this, uint8_t setValue) {
+
+	if (_this == NULL ) {
+		return SDDS_RT_BAD_PARAMETER;
+	}
+	Log_debug("New Value %u\n", setValue);
+	_this->dimValue = setValue;
+
+
+	_dim(_this, setValue);
 
 	return SDDS_RT_OK;
 }
