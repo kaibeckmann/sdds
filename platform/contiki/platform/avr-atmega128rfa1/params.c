@@ -159,10 +159,15 @@ params_get_channel(void) {
 }
 uint8_t
 params_get_eui64(uint8_t *eui64) {
+	uint8_t buffer[sizeof(rimeaddr_t)];
   cli();
   //eeprom_read_block ((void *)eui64, &eemem_mac_address, sizeof(rimeaddr_t));
-  eeprom_read_block ((void *)eui64, 0x0000, sizeof(rimeaddr_t));
+  eeprom_read_block ((void *)buffer, 0x0000, sizeof(rimeaddr_t));
   sei();
+  uint8_t j = 0;
+  for (uint8_t i = sizeof(rimeaddr_t) ; i > 0; i--, j++){
+	  eui64[j] = buffer[i-1];
+  }
 #if CONTIKI_CONF_RANDOM_MAC
   return randomeui64;
 #else
