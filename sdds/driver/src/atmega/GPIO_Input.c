@@ -12,6 +12,8 @@
 #include "sdds/sdds_types.h"
 #include "sdds/Log.h"
 
+#if 1
+
 /*
  #define GPIO_INPUT_MODE_INTERUPT_ENABLE			0x01
  #define GPIO_INPUT_MODE_NEGATIVE_LOGIC			0x02
@@ -23,14 +25,50 @@
  #define GPIO_INPUT_MODE_free6					0x80
  */
 
-#define GPIO_INPUT_IRQ_ENABLE_INT0
-#define GPIO_INPUT_IRQ_ENABLE_INT1
-#define GPIO_INPUT_IRQ_ENABLE_INT2
-#define GPIO_INPUT_IRQ_ENABLE_INT3
+
+//#define GPIO_INPUT_IRQ_ENABLE_INT0
+//#define GPIO_INPUT_IRQ_ENABLE_INT1
+//#define GPIO_INPUT_IRQ_ENABLE_INT2
+//#define GPIO_INPUT_IRQ_ENABLE_INT3
 #define GPIO_INPUT_IRQ_ENABLE_INT4
 #define GPIO_INPUT_IRQ_ENABLE_INT5
-#define GPIO_INPUT_IRQ_ENABLE_INT6
+//#define GPIO_INPUT_IRQ_ENABLE_INT6
 #define GPIO_INPUT_IRQ_ENABLE_INT7
+
+
+//#define GPIO_INPUT_IRQ_ENABLE_PCINT0
+/*
+#define GPIO_INPUT_IRQ_ENABLE_PCINT1
+#define GPIO_INPUT_IRQ_ENABLE_PCINT2
+#define GPIO_INPUT_IRQ_ENABLE_PCINT3
+#define GPIO_INPUT_IRQ_ENABLE_PCINT4
+#define GPIO_INPUT_IRQ_ENABLE_PCINT5
+#define GPIO_INPUT_IRQ_ENABLE_PCINT6
+#define GPIO_INPUT_IRQ_ENABLE_PCINT7
+*/
+
+#ifdef GPIO_INPUT_IRQ_ENABLE_PCINT0
+GPIO_Input_CallBack_Handler handler_pcint0 = NULL;
+GPIO_Input gpio_input_pcint0 = NULL;
+/**
+ * todo support more than one irq sources
+ */
+ISR(PCINT0_vect) {
+	/* Interrupt Code */
+
+	// io port has changed
+
+	bool_t value = 0;
+
+	//PCMSK0 &= ~_BV(PCINT0);
+
+	if (gpio_input_pcint0 != NULL && handler_pcint0 != NULL) {
+		//GPIO_Input_getState(gpio_input_pcint0, &value);
+		(*handler_pcint0)(gpio_input_pcint0, value);
+	}
+}
+#endif
+
 
 #ifdef GPIO_INPUT_IRQ_ENABLE_INT0
 GPIO_Input_CallBack_Handler handler_int0;
@@ -294,40 +332,6 @@ rc_t GPIO_Input_setCallback(GPIO_Input _this,
 
 #ifdef __AVR_ATmega128RFA1__
 
-	// save the handler and the led structure
-#ifdef GPIO_INPUT_IRQ_ENABLE_INT0
-	handler_int0 = callback;
-	gpio_input_int0 = _this;
-#endif
-#ifdef GPIO_INPUT_IRQ_ENABLE_INT1
-	handler_int1 = callback;
-	gpio_input_int1 = _this;
-#endif
-#ifdef GPIO_INPUT_IRQ_ENABLE_INT2
-	handler_int2 = callback;
-	gpio_input_int2 = _this;
-#endif
-#ifdef GPIO_INPUT_IRQ_ENABLE_INT3
-	handler_int3 = callback;
-	gpio_input_int3 = _this;
-#endif
-#ifdef GPIO_INPUT_IRQ_ENABLE_INT4
-	handler_int4 = callback;
-	gpio_input_int4 = _this;
-#endif
-#ifdef GPIO_INPUT_IRQ_ENABLE_INT5
-	handler_int5 = callback;
-	gpio_input_int5 = _this;
-#endif
-#ifdef GPIO_INPUT_IRQ_ENABLE_INT6
-	handler_int6 = callback;
-	gpio_input_int6 = _this;
-#endif
-#ifdef GPIO_INPUT_IRQ_ENABLE_INT7
-	handler_int7 = callback;
-	gpio_input_int7 = _this;
-#endif
-
 	// activate interrupt
 
 	// check if interupts are configured, if not error
@@ -338,6 +342,10 @@ rc_t GPIO_Input_setCallback(GPIO_Input _this,
 
 	if (_this->bank == GPIO_INPUT_ATMEGA_BANK_E && _this->pin == 4) {
 		// PE4 und INT4
+#ifdef GPIO_INPUT_IRQ_ENABLE_INT4
+		handler_int4 = callback;
+		gpio_input_int4 = _this;
+#endif
 		if (_this->mode & GPIO_INPUT_MODE_CALLBACK_LEVEL_TRIGGER) {
 			// do nothing in EICRx
 		}
@@ -357,6 +365,10 @@ rc_t GPIO_Input_setCallback(GPIO_Input _this,
 
 	} else if (_this->bank == GPIO_INPUT_ATMEGA_BANK_E && _this->pin == 5) {
 		// PE5 und INT5
+#ifdef GPIO_INPUT_IRQ_ENABLE_INT5
+		handler_int5 = callback;
+		gpio_input_int5 = _this;
+#endif
 		if (_this->mode & GPIO_INPUT_MODE_CALLBACK_LEVEL_TRIGGER) {
 			// do nothing in EICRx
 		}
@@ -375,6 +387,10 @@ rc_t GPIO_Input_setCallback(GPIO_Input _this,
 		EIMSK |= _BV(INT5);
 	} else if (_this->bank == GPIO_INPUT_ATMEGA_BANK_E && _this->pin == 6) {
 		// PE6 and INT6
+#ifdef GPIO_INPUT_IRQ_ENABLE_INT6
+		handler_int6 = callback;
+		gpio_input_int6 = _this;
+#endif
 		if (_this->mode & GPIO_INPUT_MODE_CALLBACK_LEVEL_TRIGGER) {
 			// do nothing in EICRx
 		}
@@ -393,6 +409,10 @@ rc_t GPIO_Input_setCallback(GPIO_Input _this,
 		EIMSK |= _BV(INT6);
 	} else if (_this->bank == GPIO_INPUT_ATMEGA_BANK_E && _this->pin == 7) {
 		// PE7 und INT7
+#ifdef GPIO_INPUT_IRQ_ENABLE_INT7
+		handler_int7 = callback;
+		gpio_input_int7 = _this;
+#endif
 		if (_this->mode & GPIO_INPUT_MODE_CALLBACK_LEVEL_TRIGGER) {
 			// do nothing in EICRx
 		}
@@ -411,6 +431,10 @@ rc_t GPIO_Input_setCallback(GPIO_Input _this,
 		EIMSK |= _BV(INT7);
 	} else if (_this->bank == GPIO_INPUT_ATMEGA_BANK_D && _this->pin == 0) {
 		// PD0 and INT0
+#ifdef GPIO_INPUT_IRQ_ENABLE_INT0
+		handler_int0 = callback;
+		gpio_input_int0 = _this;
+#endif
 		if (_this->mode & GPIO_INPUT_MODE_CALLBACK_LEVEL_TRIGGER) {
 			// do nothing in EICRx
 		}
@@ -429,6 +453,10 @@ rc_t GPIO_Input_setCallback(GPIO_Input _this,
 		EIMSK |= _BV(INT0);
 	} else if (_this->bank == GPIO_INPUT_ATMEGA_BANK_D && _this->pin == 1) {
 		// PD1 and INT1
+#ifdef GPIO_INPUT_IRQ_ENABLE_INT1
+		handler_int1 = callback;
+		gpio_input_int1 = _this;
+#endif
 		if (_this->mode & GPIO_INPUT_MODE_CALLBACK_LEVEL_TRIGGER) {
 			// do nothing in EICRx
 		}
@@ -447,6 +475,10 @@ rc_t GPIO_Input_setCallback(GPIO_Input _this,
 		EIMSK |= _BV(INT1);
 	} else if (_this->bank == GPIO_INPUT_ATMEGA_BANK_D && _this->pin == 2) {
 		// PD2 and INT2
+#ifdef GPIO_INPUT_IRQ_ENABLE_INT2
+		handler_int2 = callback;
+		gpio_input_int2 = _this;
+#endif
 		if (_this->mode & GPIO_INPUT_MODE_CALLBACK_LEVEL_TRIGGER) {
 			// do nothing in EICRx
 		}
@@ -465,6 +497,12 @@ rc_t GPIO_Input_setCallback(GPIO_Input _this,
 		EIMSK |= _BV(INT2);
 	} else if (_this->bank == GPIO_INPUT_ATMEGA_BANK_D && _this->pin == 3) {
 		// PD3 and INT3
+
+#ifdef GPIO_INPUT_IRQ_ENABLE_INT3
+		handler_int3 = callback;
+		gpio_input_int3 = _this;
+#endif
+
 		if (_this->mode & GPIO_INPUT_MODE_CALLBACK_LEVEL_TRIGGER) {
 			// do nothing in EICRx
 		}
@@ -481,9 +519,21 @@ rc_t GPIO_Input_setCallback(GPIO_Input _this,
 		}
 		// unmask interupt
 		EIMSK |= _BV(INT3);
+	} else if (_this->bank == GPIO_INPUT_ATMEGA_BANK_B && _this->pin == 0) {
+		// PB0 and PCINT0
+		// only one irq handler for all PCINTs
+#ifdef GPIO_INPUT_IRQ_ENABLE_PCINT0
+		handler_pcint0 = callback;
+		gpio_input_pcint0 = _this;
+#endif
+		// activate IRQ handling for all PCINTs
+		PCICR |= _BV(PCIE0);
+		// activate PCINT0 for pin PB0
+		PCMSK0 |= _BV(PCINT0);
 	}
 
-#endif
+#endif /* __AVR_ATmega128RFA1__*/
+
 	return SDDS_RT_OK;
 }
 rc_t GPIO_Input_getState(GPIO_Input _this, bool_t* state) {
@@ -526,3 +576,21 @@ rc_t GPIO_Input_getState(GPIO_Input _this, bool_t* state) {
 #endif
 	return SDDS_RT_OK;
 }
+
+rc_t GPIO_Input_activateInterrupt(GPIO_Input _this) {
+
+	if (_this->bank == GPIO_INPUT_ATMEGA_BANK_B && _this->pin == 0) {
+		PCMSK0 |= _BV(PCINT0);
+	}
+	return SDDS_RT_OK;
+}
+
+rc_t GPIO_Input_deactivateInterrupt(GPIO_Input _this) {
+
+	if (_this->bank == GPIO_INPUT_ATMEGA_BANK_B && _this->pin == 0) {
+		PCMSK0 &= ~_BV(PCINT0);
+	}
+	return SDDS_RT_OK;
+}
+
+#endif

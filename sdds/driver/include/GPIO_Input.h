@@ -44,6 +44,10 @@ rc_t GPIO_Input_init(GPIO_Input _this);
 // callback is called depending on configuration
 rc_t GPIO_Input_setCallback(GPIO_Input _this, GPIO_Input_CallBack_Handler callback );
 
+rc_t GPIO_Input_activateInterrupt(GPIO_Input _this);
+
+rc_t GPIO_Input_deactivateInterrupt(GPIO_Input _this);
+
 rc_t GPIO_Input_getState(GPIO_Input _this, bool_t* state);
 
 
