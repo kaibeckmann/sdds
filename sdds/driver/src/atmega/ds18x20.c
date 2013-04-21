@@ -201,7 +201,7 @@ rc_t DS18X20_read_celsius(int16_t* temperature) {
 
 	uint8_t sp[DS18X20_SP_SIZE];
 	uint8_t ret;
-
+	
 	ow_reset();
 	ret = read_scratchpad(gSensorID[0], sp, DS18X20_SP_SIZE);
 	if (ret == DS18X20_OK) {
@@ -212,6 +212,17 @@ rc_t DS18X20_read_celsius(int16_t* temperature) {
 	}
 }
 
+rc_t DS18X20_start_meassurement() {
+    uint8_t ret;
+    
+    ret = DS18X20_start_meas(DS18X20_POWER_EXTERN, gSensorID[0]);
+    
+    if (ret != DS18X20_OK) {
+        return SDDS_RT_FAIL;
+    }
+    
+    return SDDS_RT_OK;
+}
 
 void DS18X20_show_id_uart(uint8_t *id, size_t n) {
 	size_t i;
@@ -243,6 +254,7 @@ void DS18X20_show_id_uart(uint8_t *id, size_t n) {
 		PRINTF(" CRC FAIL ");
 	else
 		PRINTF(" CRC O.K. ");
+	printf("\n");
 }
 
 
