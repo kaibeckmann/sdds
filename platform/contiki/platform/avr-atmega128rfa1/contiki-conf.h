@@ -210,7 +210,7 @@ typedef unsigned short uip_stats_t;
 /* If wait is too short the connection can be reset as a result of multiple fragment reassembly timeouts */
 #define UIP_CONF_WAIT_TIMEOUT    20
 /* 211 bytes per queue buffer */
-#define QUEUEBUF_CONF_NUM         5
+#define QUEUEBUF_CONF_NUM         3
 /* 54 bytes per queue ref buffer */
 #define QUEUEBUF_CONF_REF_NUM     2
 /* Allocate remaining RAM as desired */
