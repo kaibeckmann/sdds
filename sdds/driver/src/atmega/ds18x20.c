@@ -254,7 +254,7 @@ void DS18X20_show_id_uart(uint8_t *id, size_t n) {
 		PRINTF(" CRC FAIL ");
 	else
 		PRINTF(" CRC O.K. ");
-	printf("\n");
+	PRINTF("\n");
 }
 
 
