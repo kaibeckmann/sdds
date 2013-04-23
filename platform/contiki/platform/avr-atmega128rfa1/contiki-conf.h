@@ -75,7 +75,7 @@ void clock_adjust_ticks(clock_time_t howmany);
 /* Michael Hartman's atmega128rfa1 board has an external 32768Hz crystal connected to TOSC1 and 2 pins similar to the Raven 1284p */
 /* and theoretically can use TIMER2 with it to keep time. Else TIMER0 is used. */
 /* The sleep timer requires the crystal and adds a TIMER2 interrupt routine if not already define by clock.c */
-#define AVR_CONF_USE32KCRYSTAL 0
+#define AVR_CONF_USE32KCRYSTAL 1
 
 /* Michael Hartman's protobyte board has LED on PORTE1, used for radio on indication */
 /* However this results in disabling UART0. */
@@ -146,7 +146,7 @@ typedef unsigned short uip_stats_t;
 #define RIMEADDR_CONF_SIZE        8
 #define UIP_CONF_ICMP6            1
 #define UIP_CONF_UDP              1
-#define UIP_CONF_TCP              1
+#define UIP_CONF_TCP              0
 #define NETSTACK_CONF_NETWORK     sicslowpan_driver
 #define SICSLOWPAN_CONF_COMPRESSION SICSLOWPAN_COMPRESSION_HC06
 #else
@@ -206,7 +206,7 @@ typedef unsigned short uip_stats_t;
 /* If wait is too short the connection can be reset as a result of multiple fragment reassembly timeouts */
 #define UIP_CONF_WAIT_TIMEOUT    20
 /* 211 bytes per queue buffer */
-#define QUEUEBUF_CONF_NUM         8
+#define QUEUEBUF_CONF_NUM         5
 /* 54 bytes per queue ref buffer */
 #define QUEUEBUF_CONF_REF_NUM     2
 /* Allocate remaining RAM as desired */
@@ -215,11 +215,11 @@ typedef unsigned short uip_stats_t;
 /* from previous GETs, causing decreased throughput, retransmissions, and timeouts. Increase to study this. */
 /* ACKs to other ports become interleaved with computation-intensive GETs, so ACKs are particularly missed. */
 /* Increasing the number of packet receive buffers in RAM helps to keep ACKs from being lost */
-#define UIP_CONF_MAX_CONNECTIONS  4
+#define UIP_CONF_MAX_CONNECTIONS  2
 /* 2 bytes per TCP listening port */
-#define UIP_CONF_MAX_LISTENPORTS  4
+#define UIP_CONF_MAX_LISTENPORTS  2
 /* 25 bytes per UDP connection */
-#define UIP_CONF_UDP_CONNS       10
+#define UIP_CONF_UDP_CONNS       2
 /* See uip-ds6.h */
 #define UIP_CONF_DS6_NBR_NBU      20
 #define UIP_CONF_DS6_DEFRT_NBU    2
@@ -259,13 +259,13 @@ typedef unsigned short uip_stats_t;
 #define SICSLOWPAN_CONF_FRAG      1
 #define SICSLOWPAN_CONF_MAXAGE    3
 /* 211 bytes per queue buffer. Contikimac burst mode needs 15 for a 1280 byte MTU */
-#define QUEUEBUF_CONF_NUM         15
+#define QUEUEBUF_CONF_NUM         3
 /* 54 bytes per queue ref buffer */
 #define QUEUEBUF_CONF_REF_NUM     2
 /* Allocate remaining RAM. Not much left due to queuebuf increase  */
 #define UIP_CONF_MAX_CONNECTIONS  2
-#define UIP_CONF_MAX_LISTENPORTS  4
-#define UIP_CONF_UDP_CONNS        5
+#define UIP_CONF_MAX_LISTENPORTS  2
+#define UIP_CONF_UDP_CONNS        2
 #define UIP_CONF_DS6_NBR_NBU      20
 #define UIP_CONF_DS6_DEFRT_NBU    2
 #define UIP_CONF_DS6_PREFIX_NBU   3
@@ -295,13 +295,13 @@ typedef unsigned short uip_stats_t;
 #define CXMAC_CONF_ANNOUNCEMENTS  0
 #define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE 8
 /* 211 bytes per queue buffer. Burst mode will need 15 for a 1280 byte MTU */
-#define QUEUEBUF_CONF_NUM         15
+#define QUEUEBUF_CONF_NUM         3
 /* 54 bytes per queue ref buffer */
 #define QUEUEBUF_CONF_REF_NUM     2
 /* Allocate remaining RAM. Not much left due to queuebuf increase  */
 #define UIP_CONF_MAX_CONNECTIONS  2
-#define UIP_CONF_MAX_LISTENPORTS  4
-#define UIP_CONF_UDP_CONNS        5
+#define UIP_CONF_MAX_LISTENPORTS  2
+#define UIP_CONF_UDP_CONNS        2
 #define UIP_CONF_DS6_NBR_NBU      4
 #define UIP_CONF_DS6_DEFRT_NBU    2
 #define UIP_CONF_DS6_PREFIX_NBU   3
@@ -331,7 +331,7 @@ typedef unsigned short uip_stats_t;
 /* For slow slip connections, to prevent buffer overruns */
 //#define UIP_CONF_RECEIVE_WINDOW 300
 #undef UIP_CONF_FWCACHE_SIZE
-#define UIP_CONF_FWCACHE_SIZE    30
+#define UIP_CONF_FWCACHE_SIZE    10
 #define UIP_CONF_BROADCAST       1
 #define UIP_ARCH_IPCHKSUM        1
 #define UIP_CONF_PINGADDRCONF    0
