@@ -92,6 +92,10 @@ void clock_adjust_ticks(clock_time_t howmany);
 /* Default is 4096. Currently used only when elfloader is present. Not tested on Raven */
 //#define MMEM_CONF_SIZE 256
 
+
+/* try to define buffer size for UIP */
+#define UIP_CONF_BUFFER_SIZE 600
+
 /* Starting address for code received via the codeprop facility. Not tested. */
 typedef unsigned long off_t;
 //#define EEPROMFS_ADDR_CODEPROP 0x8000
