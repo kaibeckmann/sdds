@@ -160,7 +160,7 @@ rc_t LED_init(LED _this) {
 	} else if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_6 && (_this->mode & LED_CONF_DIM_ACTIVATE)) {
 		// timer 1
 		TCCR1A |= _BV(COM1B1);
-		if (_this->sourceing == true) {
+		if (_this->sourceing == false) {
 			// inverse
 			TCCR1A |= _BV(COM1B0);
 		}
@@ -175,7 +175,7 @@ rc_t LED_init(LED _this) {
 	} else if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_7 && (_this->mode & LED_CONF_DIM_ACTIVATE)) {
 		// timer 1
 		TCCR1A |= _BV(COM1C1);
-		if (_this->sourceing == true) {
+		if (_this->sourceing == false) {
 			// inverse
 			TCCR1A |= _BV(COM1C0);
 		}
@@ -190,7 +190,7 @@ rc_t LED_init(LED _this) {
 	} else if (_this->bank == LED_CONF_BANK_B && _this->pin == LED_CONF_PIN_4 && (_this->mode & LED_CONF_DIM_ACTIVATE)) {
 		// timer 2 achtung wird benötigt wenn der uC schlafen soll!
 		TCCR2A |= _BV(COM2A1);
-		if (_this->sourceing == true) {
+		if (_this->sourceing == false) {
 			// inverse
 			TCCR2A |= _BV(COM2A0);
 		}
