@@ -220,7 +220,7 @@ SIGNATURE = {
 FUSES ={.low = 0xde, .high = 0x99, .extended = 0xff,};
 
 /* Save the default settings into program flash memory */
-const uint8_t default_mac_address[8] PROGMEM = {0x02, 0x12, 0x13, 0xff, 0xfe, 0x14, 0x15, 0x16};
+const uint8_t default_mac_address[8] PROGMEM = {0x02, 0x12, 0x13, 0xff, 0xfe, 0x14, 0x23, 0x23};
 #ifdef CHANNEL_802_15_4
 const uint8_t default_channel PROGMEM = CHANNEL_802_15_4;
 #else
