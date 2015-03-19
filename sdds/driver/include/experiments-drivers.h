@@ -4,9 +4,9 @@
 #include <stdint.h>
 #include <sdds_types.h>
 
-#define TWI_TI0_ADDRESS 0xc2
-#define TWI_TI1_ADDRESS 0xc4
-#define TWI_TI2_ADDRESS 0xc8
+#define DRIVER_TWI_TI0_ADDRESS 0xc2
+#define DRIVER_TWI_TI1_ADDRESS 0xc4
+#define DRIVER_TWI_TI2_ADDRESS 0xc8
 
 /* initialize the light sensor
  *

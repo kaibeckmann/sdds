@@ -14,13 +14,13 @@
 #include "sdds_types.h"
 
 // DS18x20 EERPROM support disabled(0) or enabled(1) :
-#define DS18X20_EEPROMSUPPORT 1
+#define DRIVER_DS18X20_EEPROMSUPPORT 1
 // decicelsius functions disabled(0) or enabled(1):
-#define DS18X20_DECICELSIUS 1
+#define DRIVER_DS18X20_DECICELSIUS 1
 // max. resolution functions disabled(0) or enabled(1):
 #define DS18X20_MAX_RESOLUTION 1
 // extended output via UART disabled(0) or enabled(1) :
-#define DS18X20_VERBOSE 1
+#define DRIVER_DS18X20_VERBOSE 1
 
 
 

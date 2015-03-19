@@ -27,7 +27,7 @@ rc_t anemometer_read_minute(uint16_t *value);
 rc_t anemometer_read_hour(uint16_t *value);
 
 /*
- * the passed callback needs to be called every ANEMOMETER_CALLBACK_PERIOD (see config.h)
+ * the passed callback needs to be called every DRIVER_ANEMOMETER_CALLBACK_PERIOD (see config.h)
  * to keep track of the current speed
  */
 void anemometer_register_callback(void(*callback)(void));

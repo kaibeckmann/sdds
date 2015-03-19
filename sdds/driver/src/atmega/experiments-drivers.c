@@ -2,13 +2,13 @@
 #include "twi.h"
 #include "twi-pcf.h"
 
-#define TWI_TI_MODE1_DATA 0x0
-#define TWI_TI_MODE2_DATA 0x0
+#define DRIVER_TWI_TI_MODE1_DATA 0x0
+#define DRIVER_TWI_TI_MODE2_DATA 0x0
 
-#if REGISTER_SINGLE
-#define TWI_TI_AUTO_INCREMENT 0
+#if DRIVER_TWI_REGISTER_SINGLE
+#define DRIVER_TWI_TI_AUTO_INCREMENT 0
 #else
-#define TWI_TI_AUTO_INCREMENT (1 << 2)
+#define DRIVER_TWI_TI_AUTO_INCREMENT (1 << 2)
 #endif
 
 rc_t init_light(void)
@@ -75,15 +75,15 @@ rc_t setup_ti_one(uint8_t address)
 	data[1].byte = address;
 
 	data[2].type = TWI_TYPE_TRANSMIT_DATA;
-	data[2].byte = (0x0 | (TWI_TI_AUTO_INCREMENT << 5));
+	data[2].byte = (0x0 | (DRIVER_TWI_TI_AUTO_INCREMENT << 5));
 
 	tlc_regs = data + 3;
 
 	tlc_regs[0].type = TWI_TYPE_TRANSMIT_DATA;
-	tlc_regs[0].byte = (TWI_TI_MODE1_DATA | (TWI_TI_AUTO_INCREMENT << 5));
+	tlc_regs[0].byte = (DRIVER_TWI_TI_MODE1_DATA | (DRIVER_TWI_TI_AUTO_INCREMENT << 5));
 
 	tlc_regs[1].type = TWI_TYPE_TRANSMIT_DATA;
-	tlc_regs[1].byte = TWI_TI_MODE2_DATA;
+	tlc_regs[1].byte = DRIVER_TWI_TI_MODE2_DATA;
 
 	/* Brightness Control Registers */
 	for (i = 2; i < 0x12; i++)
@@ -127,13 +127,13 @@ rc_t setup_ti_one(uint8_t address)
 
 rc_t setup_ti_all(void)
 {
-	if (setup_ti_one(TWI_TI0_ADDRESS) != 0)
+	if (setup_ti_one(DRIVER_TWI_TI0_ADDRESS) != 0)
 		return SDDS_RT_FAIL;
 
-	if (setup_ti_one(TWI_TI1_ADDRESS) != 0)
+	if (setup_ti_one(DRIVER_TWI_TI1_ADDRESS) != 0)
 		return SDDS_RT_FAIL;
 
-	if (setup_ti_one(TWI_TI2_ADDRESS) != 0)
+	if (setup_ti_one(DRIVER_TWI_TI2_ADDRESS) != 0)
 		return SDDS_RT_FAIL;
 
 	return SDDS_RT_OK;

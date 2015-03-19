@@ -27,7 +27,7 @@ rc_t raingauge_read_minute(uint16_t *value);
 rc_t raingauge_read_hour(uint16_t *value);
 
 /*
- * the passed callback needs to be called every RAINGAUGE_CALLBACK_PERIOD (see config.h)
+ * the passed callback needs to be called every DRIVER_RAINGAUGE_CALLBACK_PERIOD (see config.h)
  * to keep track of the current speed
  */
 void raingauge_register_callback(void(*callback)(void));

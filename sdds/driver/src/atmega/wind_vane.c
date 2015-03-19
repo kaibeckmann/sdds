@@ -13,13 +13,13 @@
 #include <avr/io.h>
 
 /* resistor used as voltage divider */
-#define WIND_VANE_DIVIDER_RESISTOR 5.4f
+#define DRIVER_WIND_VANE_DIVIDER_RESISTOR 5.4f
 
 /* maximum amount of switch positions */
-#define WIND_VANE_MAX_SWITCHES 16
+#define DRIVER_WIND_VANE_MAX_SWITCHES 16
 
 /* lookup table for wind vane conversions, calculated on initialization */
-static uint16_t wind_vane_conversions[WIND_VANE_MAX_SWITCHES];
+static uint16_t wind_vane_conversions[DRIVER_WIND_VANE_MAX_SWITCHES];
 
 
 rc_t wind_vane_init(void)
@@ -27,7 +27,7 @@ rc_t wind_vane_init(void)
 	uint8_t i;
 
 	/* lookup table for wind vane resistors, recalculated on initialization */
-	float const wind_vane_resistors[WIND_VANE_MAX_SWITCHES] =
+	float const wind_vane_resistors[DRIVER_WIND_VANE_MAX_SWITCHES] =
 	{
 		33,
 		(33 * 8.2) / (33 + 8.2),
@@ -49,17 +49,17 @@ rc_t wind_vane_init(void)
 
 #if 1
 	// for connection to the adc
-	adc_init_mux(WIND_VANE_ADC_REFERENCE);
+	adc_init_mux(DRIVER_WIND_VANE_ADC_REFERENCE);
 	adc_init();
 #else
 	// for connection to the twi
 	twi_init();
 #endif
 
-	for (i = 0; i < WIND_VANE_MAX_SWITCHES; i++)
+	for (i = 0; i < DRIVER_WIND_VANE_MAX_SWITCHES; i++)
 	{
-		float const divider = wind_vane_resistors[i] / (wind_vane_resistors[i] + WIND_VANE_DIVIDER_RESISTOR);
-		wind_vane_conversions[i] = WIND_VANE_POSSIBLE_VALUES * divider;
+		float const divider = wind_vane_resistors[i] / (wind_vane_resistors[i] + DRIVER_WIND_VANE_DIVIDER_RESISTOR);
+		wind_vane_conversions[i] = DRIVER_WIND_VANE_POSSIBLE_VALUES * divider;
 	}
 
 	return SDDS_RT_OK;
@@ -77,7 +77,7 @@ static uint8_t closest_wind_vane_direction_index(uint16_t value)
 	current_min = abs(wind_vane_conversions[current_index] - value);
 	min_index = 0;
 
-	for (current_index = 1; current_index < WIND_VANE_MAX_SWITCHES; current_index++)
+	for (current_index = 1; current_index < DRIVER_WIND_VANE_MAX_SWITCHES; current_index++)
 	{
 		uint16_t distance;
 
@@ -99,7 +99,7 @@ rc_t wind_vane_read(uint8_t *value)
 	uint16_t read_value;
 
 	// for connection to the adc input 1
-	read_value = adc_read(WIND_VANE_ADC_CHANNEL);
+	read_value = adc_read(DRIVER_WIND_VANE_ADC_CHANNEL);
 
 	/* find the closest match from the lookup table */
 	*value = closest_wind_vane_direction_index(read_value);

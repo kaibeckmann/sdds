@@ -24,47 +24,47 @@
 «ENDDEFINE»
 
 «DEFINE defNetMaxOutQueue FOR Application-»
-#define sDDS_NET_MAX_OUT_QUEUE 2
+#define SDDS_NET_MAX_OUT_QUEUE 2
 «ENDDEFINE»
 
 «DEFINE defNetMaxBufSize FOR Application-»
-#define sDDS_NET_MAX_BUF_SIZE 30
+#define SDDS_NET_MAX_BUF_SIZE 30
 «ENDDEFINE»
 «DEFINE defNetMaxLocCount FOR Application-»
-#define sDDS_NET_MAX_LOCATOR_COUNT 10
+#define SDDS_NET_MAX_LOCATOR_COUNT 10
 «ENDDEFINE»
 «DEFINE defQosDW FOR Application-»
-#define sDDS_QOS_DW1_LATBUD 100
-#define sDDS_QOS_DW2_LATBUD 500
+#define SDDS_QOS_DW1_LATBUD 100
+#define SDDS_QOS_DW2_LATBUD 500
 «ENDDEFINE»
 «DEFINE defFlagTopicHasSub FOR Application-»
 «IF !this.eAllContents.typeSelect(DataReader).isEmpty-»
-#define sDDS_TOPIC_HAS_PUB
+#define SDDS_TOPIC_HAS_PUB
 «ENDIF-»
 «ENDDEFINE»
 «DEFINE defFlagTopicHasPub FOR Application-»
 «IF !this.eAllContents.typeSelect(DataWriter).isEmpty-»
-#define sDDS_TOPIC_HAS_SUB
+#define SDDS_TOPIC_HAS_SUB
 «ENDIF-»
 «ENDDEFINE»
 «DEFINE defTopicMsgCount FOR Application-»
-#define sDDS_TOPIC_APP_MSG_COUNT 2
+#define SDDS_TOPIC_APP_MSG_COUNT 2
 «ENDDEFINE»
 «DEFINE defTopicMaxCount FOR Application-»
-#define sDDS_TOPIC_MAX_COUNT «returnTopicList(this).size»
+#define SDDS_TOPIC_MAX_COUNT «returnTopicList(this).size»
 «ENDDEFINE»
 
 
 «DEFINE defMaxDW FOR Application-»
-#define sDDS_MAX_DW_APP «this.eAllContents.typeSelect(DataWriter).size»
+#define SDDS_MAX_DW_APP «this.eAllContents.typeSelect(DataWriter).size»
 «ENDDEFINE»
 
 «DEFINE defMaxDR FOR Application-»
-#define sDDS_MAX_DR_APP «this.eAllContents.typeSelect(DataReader).size»
+#define SDDS_MAX_DR_APP «this.eAllContents.typeSelect(DataReader).size»
 «ENDDEFINE»
 
 «DEFINE defEndian FOR System-»
-#define LOCAL_BYTEORDER_LITTLE_ENDIAN
+#define SDDS_LOCAL_BYTEORDER_LITTLE_ENDIAN
 «ENDDEFINE»
 
 «DEFINE defSNPSVersion FOR System-»

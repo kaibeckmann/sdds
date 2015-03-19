@@ -8,9 +8,9 @@
 
 #include "GammaCorrection.h"
 
-#ifdef DRV_LED_DIMMING_GAMMACORRECTION
+#ifdef DRIVER_LED_DIMMING_GAMMACORRECTION
 
-#ifdef DRV_LED_DIMMING_GAMMACORRECTION_8BIT
+#ifdef DRIVER_LED_DIMMING_GAMMACORRECTION_8BIT
 const uint8_t pwmtable_8to8[256] PROGMEM =
 {
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
@@ -30,9 +30,9 @@ const uint8_t pwmtable_8to8[256] PROGMEM =
 		0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFC, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD,
 		0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFD, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFE, 0xFF, 0xFF
 };
-#endif /* DRV_LED_DIMMING_GAMMACORRECTION_8BIT*/
+#endif /* DRIVER_LED_DIMMING_GAMMACORRECTION_8BIT*/
 
-#ifdef DRV_LED_DIMMING_GAMMACORRECTION_16BIT
+#ifdef DRIVER_LED_DIMMING_GAMMACORRECTION_16BIT
 const uint16_t pwmtable_8to16[256] PROGMEM =
 {
     0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3,
@@ -56,10 +56,10 @@ const uint16_t pwmtable_8to16[256] PROGMEM =
     37315, 38967, 40693, 42494, 44376, 46340, 48392, 50534, 52772,
     55108, 57548, 60096, 62757, 65535
 };
-#endif /*DRV_LED_DIMMING_GAMMACORRECTION_16BIT*/
+#endif /*DRIVER_LED_DIMMING_GAMMACORRECTION_16BIT*/
 
 
-#ifdef DRV_LED_DIMMING_GAMMACORRECTION_10BIT
+#ifdef DRIVER_LED_DIMMING_GAMMACORRECTION_10BIT
 const uint16_t pwmtable_8to10[256] PROGMEM =
 {
 	0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
@@ -89,31 +89,31 @@ const uint16_t pwmtable_8to10[256] PROGMEM =
 	879,  888,  897,  906,  916,  925,  935,  944,  954,  963,
 	973,  983,  993, 1003, 1013, 1023
 };
-#endif /*DRV_LED_DIMMING_GAMMACORRECTION_10BIT*/
+#endif /*DRIVER_LED_DIMMING_GAMMACORRECTION_10BIT*/
 
-#ifdef DRV_LED_DIMMING_GAMMACORRECTION_8BIT
+#ifdef DRIVER_LED_DIMMING_GAMMACORRECTION_8BIT
 rc_t GammaCorrection_getValue8to8(uint8_t in, uint8_t* out) {
 
 	*out = pgm_read_byte(& pwmtable_8to8[in]);
 	return SDDS_RT_OK;
 }
-#endif /*DRV_LED_DIMMING_GAMMACORRECTION_8BIT*/
+#endif /*DRIVER_LED_DIMMING_GAMMACORRECTION_8BIT*/
 
 
-#ifdef DRV_LED_DIMMING_GAMMACORRECTION_16BIT
+#ifdef DRIVER_LED_DIMMING_GAMMACORRECTION_16BIT
 rc_t GammaCorrection_getValue8to16(uint8_t in, uint16_t* out) {
 
 	*out = pgm_read_word(&pwmtable_8to16[in]);
 	return SDDS_RT_OK;
 }
-#endif /* DRV_LED_DIMMING_GAMMACORRECTION_16BIT */
+#endif /* DRIVER_LED_DIMMING_GAMMACORRECTION_16BIT */
 
-#ifdef DRV_LED_DIMMING_GAMMACORRECTION_10BIT
+#ifdef DRIVER_LED_DIMMING_GAMMACORRECTION_10BIT
 rc_t GammaCorrection_getValue8to10(uint8_t in, uint16_t* out) {
 
 	*out = pgm_read_word(&pwmtable_8to10[in]);
 	return SDDS_RT_OK;
 }
-#endif /* DRV_LED_DIMMING_GAMMACORRECTION_10BIT */
+#endif /* DRIVER_LED_DIMMING_GAMMACORRECTION_10BIT */
 
-#endif /* DRV_LED_DIMMING_GAMMACORRECTION*/
+#endif /* DRIVER_LED_DIMMING_GAMMACORRECTION*/

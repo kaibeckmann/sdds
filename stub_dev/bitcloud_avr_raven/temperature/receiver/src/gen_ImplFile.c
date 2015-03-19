@@ -21,7 +21,7 @@ Eval_TemperaturDataReader drDataReader;
 DDS_Topic TempControlTopic;
 
 
-Eval_Temperatur temperaturBufferPool[sDDS_TOPIC_APP_MSG_COUNT];
+Eval_Temperatur temperaturBufferPool[SDDS_TOPIC_APP_MSG_COUNT];
 
 
 
@@ -130,7 +130,7 @@ Topic Eval_TemperaturTopic_create(void) {
     Locator loc;
     LocatorDB_newLocator(&loc);
     // init the msg pool
-    for (int i = 0; i < sDDS_TOPIC_APP_MSG_COUNT; i++){
+    for (int i = 0; i < SDDS_TOPIC_APP_MSG_COUNT; i++){
         Msg_init(&(topic->msg.pool[i]), (Data) &(temperaturBufferPool[i]));
     }
 

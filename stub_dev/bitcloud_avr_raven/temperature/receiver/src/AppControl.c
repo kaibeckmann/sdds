@@ -12,11 +12,11 @@
 #include <util/delay.h>
 #include <stdio.h>
 
-#ifndef sDDS_TEST_SENSORAPP
-#define sDDS_TEST_SENSORAPP
+#ifndef SDDS_TEST_SENSORAPP
+#define SDDS_TEST_SENSORAPP
 #endif
 
-#ifdef sDDS_TEST_SENSORAPP
+#ifdef SDDS_TEST_SENSORAPP
 
 #include "WSNVisualizer.h"
 
@@ -157,6 +157,6 @@ void sdds_app_fail(void)
 
 #endif
 
-#ifdef sDDS_TEST_ACTORAPP
+#ifdef SDDS_TEST_ACTORAPP
 
 #endif

@@ -10,13 +10,13 @@ rc_t twi_init_pcf(uint8_t channel)
 	data[0].type = TWI_TYPE_START;
 
 	data[1].type = TWI_TYPE_TRANSMIT_ADDRESS;
-	data[1].byte = TWI_PCF_8591P_ADDRESS;
+	data[1].byte = DRIVER_TWI_PCF_8591P_ADDRESS;
 
 	data[2].type = TWI_TYPE_TRANSMIT_DATA;
-	data[2].byte = TWI_PCF_8591P_CONTROL | channel;
+	data[2].byte = DRIVER_TWI_PCF_8591P_CONTROL | channel;
 
 	data[3].type = TWI_TYPE_TRANSMIT_DATA;
-	data[3].byte = TWI_PCF_8591P_TAP;
+	data[3].byte = DRIVER_TWI_PCF_8591P_TAP;
 
 	if (twi_communicate(data, sizeof data / sizeof *data, &failed_command) != 0)
 		return SDDS_RT_FAIL;
@@ -32,7 +32,7 @@ rc_t twi_read_pcf(uint8_t *value)
 	data[0].type = TWI_TYPE_START;
 
 	data[1].type = TWI_TYPE_RECEIVE_ADDRESS;
-	data[1].byte = TWI_PCF_8591P_ADDRESS;
+	data[1].byte = DRIVER_TWI_PCF_8591P_ADDRESS;
 
 	data[2].type = TWI_TYPE_RECEIVE_DATA; /* throw this byte away */
 

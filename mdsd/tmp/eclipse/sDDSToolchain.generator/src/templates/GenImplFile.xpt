@@ -199,7 +199,7 @@ Topic «ns»_«topic.topicContents.typeSelect(DataType).first().dataType.name»T
     LocatorDB_newLocator(&loc);
 «IF !this.eAllContents.typeSelect(DataReader).isEmpty-»
     // init the msg pool
-    for (int i = 0; i < sDDS_TOPIC_APP_MSG_COUNT; i++){
+    for (int i = 0; i < SDDS_TOPIC_APP_MSG_COUNT; i++){
         Msg_init(&(topic->msg.pool[i]), (Data) &(«topic.topicContents.typeSelect(DataType).dataType.first().name.toLowerCase()»BufferPool[i]));
     }
 «ENDIF»
@@ -216,13 +216,13 @@ Topic «ns»_«topic.topicContents.typeSelect(DataType).first().dataType.name»T
 «DEFINE msgDataBuffer(String ns) FOR Application-»
 «IF !this.eAllContents.typeSelect(DataReader).isEmpty-»
 «FOREACH returnTopicList(this).topicContents.typeSelect(DataType).dataType AS e-»
-«ns»_«e.name» «e.name.toLowerCase()»BufferPool[sDDS_TOPIC_APP_MSG_COUNT];
+«ns»_«e.name» «e.name.toLowerCase()»BufferPool[SDDS_TOPIC_APP_MSG_COUNT];
 «ENDFOREACH-»
 «ENDIF-»
 «ENDDEFINE»
 
 // data buffer for the msg
-Foo fooBufferPool[sDDS_TOPIC_APP2_MSG_COUNT];
+Foo fooBufferPool[SDDS_TOPIC_APP2_MSG_COUNT];
 
 «DEFINE makeImplHeader(String ns) FOR Application»
 #include "sDDS_«ns».h"

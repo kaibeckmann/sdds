@@ -25,34 +25,34 @@
 
 #include "ow.h"
 
-#ifdef OW_ONE_BUS
+#ifdef DRIVER_OW_ONE_BUS
 
-#define OW_GET_IN() ( OW_IN & (1<<OW_PIN))
-#define OW_OUT_LOW() ( OW_OUT &= (~(1 << OW_PIN)) )
-#define OW_OUT_HIGH() ( OW_OUT |= (1 << OW_PIN) )
-#define OW_DIR_IN() ( OW_DDR &= (~(1 << OW_PIN )) )
-#define OW_DIR_OUT() ( OW_DDR |= (1 << OW_PIN) )
+#define OW_GET_IN() ( DRIVER_OW_IN & (1<<DRIVER_OW_PIN))
+#define OW_OUT_LOW() ( DRIVER_OW_OUT &= (~(1 << DRIVER_OW_PIN)) )
+#define OW_OUT_HIGH() ( DRIVER_OW_OUT |= (1 << DRIVER_OW_PIN) )
+#define OW_DIR_IN() ( DRIVER_OW_DDR &= (~(1 << DRIVER_OW_PIN )) )
+#define OW_DIR_OUT() ( DRIVER_OW_DDR |= (1 << DRIVER_OW_PIN) )
 
 #else
 
 /* set bus-config with ow_set_bus() */
-uint8_t OW_PIN_MASK;
-volatile uint8_t* OW_IN;
-volatile uint8_t* OW_OUT;
-volatile uint8_t* OW_DDR;
+uint8_t DRIVER_OW_PIN_MASK;
+volatile uint8_t* DRIVER_OW_IN;
+volatile uint8_t* DRIVER_OW_OUT;
+volatile uint8_t* DRIVER_OW_DDR;
 
-#define OW_GET_IN() ( *OW_IN & OW_PIN_MASK )
-#define OW_OUT_LOW() ( *OW_OUT &= (uint8_t) ~OW_PIN_MASK )
-#define OW_OUT_HIGH() ( *OW_OUT |= (uint8_t) OW_PIN_MASK )
-#define OW_DIR_IN() ( *OW_DDR &= (uint8_t) ~OW_PIN_MASK )
-#define OW_DIR_OUT() ( *OW_DDR |= (uint8_t) OW_PIN_MASK )
+#define OW_GET_IN() ( *DRIVER_OW_IN & DRIVER_OW_PIN_MASK )
+#define OW_OUT_LOW() ( *DRIVER_OW_OUT &= (uint8_t) ~DRIVER_OW_PIN_MASK )
+#define OW_OUT_HIGH() ( *DRIVER_OW_OUT |= (uint8_t) DRIVER_OW_PIN_MASK )
+#define OW_DIR_IN() ( *DRIVER_OW_DDR &= (uint8_t) ~DRIVER_OW_PIN_MASK )
+#define OW_DIR_OUT() ( *DRIVER_OW_DDR |= (uint8_t) DRIVER_OW_PIN_MASK )
 
 void ow_set_bus(volatile uint8_t* in, volatile uint8_t* out,
 		volatile uint8_t* ddr, uint8_t pin) {
-	OW_DDR = ddr;
-	OW_OUT = out;
-	OW_IN = in;
-	OW_PIN_MASK = (1 << pin);
+	DRIVER_OW_DDR = ddr;
+	DRIVER_OW_OUT = out;
+	DRIVER_OW_IN = in;
+	DRIVER_OW_PIN_MASK = (1 << pin);
 	ow_reset();
 }
 
@@ -69,7 +69,7 @@ void ow_parasite_enable(void) {
 
 void ow_parasite_disable(void) {
 	OW_DIR_IN();
-#if (!OW_USE_INTERNAL_PULLUP)
+#if (!DRIVER_OW_USE_INTERNAL_PULLUP)
 	OW_OUT_LOW();
 #endif
 }
@@ -85,7 +85,7 @@ uint8_t ow_reset(void) {
 	{
 // set Pin as input - wait for clients to pull low
 		OW_DIR_IN(); // input
-#if OW_USE_INTERNAL_PULLUP
+#if DRIVER_OW_USE_INTERNAL_PULLUP
 		OW_OUT_HIGH();
 #endif
 
@@ -104,24 +104,24 @@ uint8_t ow_reset(void) {
 	return err;
 }
 
-/* Timing issue when using runtime-bus-selection (!OW_ONE_BUS):
+/* Timing issue when using runtime-bus-selection (!DRIVER_OW_ONE_BUS):
  The master should sample at the end of the 15-slot after initiating
  the read-time-slot. The variable bus-settings need more
  cycles than the constant ones so the delays had to be shortened
  to achive a 15uS overall delay
- Setting/clearing a bit in I/O Register needs 1 cyle in OW_ONE_BUS
+ Setting/clearing a bit in I/O Register needs 1 cyle in DRIVER_OW_ONE_BUS
  but around 14 cyles in configureable bus (us-Delay is 4 cyles per uS) */
 static uint8_t ow_bit_io_intern(uint8_t b, uint8_t with_parasite_enable) {
 	ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
 	{
-#if OW_USE_INTERNAL_PULLUP
+#if DRIVER_OW_USE_INTERNAL_PULLUP
 		OW_OUT_LOW();
 #endif
 		OW_DIR_OUT(); // drive bus low
 		_delay_us(2); // T_INT > 1usec accoding to timing-diagramm
 		if (b) {
 			OW_DIR_IN(); // to write "1" release bus, resistor pulls high
-#if OW_USE_INTERNAL_PULLUP
+#if DRIVER_OW_USE_INTERNAL_PULLUP
 			OW_OUT_HIGH();
 #endif
 		}
@@ -130,14 +130,14 @@ static uint8_t ow_bit_io_intern(uint8_t b, uint8_t with_parasite_enable) {
 // edge that initiated the read time slot. Therefore, the master must
 // release the bus and then sample the bus state within 15ussec from
 // the start of the slot."
-		_delay_us(15 - 2 - OW_CONF_DELAYOFFSET);
+		_delay_us(15 - 2 - DRIVER_OW_CONF_DELAYOFFSET);
 
 		if (OW_GET_IN() == 0) {
 			b = 0; // sample at end of read-timeslot
 		}
 
-		_delay_us(60 - 15 - 2 + OW_CONF_DELAYOFFSET);
-#if OW_USE_INTERNAL_PULLUP
+		_delay_us(60 - 15 - 2 + DRIVER_OW_CONF_DELAYOFFSET);
+#if DRIVER_OW_USE_INTERNAL_PULLUP
 		OW_OUT_HIGH();
 #endif
 		OW_DIR_IN();
@@ -148,7 +148,7 @@ static uint8_t ow_bit_io_intern(uint8_t b, uint8_t with_parasite_enable) {
 
 	} /* ATOMIC_BLOCK */
 
-	_delay_us(OW_RECOVERY_TIME); // may be increased for longer wires
+	_delay_us(DRIVER_OW_RECOVERY_TIME); // may be increased for longer wires
 
 	return b;
 }
@@ -200,13 +200,13 @@ uint8_t ow_rom_search(uint8_t diff, uint8_t *id) {
 	uint8_t b;
 
 	if (ow_reset()) {
-		return OW_PRESENCE_ERR; // error, no device found <--- early exit!
+		return DRIVER_OW_PRESENCE_ERR; // error, no device found <--- early exit!
 	}
 
-	ow_byte_wr(OW_SEARCH_ROM); // ROM search command
-	next_diff = OW_LAST_DEVICE; // unchanged on last device
+	ow_byte_wr(DRIVER_OW_SEARCH_ROM); // ROM search command
+	next_diff = DRIVER_OW_LAST_DEVICE; // unchanged on last device
 
-	i = OW_ROMCODE_SIZE * 8; // 8 bytes
+	i = DRIVER_OW_ROMCODE_SIZE * 8; // 8 bytes
 
 	do {
 		j = 8; // 8 bits
@@ -214,7 +214,7 @@ uint8_t ow_rom_search(uint8_t diff, uint8_t *id) {
 			b = ow_bit_io(1); // read bit
 			if (ow_bit_io(1)) { // read complement bit
 				if (b) { // 0b11
-					return OW_DATA_ERR; // data error <--- early exit!
+					return DRIVER_OW_DATA_ERR; // data error <--- early exit!
 				}
 			} else {
 				if (!b) { // 0b00 = 2 devices
@@ -248,14 +248,14 @@ static void ow_command_intern(uint8_t command, uint8_t *id,
 	ow_reset();
 
 	if (id) {
-		ow_byte_wr(OW_MATCH_ROM); // to a single device
-		i = OW_ROMCODE_SIZE;
+		ow_byte_wr(DRIVER_OW_MATCH_ROM); // to a single device
+		i = DRIVER_OW_ROMCODE_SIZE;
 		do {
 			ow_byte_wr(*id);
 			id++;
 		} while (--i);
 	} else {
-		ow_byte_wr(OW_SKIP_ROM); // to all devices
+		ow_byte_wr(DRIVER_OW_SKIP_ROM); // to all devices
 	}
 
 	if (with_parasite_enable) {

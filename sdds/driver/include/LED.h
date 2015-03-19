@@ -24,7 +24,7 @@ rc_t LED_switchOff(LED _this);
 rc_t LED_toggle(LED _this);
 rc_t LED_getState(LED _this, bool_t* state);
 
-#ifdef DRV_LED_DIMMING
+#ifdef DRIVER_LED_DIMMING
 rc_t LED_dim(LED _this, uint8_t setValue);
 rc_t LED_getDimValue(LED _this, uint8_t* value);
 #endif
