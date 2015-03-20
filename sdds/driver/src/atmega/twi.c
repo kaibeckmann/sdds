@@ -46,7 +46,7 @@ void twi_init(void)
 
 	power_twi_enable();
 
-#ifdef CONFIG_USE_DERFMEGA128
+#ifdef TARGET_USE_DERFMEGA128
 	/* deactivate the onboard twi-eeprom */
 	DDRD |= _BV(DDD6);
 #endif

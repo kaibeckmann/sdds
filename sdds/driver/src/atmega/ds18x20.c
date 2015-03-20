@@ -67,52 +67,52 @@
 #define RETURN_DS18X20_CONVERTING 0x01
 
 /* DS18X20 specific values (see datasheet) */
-#define PREDEF_VAL_DS18S20_FAMILY_CODE 0x10
-#define PREDEF_VAL_DS18B20_FAMILY_CODE 0x28
-#define PREDEF_VAL_DS1822_FAMILY_CODE 0x22
+#define DRIVER_CONF_DS18S20_FAMILY_CODE 0x10
+#define DRIVER_CONF_DS18B20_FAMILY_CODE 0x28
+#define DRIVER_CONF_DS1822_FAMILY_CODE 0x22
 
-#define PREDEF_VAL_DS18X20_CONVERT_T 0x44
-#define PREDEF_VAL_DS18X20_READ 0xBE
-#define PREDEF_VAL_DS18X20_WRITE 0x4E
-#define PREDEF_VAL_DS18X20_EE_WRITE 0x48
-#define PREDEF_VAL_DS18X20_EE_RECALL 0xB8
-#define PREDEF_VAL_PREDEF_VAL_DS18X20_READ_POWER_SUPPLY 0xB4
+#define DRIVER_CONF_DS18X20_CONVERT_T 0x44
+#define DRIVER_CONF_DS18X20_READ 0xBE
+#define DRIVER_CONF_DS18X20_WRITE 0x4E
+#define DRIVER_CONF_DS18X20_EE_WRITE 0x48
+#define DRIVER_CONF_DS18X20_EE_RECALL 0xB8
+#define DRIVER_CONF_DS18X20_READ_POWER_SUPPLY 0xB4
 
-#define PREDEF_VAL_DS18B20_CONF_REG 4
-#define PREDEF_VAL_DS18B20_9_BIT 0
-#define PREDEF_VAL_DS18B20_9_BIT (1<<5)
-#define PREDEF_VAL_DS18B20_11_BIT (1<<6)
-#define PREDEF_VAL_DS18B20_12_BIT ((1<<6)|(1<<5))
-#define PREDEF_VAL_DS18B20_RES_MASK ((1<<6)|(1<<5))
+#define DRIVER_CONF_DS18B20_CONF_REG 4
+#define DRIVER_CONF_DS18B20_9_BIT 0
+#define DRIVER_CONF_DS18B20_9_BIT (1<<5)
+#define DRIVER_CONF_DS18B20_11_BIT (1<<6)
+#define DRIVER_CONF_DS18B20_12_BIT ((1<<6)|(1<<5))
+#define DRIVER_CONF_DS18B20_RES_MASK ((1<<6)|(1<<5))
 
 // undefined bits in LSB if 18B20 != 12bit
-#define PREDEF_VAL_DS18B20_9_BIT_UNDF ((1<<0)|(1<<1)|(1<<2))
-#define PREDEF_VAL_DS18B20_9_BIT_UNDF ((1<<0)|(1<<1))
-#define PREDEF_VAL_DS18B20_11_BIT_UNDF ((1<<0))
-#define PREDEF_VAL_DS18B20_12_BIT_UNDF 0
+#define DRIVER_CONF_DS18B20_9_BIT_UNDF ((1<<0)|(1<<1)|(1<<2))
+#define DRIVER_CONF_DS18B20_9_BIT_UNDF ((1<<0)|(1<<1))
+#define DRIVER_CONF_DS18B20_11_BIT_UNDF ((1<<0))
+#define DRIVER_CONF_DS18B20_12_BIT_UNDF 0
 
 // conversion times in milliseconds
-#define PREDEF_VAL_DS18B20_TCONV_12BIT 750
-#define PREDEF_VAL_DS18B20_TCONV_11BIT DS18B20_TCONV_12_BIT/2
-#define PREDEF_VAL_DS18B20_TCONV_10BIT DS18B20_TCONV_12_BIT/4
-#define PREDEF_VAL_DS18B20_TCONV_9BIT DS18B20_TCONV_12_BIT/8
-#define PREDEF_VAL_DS18S20_TCONV DS18B20_TCONV_12_BIT
+#define DRIVER_CONF_DS18B20_TCONV_12BIT 750
+#define DRIVER_CONF_DS18B20_TCONV_11BIT DS18B20_TCONV_12_BIT/2
+#define DRIVER_CONF_DS18B20_TCONV_10BIT DS18B20_TCONV_12_BIT/4
+#define DRIVER_CONF_DS18B20_TCONV_9BIT DS18B20_TCONV_12_BIT/8
+#define DRIVER_CONF_DS18S20_TCONV DS18B20_TCONV_12_BIT
 
 // constant to convert the fraction bits to cel*(10^-4)
-#define PREDEF_VAL_DS18X20_FRACCONV 625
+#define DRIVER_CONF_DS18X20_FRACCONV 625
 
 // scratchpad size in bytes
-#define PREDEF_VAL_DS18X20_SP_SIZE 9
+#define DRIVER_CONF_DS18X20_SP_SIZE 9
 
 // DS18X20 EEPROM-Support
-#define PREDEF_VAL_DS18X20_WRITE_SCRATCHPAD 0x4E
-#define PREDEF_VAL_DS18X20_COPY_SCRATCHPAD 0x48
-#define PREDEF_VAL_DS18X20_RECALL_E2 0xB8
-#define PREDEF_VAL_DS18X20_COPYSP_DELAY 10 /* ms */
-#define PREDEF_VAL_DS18X20_TH_REG 2
-#define PREDEF_VAL_DS18X20_TL_REG 3
+#define DRIVER_CONF_DS18X20_WRITE_SCRATCHPAD 0x4E
+#define DRIVER_CONF_DS18X20_COPY_SCRATCHPAD 0x48
+#define DRIVER_CONF_DS18X20_RECALL_E2 0xB8
+#define DRIVER_CONF_DS18X20_COPYSP_DELAY 10 /* ms */
+#define DRIVER_CONF_DS18X20_TH_REG 2
+#define DRIVER_CONF_DS18X20_TL_REG 3
 
-#define PREDEF_VAL_DS18X20_DECIMAL_CHAR '.'
+#define DRIVER_CONF_DS18X20_DECIMAL_CHAR '.'
 
 
 #if DRIVER_DS18X20_EEPROMSUPPORT
@@ -199,11 +199,11 @@ rc_t DS18X20_init() {
 
 rc_t DS18X20_read_celsius(int16_t* temperature) {
 
-	uint8_t sp[PREDEF_VAL_DS18X20_SP_SIZE];
+	uint8_t sp[DRIVER_CONF_DS18X20_SP_SIZE];
 	uint8_t ret;
 	
 	ow_reset();
-	ret = read_scratchpad(gSensorID[0], sp, PREDEF_VAL_DS18X20_SP_SIZE);
+	ret = read_scratchpad(gSensorID[0], sp, DRIVER_CONF_DS18X20_SP_SIZE);
 	if (ret == RETURN_DS18X20_OK) {
 		*temperature = DS18X20_raw_to_decicelsius(gSensorID[0][0], sp);
 		return SDDS_RT_OK;
@@ -239,11 +239,11 @@ void DS18X20_show_id_uart(uint8_t *id, size_t n) {
 //uart_puthex_byte(id[i]);
 		PRINTF("%X", id[i]);
 		if (i == 0) {
-			if (id[0] == PREDEF_VAL_DS18S20_FAMILY_CODE) {
+			if (id[0] == DRIVER_CONF_DS18S20_FAMILY_CODE) {
 				PRINTF(" (18S)");
-			} else if (id[0] == PREDEF_VAL_DS18B20_FAMILY_CODE) {
+			} else if (id[0] == DRIVER_CONF_DS18B20_FAMILY_CODE) {
 				PRINTF(" (18B)");
-			} else if (id[0] == PREDEF_VAL_DS1822_FAMILY_CODE) {
+			} else if (id[0] == DRIVER_CONF_DS1822_FAMILY_CODE) {
 				PRINTF(" (22)");
 			} else {
 				PRINTF(" ( ? )");
@@ -275,8 +275,8 @@ uint8_t DS18X20_find_sensor(uint8_t *diff, uint8_t id[]) {
 			go = 0;
 			ret = RETURN_DS18X20_ERROR;
 		} else {
-			if (id[0] == PREDEF_VAL_DS18B20_FAMILY_CODE || id[0] == PREDEF_VAL_DS18S20_FAMILY_CODE
-					|| id[0] == PREDEF_VAL_DS1822_FAMILY_CODE) {
+			if (id[0] == DRIVER_CONF_DS18B20_FAMILY_CODE || id[0] == DRIVER_CONF_DS18S20_FAMILY_CODE
+					|| id[0] == DRIVER_CONF_DS1822_FAMILY_CODE) {
 				go = 0;
 			}
 		}
@@ -292,7 +292,7 @@ uint8_t DS18X20_get_power_status(uint8_t id[]) {
 	uint8_t pstat;
 
 	ow_reset();
-	ow_command(PREDEF_VAL_PREDEF_VAL_DS18X20_READ_POWER_SUPPLY, id);
+	ow_command(DRIVER_CONF_DS18X20_READ_POWER_SUPPLY, id);
 	pstat = ow_bit_io(1);
 	ow_reset();
 	return (pstat) ? RETURN_DS18X20_POWER_EXTERN : RETURN_DS18X20_POWER_PARASITE;
@@ -306,10 +306,10 @@ uint8_t DS18X20_start_meas(uint8_t with_power_extern, uint8_t id[]) {
 	ow_reset();
 	if (ow_input_pin_state()) { // only send if bus is "idle" = high
 		if (with_power_extern != RETURN_DS18X20_POWER_EXTERN) {
-			ow_command_with_parasite_enable(PREDEF_VAL_DS18X20_CONVERT_T, id);
+			ow_command_with_parasite_enable(DRIVER_CONF_DS18X20_CONVERT_T, id);
 			/* not longer needed: ow_parasite_enable(); */
 		} else {
-			ow_command(PREDEF_VAL_DS18X20_CONVERT_T, id);
+			ow_command(DRIVER_CONF_DS18X20_CONVERT_T, id);
 		}
 		ret = RETURN_DS18X20_OK;
 	} else {
@@ -330,11 +330,11 @@ static uint8_t read_scratchpad(uint8_t id[], uint8_t sp[], uint8_t n) {
 	uint8_t i;
 	uint8_t ret;
 
-	ow_command(PREDEF_VAL_DS18X20_READ, id);
+	ow_command(DRIVER_CONF_DS18X20_READ, id);
 	for (i = 0; i < n; i++) {
 		sp[i] = ow_byte_rd();
 	}
-	if (crc8(&sp[0], PREDEF_VAL_DS18X20_SP_SIZE)) {
+	if (crc8(&sp[0], DRIVER_CONF_DS18X20_SP_SIZE)) {
 		ret = RETURN_DS18X20_ERROR_CRC;
 	} else {
 		ret = RETURN_DS18X20_OK;
@@ -356,7 +356,7 @@ static int16_t DS18X20_raw_to_decicelsius(uint8_t familycode, uint8_t sp[]) {
 //measure = 0xFF5E; // test -10.125
 //measure = 0xFE6F; // test -25.0625
 
-	if (familycode == PREDEF_VAL_DS18S20_FAMILY_CODE) { // 9 -> 12 bit if 18S20
+	if (familycode == DRIVER_CONF_DS18S20_FAMILY_CODE) { // 9 -> 12 bit if 18S20
 	/* Extended measurements for DS18S20 contributed by Carsten Foss */
 		measure &= (uint16_t) 0xfffe; // Discard LSB, needed for later extended precicion calc
 		measure <<= 3; // Convert to 12-bit, now degrees are in 1/16 degrees units
@@ -373,16 +373,16 @@ static int16_t DS18X20_raw_to_decicelsius(uint8_t familycode, uint8_t sp[]) {
 	}
 
 // clear undefined bits for DS18B20 != 12bit resolution
-	if (familycode == PREDEF_VAL_DS18B20_FAMILY_CODE || familycode == PREDEF_VAL_DS1822_FAMILY_CODE) {
-		switch (sp[PREDEF_VAL_DS18B20_CONF_REG] & PREDEF_VAL_DS18B20_RES_MASK) {
-		case PREDEF_VAL_DS18B20_9_BIT:
-			measure &= ~(PREDEF_VAL_DS18B20_9_BIT_UNDF);
+	if (familycode == DRIVER_CONF_DS18B20_FAMILY_CODE || familycode == DRIVER_CONF_DS1822_FAMILY_CODE) {
+		switch (sp[DRIVER_CONF_DS18B20_CONF_REG] & DRIVER_CONF_DS18B20_RES_MASK) {
+		case DRIVER_CONF_DS18B20_9_BIT:
+			measure &= ~(DRIVER_CONF_DS18B20_9_BIT_UNDF);
 			break;
-		case PREDEF_VAL_DS18B20_9_BIT:
-			measure &= ~(PREDEF_VAL_DS18B20_9_BIT_UNDF);
+		case DRIVER_CONF_DS18B20_9_BIT:
+			measure &= ~(DRIVER_CONF_DS18B20_9_BIT_UNDF);
 			break;
-		case PREDEF_VAL_DS18B20_11_BIT:
-			measure &= ~(PREDEF_VAL_DS18B20_11_BIT_UNDF);
+		case DRIVER_CONF_DS18B20_11_BIT:
+			measure &= ~(DRIVER_CONF_DS18B20_11_BIT_UNDF);
 			break;
 		default:
 // 12 bit - all bits valid
@@ -427,7 +427,7 @@ static int32_t DS18X20_raw_to_maxres(uint8_t familycode, uint8_t sp[]) {
 //measure = 0xFF5E; // test -10.125
 //measure = 0xFE6F; // test -25.0625
 
-	if (familycode == PREDEF_VAL_DS18S20_FAMILY_CODE) { // 9 -> 12 bit if 18S20
+	if (familycode == DRIVER_CONF_DS18S20_FAMILY_CODE) { // 9 -> 12 bit if 18S20
 	/* Extended measurements for DS18S20 contributed by Carsten Foss */
 		measure &= (uint16_t) 0xfffe; // Discard LSB, needed for later extended precicion calc
 		measure <<= 3; // Convert to 12-bit, now degrees are in 1/16 degrees units
@@ -444,16 +444,16 @@ static int32_t DS18X20_raw_to_maxres(uint8_t familycode, uint8_t sp[]) {
 	}
 
 // clear undefined bits for DS18B20 != 12bit resolution
-	if (familycode == PREDEF_VAL_DS18B20_FAMILY_CODE || familycode == PREDEF_VAL_DS1822_FAMILY_CODE) {
-		switch (sp[PREDEF_VAL_DS18B20_CONF_REG] & PREDEF_VAL_DS18B20_RES_MASK) {
-		case PREDEF_VAL_DS18B20_9_BIT:
-			measure &= ~(PREDEF_VAL_DS18B20_9_BIT_UNDF);
+	if (familycode == DRIVER_CONF_DS18B20_FAMILY_CODE || familycode == DRIVER_CONF_DS1822_FAMILY_CODE) {
+		switch (sp[DRIVER_CONF_DS18B20_CONF_REG] & DRIVER_CONF_DS18B20_RES_MASK) {
+		case DRIVER_CONF_DS18B20_9_BIT:
+			measure &= ~(DRIVER_CONF_DS18B20_9_BIT_UNDF);
 			break;
-		case PREDEF_VAL_DS18B20_9_BIT:
-			measure &= ~(PREDEF_VAL_DS18B20_9_BIT_UNDF);
+		case DRIVER_CONF_DS18B20_9_BIT:
+			measure &= ~(DRIVER_CONF_DS18B20_9_BIT_UNDF);
 			break;
-		case PREDEF_VAL_DS18B20_11_BIT:
-			measure &= ~(PREDEF_VAL_DS18B20_11_BIT_UNDF);
+		case DRIVER_CONF_DS18B20_11_BIT:
+			measure &= ~(DRIVER_CONF_DS18B20_11_BIT_UNDF);
 			break;
 		default:
 // 12 bit - all bits valid
@@ -463,7 +463,7 @@ static int32_t DS18X20_raw_to_maxres(uint8_t familycode, uint8_t sp[]) {
 
 	temperaturevalue = (measure >> 4);
 	temperaturevalue *= 10000;
-	temperaturevalue += (measure & 0x000F) * PREDEF_VAL_DS18X20_FRACCONV;
+	temperaturevalue += (measure & 0x000F) * DRIVER_CONF_DS18X20_FRACCONV;
 
 	if (negative) {
 		temperaturevalue = -temperaturevalue;
@@ -473,11 +473,11 @@ static int32_t DS18X20_raw_to_maxres(uint8_t familycode, uint8_t sp[]) {
 }
 
 uint8_t DS18X20_read_maxres(uint8_t id[], int32_t *temperaturevalue) {
-	uint8_t sp[PREDEF_VAL_DS18X20_SP_SIZE];
+	uint8_t sp[DRIVER_CONF_DS18X20_SP_SIZE];
 	uint8_t ret;
 
 	ow_reset();
-	ret = read_scratchpad(id, sp, PREDEF_VAL_DS18X20_SP_SIZE);
+	ret = read_scratchpad(id, sp, DRIVER_CONF_DS18X20_SP_SIZE);
 	if (ret == RETURN_DS18X20_OK) {
 		*temperaturevalue = DS18X20_raw_to_maxres(id[0], sp);
 	}
@@ -496,10 +496,10 @@ uint8_t DS18X20_write_scratchpad(uint8_t id[], uint8_t th, uint8_t tl,
 
 	ow_reset();
 	if (ow_input_pin_state()) { // only send if bus is "idle" = high
-		ow_command(PREDEF_VAL_DS18X20_WRITE_SCRATCHPAD, id);
+		ow_command(DRIVER_CONF_DS18X20_WRITE_SCRATCHPAD, id);
 		ow_byte_wr(th);
 		ow_byte_wr(tl);
-		if (id[0] == PREDEF_VAL_DS18B20_FAMILY_CODE || id[0] == PREDEF_VAL_DS1822_FAMILY_CODE) {
+		if (id[0] == DRIVER_CONF_DS18B20_FAMILY_CODE || id[0] == DRIVER_CONF_DS1822_FAMILY_CODE) {
 			ow_byte_wr(conf); // config only available on DS18B20 and DS1822
 		}
 		ret = RETURN_DS18X20_OK;
@@ -531,12 +531,12 @@ uint8_t DS18X20_scratchpad_to_eeprom(uint8_t with_power_extern, uint8_t id[]) {
 	ow_reset();
 	if (ow_input_pin_state()) { // only send if bus is "idle" = high
 		if (with_power_extern != RETURN_DS18X20_POWER_EXTERN) {
-			ow_command_with_parasite_enable(PREDEF_VAL_DS18X20_COPY_SCRATCHPAD, id);
+			ow_command_with_parasite_enable(DRIVER_CONF_DS18X20_COPY_SCRATCHPAD, id);
 			/* not longer needed: ow_parasite_enable(); */
 		} else {
-			ow_command(PREDEF_VAL_DS18X20_COPY_SCRATCHPAD, id);
+			ow_command(DRIVER_CONF_DS18X20_COPY_SCRATCHPAD, id);
 		}
-		_delay_ms(PREDEF_VAL_DS18X20_COPYSP_DELAY); // wait for 10 ms
+		_delay_ms(DRIVER_CONF_DS18X20_COPYSP_DELAY); // wait for 10 ms
 		if (with_power_extern != RETURN_DS18X20_POWER_EXTERN) {
 			ow_parasite_disable();
 		}
@@ -555,7 +555,7 @@ uint8_t DS18X20_eeprom_to_scratchpad(uint8_t id[]) {
 
 	ow_reset();
 	if (ow_input_pin_state()) { // only send if bus is "idle" = high
-		ow_command(PREDEF_VAL_DS18X20_RECALL_E2, id);
+		ow_command(DRIVER_CONF_DS18X20_RECALL_E2, id);
 		while (retry_count-- && !(ow_bit_io(1))) {
 			;
 		}
