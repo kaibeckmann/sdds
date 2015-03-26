@@ -87,7 +87,7 @@
 
 // undefined bits in LSB if 18B20 != 12bit
 #define DRIVER_CONF_DS18B20_9_BIT_UNDF ((1<<0)|(1<<1)|(1<<2))
-#define DRIVER_CONF_DS18B20_9_BIT_UNDF ((1<<0)|(1<<1))
+#define DRIVER_CONF_DS18B20_10_BIT_UNDF ((1<<0)|(1<<1))
 #define DRIVER_CONF_DS18B20_11_BIT_UNDF ((1<<0))
 #define DRIVER_CONF_DS18B20_12_BIT_UNDF 0
 
@@ -379,7 +379,7 @@ static int16_t DS18X20_raw_to_decicelsius(uint8_t familycode, uint8_t sp[]) {
 			measure &= ~(DRIVER_CONF_DS18B20_9_BIT_UNDF);
 			break;
 		case DRIVER_CONF_DS18B20_9_BIT:
-			measure &= ~(DRIVER_CONF_DS18B20_9_BIT_UNDF);
+			measure &= ~(DRIVER_CONF_DS18B20_10_BIT_UNDF);
 			break;
 		case DRIVER_CONF_DS18B20_11_BIT:
 			measure &= ~(DRIVER_CONF_DS18B20_11_BIT_UNDF);
@@ -450,7 +450,7 @@ static int32_t DS18X20_raw_to_maxres(uint8_t familycode, uint8_t sp[]) {
 			measure &= ~(DRIVER_CONF_DS18B20_9_BIT_UNDF);
 			break;
 		case DRIVER_CONF_DS18B20_9_BIT:
-			measure &= ~(DRIVER_CONF_DS18B20_9_BIT_UNDF);
+			measure &= ~(DRIVER_CONF_DS18B20_10_BIT_UNDF);
 			break;
 		case DRIVER_CONF_DS18B20_11_BIT:
 			measure &= ~(DRIVER_CONF_DS18B20_11_BIT_UNDF);
