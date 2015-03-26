@@ -47,7 +47,7 @@ struct LED_t {
 	uint8_t dimValue;
 #endif
 
-#ifdef DRV_LED_BLINK
+#ifdef DRIVER_LED_BLINK
 #endif
 };
 

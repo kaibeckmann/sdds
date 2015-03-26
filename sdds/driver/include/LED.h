@@ -29,11 +29,11 @@ rc_t LED_dim(LED _this, uint8_t setValue);
 rc_t LED_getDimValue(LED _this, uint8_t* value);
 #endif
 
-#ifdef DRV_LED_BLINK
+#ifdef DRIVER_LED_BLINK
 typedef drv_led_blink_interval_t uint8_t;
 typedef drv_led_blink_mode_t uint8_t;
-#define DRV_LED_BLINK_SINGLE 1
-#define DRV_LED_BLINK_DOUBLEPULSE 2
+#define DRIVER_LED_BLINK_SINGLE 1
+#define DRIVER_LED_BLINK_DOUBLEPULSE 2
 rc_t LED_blink(LED _this, drv_led_blink_interval interval_t, drv_led_blink_mode_t mode);
 #endif
 

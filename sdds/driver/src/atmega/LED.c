@@ -203,7 +203,7 @@ rc_t LED_init(LED _this) {
 
 #endif
 
-#ifdef DRV_LED_BLINK
+#ifdef DRIVER_LED_BLINK
 #endif
 
 	return SDDS_RT_OK;
@@ -512,7 +512,7 @@ rc_t LED_getDimValue(LED _this, uint8_t* value)  {
 
 #endif
 
-#ifdef DRV_LED_BLINK
+#ifdef DRIVER_LED_BLINK
 rc_t LED_blink(LED _this, drv_led_blink_interval interval_t, drv_led_blink_mode_t mode) {
 	return SDDS_RT_OK;
 }
