@@ -80,7 +80,7 @@
 
 #define DRIVER_CONF_DS18B20_CONF_REG 4
 #define DRIVER_CONF_DS18B20_9_BIT 0
-#define DRIVER_CONF_DS18B20_9_BIT (1<<5)
+#define DRIVER_CONF_DS18B20_10_BIT (1<<5)
 #define DRIVER_CONF_DS18B20_11_BIT (1<<6)
 #define DRIVER_CONF_DS18B20_12_BIT ((1<<6)|(1<<5))
 #define DRIVER_CONF_DS18B20_RES_MASK ((1<<6)|(1<<5))
@@ -378,7 +378,7 @@ static int16_t DS18X20_raw_to_decicelsius(uint8_t familycode, uint8_t sp[]) {
 		case DRIVER_CONF_DS18B20_9_BIT:
 			measure &= ~(DRIVER_CONF_DS18B20_9_BIT_UNDF);
 			break;
-		case DRIVER_CONF_DS18B20_9_BIT:
+		case DRIVER_CONF_DS18B20_10_BIT:
 			measure &= ~(DRIVER_CONF_DS18B20_10_BIT_UNDF);
 			break;
 		case DRIVER_CONF_DS18B20_11_BIT:
@@ -449,7 +449,7 @@ static int32_t DS18X20_raw_to_maxres(uint8_t familycode, uint8_t sp[]) {
 		case DRIVER_CONF_DS18B20_9_BIT:
 			measure &= ~(DRIVER_CONF_DS18B20_9_BIT_UNDF);
 			break;
-		case DRIVER_CONF_DS18B20_9_BIT:
+		case DRIVER_CONF_DS18B20_10_BIT:
 			measure &= ~(DRIVER_CONF_DS18B20_10_BIT_UNDF);
 			break;
 		case DRIVER_CONF_DS18B20_11_BIT:
