@@ -1,0 +1,6 @@
+Makefile-local.mk
+*.o
+liblwip.a
+.*
+#*
+*~
