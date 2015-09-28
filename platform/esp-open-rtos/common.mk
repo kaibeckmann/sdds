@@ -117,7 +117,8 @@ else
     LDFLAGS += -g -O2
 endif
 
-GITSHORTREV=\"$(shell cd $(ROOT); git rev-parse --short -q HEAD)\"
+GITSHORTREV= \"0\"
+#\"$(shell cd $(ROOT); git rev-parse --short -q HEAD)\"
 CPPFLAGS += -DGITSHORTREV=$(GITSHORTREV) -DFLASH_SIZE=$(FLASH_SIZE)
 
 # Linker scripts, all found in $(ROOT)/ld
