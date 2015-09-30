@@ -36,7 +36,7 @@
 	.constructor init_pfs
         .destructor  done_pfs
 	.importzp    ptr1, ptr2, ptr3, sp
-	.import	     __curunit, __filetype, popax, addysp, subysp
+	.import	     curunit, __filetype, popax, addysp, subysp
 	.export	     pfs_rwcommon, pfs_rwsetflags, pfs_rwcommonend
 	.if	F_IDE64
 	.export      ide64_rwprepare, ide64_rwfinish
@@ -73,8 +73,7 @@ flags:	.res	10
 	.data
 
 illchr:	.byte	$3A, $2A, $3F, $3D	;illegal chars
-pw:	.byte	$2C
-filet:	.byte	$50, $2C, $57	;,p,w
+pw:	.byte	$2C, $50, $2C, $57	;,p,w
 ;---------------------------------------------------------------------
 	.segment	"INIT"
 
@@ -149,7 +148,7 @@ nopath: lda	#$3A
 	lsr	ptr2
 	bcs	ro	;read only
 	lda	__filetype
-	sta	filet	;set filetype
+	sta	pw+1	;set filetype
 	ldx	#252
 @L20:	lda	pw-252,x
 	sta	(sp),y	;write
@@ -178,7 +177,7 @@ next:	inc	ptr2	;next file number
 	stx	ptr2+1
 nextsa:	inc	ptr2+1	;next channel
 retr:	lda	ptr2	;file number
-	ldx	__curunit
+	ldx	curunit
 	ldy	ptr2+1	;secondary address
 	jsr	SETLFS
 	jsr	OPEN	;open

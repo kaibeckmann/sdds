@@ -30,7 +30,6 @@
  * 
  * Author: Oliver Schmidt <ol.sc@web.de>
  *
- * $Id: contiki-main.c,v 1.25 2010/10/27 22:17:39 oliverschmidt Exp $
  */
 
 #include <string.h>
@@ -48,21 +47,37 @@
 #endif /* WITH_GUI */
 
 #if WITH_DNS
-#define RESOLV_PROCESS &resolv_process,
+#define RESOLV_PROCESS ,&resolv_process
 #else /* WITH_DNS */
 #define RESOLV_PROCESS
 #endif /* WITH_DNS */
 
 PROCINIT(&etimer_process,
-	 CTK_PROCESS
-	 RESOLV_PROCESS
-	 &tcpip_process);
+         CTK_PROCESS
+         &tcpip_process
+         RESOLV_PROCESS);
+
+static struct ethernet_config *ethernet_config;
 
 /*-----------------------------------------------------------------------------------*/
+#if WITH_ARGS
+
+int contiki_argc;
+char **contiki_argv;
+
+void
+main(int argc, char **argv)
+{
+  contiki_argc = argc;
+  contiki_argv = argv;
+
+#else /* WITH_ARGS */
+
 void
 main(void)
 {
-  struct ethernet_config *ethernet_config;
+
+#endif /* WITH_ARGS */
 
   process_init();
 
@@ -83,7 +98,7 @@ main(void)
     uip_setdraddr(&addr);
 
     uip_ipaddr(&addr, 192,168,0,1);
-    resolv_conf(&addr);
+    uip_nameserver_update(&addr, UIP_NAMESERVER_INFINITE_LIFETIME);
 
     ethernet_config = &config;
   }
@@ -109,12 +124,12 @@ main(void)
 
   procinit_init();
 
-  process_start((struct process *)&ethernet_process, (char *)ethernet_config);
+  process_start((struct process *)&ethernet_process, (void *)ethernet_config);
 
   autostart_start(autostart_processes);
 
   log_message("Contiki up and running ...", "");
-  
+
   while(1) {
 
     process_run();

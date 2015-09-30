@@ -26,12 +26,11 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * @(#)$Id: cc2420-arch-sfd.c,v 1.5 2010/12/16 22:49:12 adamdunkels Exp $
  */
 
 #include "contiki.h"
 #include "dev/spi.h"
-#include "dev/cc2420.h"
+#include "cc2420.h"
 #include "isr_compat.h"
 
 extern volatile uint8_t cc2420_sfd_counter;
@@ -60,7 +59,7 @@ void
 cc2420_arch_sfd_init(void)
 {
   /* Need to select the special function! */
-  P4SEL = BV(CC2420_SFD_PIN);
+  CC2420_SFD_PORT(SEL) = BV(CC2420_SFD_PIN);
   
   /* start timer B - 32768 ticks per second */
   TBCTL = TBSSEL_1 | TBCLR;

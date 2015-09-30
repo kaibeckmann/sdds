@@ -51,7 +51,7 @@
 #include <string.h>
 
 #define DEBUG DEBUG_NONE
-#include "net/uip-debug.h"
+#include "net/ip/uip-debug.h"
 #include "dev/watchdog.h"
 #include "dev/leds.h"
 #include "net/rpl/rpl.h"
@@ -79,7 +79,7 @@ static uint16_t len;
 #define SENSOR_ADC_OFF 1
 #define SENSOR_UNKNOWN 2
 
-int8_t read_sensor(char * rs);
+int8_t read_sensor(char *rs);
 /*---------------------------------------------------------------------------*/
 extern const struct sensors_sensor adc_sensor;
 /*---------------------------------------------------------------------------*/
@@ -98,7 +98,7 @@ tcpip_handler(void)
     PRINT6ADDR(&UIP_IP_BUF->srcipaddr);
     PRINTF("]:%u\n", UIP_HTONS(UIP_UDP_BUF->srcport));
     len = read_sensor(buf);
-    if( len ) {
+    if(len) {
       server_conn->rport = UIP_UDP_BUF->srcport;
       uip_ipaddr_copy(&server_conn->ripaddr, &UIP_IP_BUF->srcipaddr);
       uip_udp_packet_send(server_conn, buf, len);

@@ -40,8 +40,8 @@
  *         David Kopf <dak664@embarqmail.com>
  */
 
-#ifndef __CONTIKI_CONF_H__
-#define __CONTIKI_CONF_H__
+#ifndef CONTIKI_CONF_H_
+#define CONTIKI_CONF_H_
 
 /* ************************************************************************** */
 //#pragma mark Basic Configuration
@@ -57,6 +57,12 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <string.h>
+
+#include <avr/eeprom.h>
+
+/* Skip the last four bytes of the EEPROM, to leave room for things
+ * like the avrdude erase count and bootloader signaling. */
+#define EEPROM_CONF_SIZE		((E2END + 1) - 4)
 
 /* The AVR tick interrupt usually is done with an 8 bit counter around 128 Hz.
  * 125 Hz needs slightly more overhead during the interrupt, as does a 32 bit
@@ -211,25 +217,24 @@ extern void mac_log_802_15_4_rx(const uint8_t* buffer, size_t total_len);
 #define PACKETBUF_CONF_HDR_SIZE    0         //RF230 combined driver/mac handles headers internally
 #endif /*RF230BB */
 
-#if UIP_CONF_IPV6
-#define RIMEADDR_CONF_SIZE       8
+#if NETSTACK_CONF_WITH_IPV6
+#define LINKADDR_CONF_SIZE       8
 #define UIP_CONF_ICMP6           1
 #define UIP_CONF_UDP             1
 #define UIP_CONF_TCP             0
-#define UIP_CONF_IPV6_RPL        0
 #define NETSTACK_CONF_NETWORK       sicslowpan_driver
 #define SICSLOWPAN_CONF_COMPRESSION SICSLOWPAN_COMPRESSION_HC06
 #else
 /* ip4 should build but is thoroughly untested */
-#define RIMEADDR_CONF_SIZE       2
+#define LINKADDR_CONF_SIZE       2
 #define NETSTACK_CONF_NETWORK    rime_driver
-#endif /* UIP_CONF_IPV6 */
+#endif /* NETSTACK_CONF_WITH_IPV6 */
 
 /* See uip-ds6.h */
-#define UIP_CONF_DS6_NBR_NBU     2
+#define NBR_TABLE_CONF_MAX_NEIGHBORS     2
 #define UIP_CONF_DS6_DEFRT_NBU   2
 #define UIP_CONF_DS6_PREFIX_NBU  3
-#define UIP_CONF_DS6_ROUTE_NBU   2
+#define UIP_CONF_MAX_ROUTES   2
 #define UIP_CONF_DS6_ADDR_NBU    3
 #define UIP_CONF_DS6_MADDR_NBU   0
 #define UIP_CONF_DS6_AADDR_NBU   0
@@ -279,9 +284,6 @@ typedef unsigned short uip_stats_t;
 #define RADIO_CONF_CALIBRATE_INTERVAL 256
 /* AUTOACK receive mode gives better rssi measurements, even if ACK is never requested */
 #define RF230_CONF_AUTOACK        1
-/* Request 802.15.4 ACK on all packets sent by sicslowpan.c (else autoretry) */
-/* Broadcasts will be duplicated by the retry count, since no one will ACK them! */
-#define SICSLOWPAN_CONF_ACK_ALL   0
 /* 1 + Number of auto retry attempts 0-15 (0 implies don't use extended TX_ARET_ON mode with CCA) */
 #define RF230_CONF_FRAME_RETRIES    2
 /* CCA theshold energy -91 to -61 dBm (default -77). Set this smaller than the expected minimum rssi to avoid packet collisions */
@@ -306,7 +308,13 @@ typedef unsigned short uip_stats_t;
 #define NETSTACK_CONF_MAC         nullmac_driver
 //#define NETSTACK_CONF_MAC         csma_driver
 #define NETSTACK_CONF_RDC         contikimac_driver
-#define NETSTACK_CONF_FRAMER      framer_802154
+
+#if NETSTACK_CONF_WITH_IPV6
+#define NETSTACK_CONF_FRAMER      framer802154
+#else /* NETSTACK_CONF_WITH_IPV6 */
+#define NETSTACK_CONF_FRAMER      contikimac_framer
+#endif /* NETSTACK_CONF_WITH_IPV6 */
+
 #define NETSTACK_CONF_RADIO       rf230_driver
 #define CHANNEL_802_15_4          26
 /* Enable extended mode with autoack, but no csma/autoretry */
@@ -354,10 +362,10 @@ typedef unsigned short uip_stats_t;
 #define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE 8
 #undef QUEUEBUF_CONF_NUM
 #define QUEUEBUF_CONF_NUM        8
-#undef UIP_CONF_DS6_NBR_NBU
-#define UIP_CONF_DS6_NBR_NBU       5
-#undef UIP_CONF_DS6_ROUTE_NBU
-#define UIP_CONF_DS6_ROUTE_NBU     5
+#undef NBR_TABLE_CONF_MAX_NEIGHBORS
+#define NBR_TABLE_CONF_MAX_NEIGHBORS       5
+#undef UIP_CONF_MAX_ROUTES
+#define UIP_CONF_MAX_ROUTES     5
 
 #else
 #error Network configuration not specified!
@@ -373,7 +381,7 @@ typedef unsigned short uip_stats_t;
 /* Not completely working yet. Works on Ubuntu after $ifconfig usb0 -arp to drop the neighbor solitications */
 /* Dropping the NS on other OSs is more complicated, see http://www.sics.se/~adam/wiki/index.php/Jackdaw_RNDIS_RPL_border_router */
 
-/* RPL requires the uip stack. Change #CONTIKI_NO_NET=1 to UIP_CONF_IPV6=1 in the examples makefile,
+/* RPL requires the uip stack. Change #CONTIKI_NO_NET=1 to NETSTACK_CONF_WITH_IPV6=1 in the examples makefile,
    or include the needed source files in /plaftorm/avr-ravenusb/Makefile.avr-ravenusb */
 /* For the present the buffer_length calcs in rpl-icmp6.c will need adjustment by the length difference
    between 6lowpan (0) and ethernet (14) link-layer headers:
@@ -403,8 +411,8 @@ typedef unsigned short uip_stats_t;
 #endif
 #define RPL_CONF_STATS              0
 #define UIP_CONF_BUFFER_SIZE	 1300
-//#define UIP_CONF_DS6_NBR_NBU       12
-//#define UIP_CONF_DS6_ROUTE_NBU     12
+//#define NBR_TABLE_CONF_MAX_NEIGHBORS       12
+//#define UIP_CONF_MAX_ROUTES     12
 
 #ifdef RPL_BORDER_ROUTER
 #undef UIP_FALLBACK_INTERFACE
@@ -440,10 +448,10 @@ typedef unsigned short uip_stats_t;
 #define UIP_CONF_TCP                1
 #define UIP_CONF_TCP_MSS           48
 #define UIP_CONF_RECEIVE_WINDOW    48
-#undef UIP_CONF_DS6_NBR_NBU
-#define UIP_CONF_DS6_NBR_NBU        5
-#undef UIP_CONF_DS6_ROUTE_NBU
-#define UIP_CONF_DS6_ROUTE_NBU      5
+#undef NBR_TABLE_CONF_MAX_NEIGHBORS
+#define NBR_TABLE_CONF_MAX_NEIGHBORS        5
+#undef UIP_CONF_MAX_ROUTES
+#define UIP_CONF_MAX_ROUTES      5
 #undef UIP_CONF_MAX_CONNECTIONS
 #define UIP_CONF_MAX_CONNECTIONS    2
 #endif
@@ -477,4 +485,4 @@ typedef unsigned short uip_stats_t;
 #define CCIF
 #define CLIF
 
-#endif /* __CONTIKI_CONF_H__ */
+#endif /* CONTIKI_CONF_H_ */

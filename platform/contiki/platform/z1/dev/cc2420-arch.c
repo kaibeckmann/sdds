@@ -26,13 +26,12 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * @(#)$Id: cc2420-arch.c,v 1.1 2010/11/07 08:38:51 enricmcalvo Exp $
  */
 
 #include "contiki.h"
 #include "contiki-net.h"
 #include "dev/spi.h"
-#include "dev/cc2420.h"
+#include "cc2420.h"
 #include "isr_compat.h"
 
 #ifndef CONF_SFD_TIMESTAMPS

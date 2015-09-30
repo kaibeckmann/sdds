@@ -55,7 +55,7 @@
  */
 
 #include "contiki.h"
-#include "net/rime.h"
+#include "net/rime/rime.h"
 #include "cc2431_loc_eng.h"
 #include "cc2430_sfr.h"
 
@@ -169,7 +169,7 @@ calculate()
  * with rime address ending in [0 , 15]
  */
 static void
-broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)
+broadcast_recv(struct broadcast_conn *c, const linkaddr_t *from)
 {
   packetbuf_attr_t rssi; /* Careful here, this is uint16_t */
 
@@ -181,7 +181,8 @@ broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)
     /* Convert RSSI to the loc. eng. format */
     parameters.rssi[from->u8[1] - 1] = (-2 * rssi);
     /* Raw dump the packetbuf into the ref_coords struct */
-    memcpy(&ref_coords[from->u8[1] - 1], packetbuf_dataptr(), 2 * sizeof(uint8_t));
+    memcpy(&ref_coords[from->u8[1] - 1], packetbuf_dataptr(),
+           2 * sizeof(uint8_t));
   }
 
   return;
@@ -194,7 +195,8 @@ broadcast_recv(struct broadcast_conn *c, const rimeaddr_t *from)
  */
 /*---------------------------------------------------------------------------*/
 static void
-set_imaginary_ref_nodes() {
+set_imaginary_ref_nodes()
+{
   ref_coords[0].x = 1;
   ref_coords[0].y = 5;
   parameters.rssi[0] = SAMPLE_RSSI;
@@ -243,11 +245,11 @@ PROCESS_THREAD(blindnode_bcast_rec, ev, data)
    * Just hard-coding measurement parameters here.
    * Ideally, this should be part of a calibration mechanism
    */
-  parameters.alpha=SAMPLE_ALPHA;
-  parameters.x_min=0;
-  parameters.x_delta=255;
-  parameters.y_min=0;
-  parameters.y_delta=255;
+  parameters.alpha = SAMPLE_ALPHA;
+  parameters.x_min = 0;
+  parameters.x_delta = 255;
+  parameters.y_min = 0;
+  parameters.y_delta = 255;
 
   set_imaginary_ref_nodes();
 
@@ -263,13 +265,15 @@ PROCESS_THREAD(blindnode_bcast_rec, ev, data)
      * With the hard-coded parameters and locations, we will calculate
      * for all possible values of n [0 , 31]
      */
-    parameters.n=n;
+    parameters.n = n;
     calculate();
     n++;
-    if(n==32) { n=0; }
+    if(n == 32) {
+      n = 0;
+    }
 
     /* Send our calculated location to some monitoring node */
-    packetbuf_copyfrom(&coords, 2*sizeof(uint8_t));
+    packetbuf_copyfrom(&coords, 2 * sizeof(uint8_t));
     broadcast_send(&broadcast);
   }
   PROCESS_END();

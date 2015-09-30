@@ -5,8 +5,8 @@
  *         Zach Shelby <zach@sensinode.com>
  */
 
-#ifndef __CC2430_RF_H__
-#define __CC2430_RF_H__
+#ifndef CC2430_RF_H_
+#define CC2430_RF_H_
 
 #include "contiki.h"
 #include "dev/radio.h"
@@ -16,15 +16,14 @@
 #endif
 
 /* Constants */
-typedef enum rf_address_mode_t
-{
-	RF_DECODER_NONE = 0,
-	RF_DECODER_COORDINATOR,
-	RF_SOFTACK_MONITOR,
-	RF_MONITOR,
-	RF_SOFTACK_CLIENT,
-	RF_DECODER_ON
-}rf_address_mode_t;
+typedef enum rf_address_mode_t {
+  RF_DECODER_NONE = 0,
+  RF_DECODER_COORDINATOR,
+  RF_SOFTACK_MONITOR,
+  RF_MONITOR,
+  RF_SOFTACK_CLIENT,
+  RF_DECODER_ON
+} rf_address_mode_t;
 
 /*CSP command set*/
 #define SSTOP		  0xDF
@@ -79,14 +78,14 @@ uint8_t cc2430_rf_power_set(uint8_t new_power);
 void cc2430_rf_set_addr(unsigned pan, unsigned addr, const uint8_t *ieee_addr);
 
 #if !NETSTACK_CONF_SHORTCUTS
-extern void cc2430_rf_ISR( void ) __interrupt (RF_VECTOR);
+extern void cc2430_rf_ISR(void) __interrupt(RF_VECTOR);
 #endif
 #if CC2430_RFERR_INTERRUPT
-extern void cc2430_rf_error_ISR( void ) __interrupt (RFERR_VECTOR);
+extern void cc2430_rf_error_ISR(void) __interrupt(RFERR_VECTOR);
 #endif
 
 #ifdef HAVE_RF_DMA
 void rf_dma_callback_isr(void);
 #endif
 
-#endif /* __CC2430_RF_H__ */
+#endif /* CC2430_RF_H_ */

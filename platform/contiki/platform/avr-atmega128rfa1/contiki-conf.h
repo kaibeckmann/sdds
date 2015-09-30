@@ -38,8 +38,8 @@
  *         David Kopf <dak664@embarqmail.com>
  */
 
-#ifndef __CONTIKI_CONF_H__
-#define __CONTIKI_CONF_H__
+#ifndef CONTIKI_CONF_H_
+#define CONTIKI_CONF_H_
 
 /* Platform name, type, and MCU clock rate */
 #define PLATFORM_NAME  "RFA1"
@@ -75,11 +75,11 @@ void clock_adjust_ticks(clock_time_t howmany);
 /* Michael Hartman's atmega128rfa1 board has an external 32768Hz crystal connected to TOSC1 and 2 pins similar to the Raven 1284p */
 /* and theoretically can use TIMER2 with it to keep time. Else TIMER0 is used. */
 /* The sleep timer requires the crystal and adds a TIMER2 interrupt routine if not already define by clock.c */
-#define AVR_CONF_USE32KCRYSTAL 1
+#define AVR_CONF_USE32KCRYSTAL 0
 
 /* Michael Hartman's protobyte board has LED on PORTE1, used for radio on indication */
 /* However this results in disabling UART0. */
-#define RF230BB_CONF_LEDONPORTE1  0
+#define RF230BB_CONF_LEDONPORTE1  1
 
 /* COM port to be used for SLIP connection. This is usually UART0, but see above */
 #if RF230BB_CONF_LEDONPORTE1
@@ -92,16 +92,12 @@ void clock_adjust_ticks(clock_time_t howmany);
 /* Default is 4096. Currently used only when elfloader is present. Not tested on Raven */
 //#define MMEM_CONF_SIZE 256
 
-
-/* try to define buffer size for UIP */
-#define UIP_CONF_BUFFER_SIZE 600
-
 /* Starting address for code received via the codeprop facility. Not tested. */
 typedef unsigned long off_t;
 //#define EEPROMFS_ADDR_CODEPROP 0x8000
 
 /* Logging adds 200 bytes to program size. RS232 output slows down webserver. */
-#define LOG_CONF_ENABLED         1
+//#define LOG_CONF_ENABLED         1
 
 /* RADIOSTATS is used in rf230bb, clock.c and the webserver cgi to report radio usage */
 /* It has less overhead than ENERGEST */
@@ -146,16 +142,16 @@ typedef unsigned short uip_stats_t;
 /* Allow MCU sleeping between channel checks */
 #define RDC_CONF_MCU_SLEEP         1
 
-#if UIP_CONF_IPV6
-#define RIMEADDR_CONF_SIZE        8
+#if NETSTACK_CONF_WITH_IPV6
+#define LINKADDR_CONF_SIZE        8
 #define UIP_CONF_ICMP6            1
 #define UIP_CONF_UDP              1
-#define UIP_CONF_TCP              0
+#define UIP_CONF_TCP              1
 #define NETSTACK_CONF_NETWORK     sicslowpan_driver
 #define SICSLOWPAN_CONF_COMPRESSION SICSLOWPAN_COMPRESSION_HC06
 #else
 /* ip4 should build but is largely untested */
-#define RIMEADDR_CONF_SIZE        2
+#define LINKADDR_CONF_SIZE        2
 #define NETSTACK_CONF_NETWORK     rime_driver
 #endif
 
@@ -195,8 +191,6 @@ typedef unsigned short uip_stats_t;
 #define CHANNEL_802_15_4          26
 /* AUTOACK receive mode gives better rssi measurements, even if ACK is never requested */
 #define RF230_CONF_AUTOACK        1
-/* Request 802.15.4 ACK on all packets sent (else autoretry). This is primarily for testing. */
-#define SICSLOWPAN_CONF_ACK_ALL   0
 /* 1 + Number of auto retry attempts 0-15 (0 implies don't use extended TX_ARET_ON mode) */
 #define RF230_CONF_FRAME_RETRIES    2
 /* Number of csma retry attempts 0-5 in extended tx mode (7 does immediate tx with no csma) */
@@ -210,7 +204,7 @@ typedef unsigned short uip_stats_t;
 /* If wait is too short the connection can be reset as a result of multiple fragment reassembly timeouts */
 #define UIP_CONF_WAIT_TIMEOUT    20
 /* 211 bytes per queue buffer */
-#define QUEUEBUF_CONF_NUM         3
+#define QUEUEBUF_CONF_NUM         8
 /* 54 bytes per queue ref buffer */
 #define QUEUEBUF_CONF_REF_NUM     2
 /* Allocate remaining RAM as desired */
@@ -219,16 +213,16 @@ typedef unsigned short uip_stats_t;
 /* from previous GETs, causing decreased throughput, retransmissions, and timeouts. Increase to study this. */
 /* ACKs to other ports become interleaved with computation-intensive GETs, so ACKs are particularly missed. */
 /* Increasing the number of packet receive buffers in RAM helps to keep ACKs from being lost */
-#define UIP_CONF_MAX_CONNECTIONS  2
+#define UIP_CONF_MAX_CONNECTIONS  4
 /* 2 bytes per TCP listening port */
-#define UIP_CONF_MAX_LISTENPORTS  2
+#define UIP_CONF_MAX_LISTENPORTS  4
 /* 25 bytes per UDP connection */
-#define UIP_CONF_UDP_CONNS       2
+#define UIP_CONF_UDP_CONNS       10
 /* See uip-ds6.h */
-#define UIP_CONF_DS6_NBR_NBU      20
+#define NBR_TABLE_CONF_MAX_NEIGHBORS      20
 #define UIP_CONF_DS6_DEFRT_NBU    2
 #define UIP_CONF_DS6_PREFIX_NBU   3
-#define UIP_CONF_DS6_ROUTE_NBU    20
+#define UIP_CONF_MAX_ROUTES    20
 #define UIP_CONF_DS6_ADDR_NBU     3
 #define UIP_CONF_DS6_MADDR_NBU    0
 #define UIP_CONF_DS6_AADDR_NBU    0
@@ -241,15 +235,19 @@ typedef unsigned short uip_stats_t;
 #define NETSTACK_CONF_RDC         contikimac_driver
 /* Default is two CCA separated by 500 usec */
 #define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE   8
-/* Wireshark won't decode with the header, but padded packets will fail ipv6 checksum */
-#define CONTIKIMAC_CONF_WITH_CONTIKIMAC_HEADER 0
 /* So without the header this needed for RPL mesh to form */
-#define CONTIKIMAC_CONF_SHORTEST_PACKET_SIZE   43-18  //multicast RPL DIS length
+#define CONTIKIMAC_FRAMER_CONF_SHORTEST_PACKET_SIZE   43-18  //multicast RPL DIS length
 /* Not tested much yet */
 #define WITH_PHASE_OPTIMIZATION                0
 #define CONTIKIMAC_CONF_COMPOWER               1
-#define RIMESTATS_CONF_ON                      1
-#define NETSTACK_CONF_FRAMER      framer_802154
+#define RIMESTATS_CONF_ENABLED                 1
+
+#if NETSTACK_CONF_WITH_IPV6
+#define NETSTACK_CONF_FRAMER      framer802154
+#else /* NETSTACK_CONF_WITH_IPV6 */
+#define NETSTACK_CONF_FRAMER      contikimac_framer
+#endif /* NETSTACK_CONF_WITH_IPV6 */
+
 #define NETSTACK_CONF_RADIO       rf230_driver
 #define CHANNEL_802_15_4          26
 /* The radio needs to interrupt during an rtimer interrupt */
@@ -263,17 +261,17 @@ typedef unsigned short uip_stats_t;
 #define SICSLOWPAN_CONF_FRAG      1
 #define SICSLOWPAN_CONF_MAXAGE    3
 /* 211 bytes per queue buffer. Contikimac burst mode needs 15 for a 1280 byte MTU */
-#define QUEUEBUF_CONF_NUM         3
+#define QUEUEBUF_CONF_NUM         15
 /* 54 bytes per queue ref buffer */
 #define QUEUEBUF_CONF_REF_NUM     2
 /* Allocate remaining RAM. Not much left due to queuebuf increase  */
 #define UIP_CONF_MAX_CONNECTIONS  2
-#define UIP_CONF_MAX_LISTENPORTS  2
-#define UIP_CONF_UDP_CONNS        2
-#define UIP_CONF_DS6_NBR_NBU      20
+#define UIP_CONF_MAX_LISTENPORTS  4
+#define UIP_CONF_UDP_CONNS        5
+#define NBR_TABLE_CONF_MAX_NEIGHBORS      20
 #define UIP_CONF_DS6_DEFRT_NBU    2
 #define UIP_CONF_DS6_PREFIX_NBU   3
-#define UIP_CONF_DS6_ROUTE_NBU    4
+#define UIP_CONF_MAX_ROUTES    4
 #define UIP_CONF_DS6_ADDR_NBU     3
 #define UIP_CONF_DS6_MADDR_NBU    0
 #define UIP_CONF_DS6_AADDR_NBU    0
@@ -299,17 +297,17 @@ typedef unsigned short uip_stats_t;
 #define CXMAC_CONF_ANNOUNCEMENTS  0
 #define NETSTACK_CONF_RDC_CHANNEL_CHECK_RATE 8
 /* 211 bytes per queue buffer. Burst mode will need 15 for a 1280 byte MTU */
-#define QUEUEBUF_CONF_NUM         3
+#define QUEUEBUF_CONF_NUM         15
 /* 54 bytes per queue ref buffer */
 #define QUEUEBUF_CONF_REF_NUM     2
 /* Allocate remaining RAM. Not much left due to queuebuf increase  */
 #define UIP_CONF_MAX_CONNECTIONS  2
-#define UIP_CONF_MAX_LISTENPORTS  2
-#define UIP_CONF_UDP_CONNS        2
-#define UIP_CONF_DS6_NBR_NBU      4
+#define UIP_CONF_MAX_LISTENPORTS  4
+#define UIP_CONF_UDP_CONNS        5
+#define NBR_TABLE_CONF_MAX_NEIGHBORS      4
 #define UIP_CONF_DS6_DEFRT_NBU    2
 #define UIP_CONF_DS6_PREFIX_NBU   3
-#define UIP_CONF_DS6_ROUTE_NBU    4
+#define UIP_CONF_MAX_ROUTES    4
 #define UIP_CONF_DS6_ADDR_NBU     3
 #define UIP_CONF_DS6_MADDR_NBU    0
 #define UIP_CONF_DS6_AADDR_NBU    0
@@ -335,7 +333,7 @@ typedef unsigned short uip_stats_t;
 /* For slow slip connections, to prevent buffer overruns */
 //#define UIP_CONF_RECEIVE_WINDOW 300
 #undef UIP_CONF_FWCACHE_SIZE
-#define UIP_CONF_FWCACHE_SIZE    10
+#define UIP_CONF_FWCACHE_SIZE    30
 #define UIP_CONF_BROADCAST       1
 #define UIP_ARCH_IPCHKSUM        1
 #define UIP_CONF_PINGADDRCONF    0
@@ -345,6 +343,9 @@ typedef unsigned short uip_stats_t;
 
 #define CCIF
 #define CLIF
+#ifndef CC_CONF_INLINE
+#define CC_CONF_INLINE inline
+#endif
 
 /* include the project config */
 /* PROJECT_CONF_H might be defined in the project Makefile */
@@ -352,4 +353,4 @@ typedef unsigned short uip_stats_t;
 #include PROJECT_CONF_H
 #endif
 
-#endif /* __CONTIKI_CONF_H__ */
+#endif /* CONTIKI_CONF_H_ */

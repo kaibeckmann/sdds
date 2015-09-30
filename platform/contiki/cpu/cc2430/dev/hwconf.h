@@ -28,10 +28,9 @@
  *
  * This file is part of the Contiki operating system.
  *
- * @(#)$Id: hwconf.h,v 1.2 2010/01/25 23:12:09 anthony-a Exp $
  */
-#ifndef __HWCONF_H__
-#define __HWCONF_H__
+#ifndef HWCONF_H_
+#define HWCONF_H_
 
 #include "sys/cc.h"
 
@@ -146,4 +145,4 @@ static CC_INLINE void  name##_IRQ_FLAG_OFF() {  \
   P2IFG = 0;                                    \
 }
 
-#endif /* __HWCONF_H__ */
+#endif /* HWCONF_H_ */

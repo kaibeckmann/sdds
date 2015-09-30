@@ -139,8 +139,7 @@ params_get_channel(void) {
 #endif
 /* eeprom_write_block should not be interrupted */
     cli();
-  //  eeprom_write_block(&buffer,  &eemem_mac_address, 
-  //  sizeof(eemem_mac_address));
+    eeprom_write_block(&buffer,  &eemem_mac_address, sizeof(eemem_mac_address));
     for (i=0;i<sizeof(default_server_name);i++) buffer[i] = pgm_read_byte_near(default_server_name+i);
     eeprom_write_block(&buffer,  &eemem_server_name, sizeof(eemem_server_name));
     for (i=0;i<sizeof(default_domain_name);i++) buffer[i] = pgm_read_byte_near(default_domain_name+i);
@@ -159,15 +158,16 @@ params_get_channel(void) {
 }
 uint8_t
 params_get_eui64(uint8_t *eui64) {
-	uint8_t buffer[sizeof(rimeaddr_t)];
+  uint8_t buffer[sizeof(linkaddr_t)];
   cli();
-  //eeprom_read_block ((void *)eui64, &eemem_mac_address, sizeof(rimeaddr_t));
-  eeprom_read_block ((void *)buffer, 0x0000, sizeof(rimeaddr_t));
+//  eeprom_read_block ((void *)eui64, &eemem_mac_address, sizeof(linkaddr_t));
+  eeprom_read_block ((void *)buffer, 0x0000, sizeof(linkaddr_t));
   sei();
   uint8_t j = 0;
-  for (uint8_t i = sizeof(rimeaddr_t) ; i > 0; i--, j++){
+  for (uint8_t i = sizeof(linkaddr_t) ; i > 0; i--, j++){
 	  eui64[j] = buffer[i-1];
   }
+  sei();
 #if CONTIKI_CONF_RANDOM_MAC
   return randomeui64;
 #else
@@ -206,7 +206,7 @@ params_get_channel() {
 }
 uint8_t
 params_get_eui64(uint8_t *eui64) {
-  size_t size = sizeof(rimeaddr_t); 
+  size_t size = sizeof(linkaddr_t); 
   if(settings_get(SETTINGS_KEY_EUI64, 0, (unsigned char*)eui64, &size) == SETTINGS_STATUS_OK) {
     PRINTD("<-Get EUI64 MAC\n");
     return 0;		

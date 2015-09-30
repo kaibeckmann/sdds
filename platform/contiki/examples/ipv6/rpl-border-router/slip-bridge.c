@@ -26,7 +26,6 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: slip-bridge.c,v 1.6 2011/01/17 20:05:51 joxe Exp $
  */
 
 /**
@@ -39,8 +38,8 @@
  *         Nicolas Tsiftes <nvt@sics.se>
  */
 
-#include "net/uip.h"
-#include "net/uip-ds6.h"
+#include "net/ip/uip.h"
+#include "net/ipv6/uip-ds6.h"
 #include "dev/slip.h"
 #include "dev/uart1.h"
 #include <string.h>
@@ -48,7 +47,7 @@
 #define UIP_IP_BUF        ((struct uip_ip_hdr *)&uip_buf[UIP_LLH_LEN])
 
 #define DEBUG DEBUG_PRINT
-#include "net/uip-debug.h"
+#include "net/ip/uip-debug.h"
 
 void set_prefix_64(uip_ipaddr_t *);
 
@@ -119,6 +118,7 @@ output(void)
 }
 
 /*---------------------------------------------------------------------------*/
+#if !SLIP_BRIDGE_CONF_NO_PUTCHAR
 #undef putchar
 int
 putchar(int c)
@@ -146,6 +146,7 @@ putchar(int c)
   }
   return c;
 }
+#endif
 /*---------------------------------------------------------------------------*/
 const struct uip_fallback_interface rpl_interface = {
   init, output

@@ -9,15 +9,10 @@
  *	   (updates for the cc2530 ports)
  */
 
-#ifndef __8051_DEF_H__
-#define __8051_DEF_H__
+#ifndef E051_DEF_H_
+#define E051_DEF_H_
 
 #include <stdint.h>
-
-/* In watchdog mode, our WDT can't be stopped once started
- * Include watchdog_stop()'s declaration and then trash it */
-#include "dev/watchdog.h"
-#define watchdog_stop() watchdog_periodic()
 
 /* This port no longer implements the legacy clock_delay. Hack its usages
  * outta the way till it gets phased out completely
@@ -115,4 +110,4 @@ typedef unsigned short clock_time_t;
 #define uip_ipaddr_copy(dest, src)		\
     memcpy(dest, src, sizeof(*dest))
 
-#endif /* __8051_DEF_H__ */
+#endif /* E051_DEF_H_ */

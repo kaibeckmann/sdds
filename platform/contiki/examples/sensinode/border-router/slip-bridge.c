@@ -26,7 +26,6 @@
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
  *
- * $Id: slip-bridge.c,v 1.3 2010/06/08 19:53:49 nifi Exp $
  */
 
 /**
@@ -39,8 +38,8 @@
  *         Nicolas Tsiftes <nvt@sics.se>
  */
 
-#include "net/uip.h"
-#include "net/uip-ds6.h"
+#include "net/ip/uip.h"
+#include "net/ipv6/uip-ds6.h"
 #include "net/rpl/rpl.h"
 #include "dev/slip.h"
 #include "dev/uart1.h"
@@ -49,7 +48,7 @@
 #define UIP_IP_BUF        ((struct uip_ip_hdr *)&uip_buf[UIP_LLH_LEN])
 
 #define DEBUG DEBUG_NONE
-#include "net/uip-debug.h"
+#include "net/ip/uip-debug.h"
 
 void set_prefix_64(uip_ipaddr_t *);
 
@@ -59,7 +58,7 @@ static void
 slip_input_callback(void)
 {
   PRINTF("SIN: %u\n", uip_len);
-  if((char) uip_buf[0] == '!') {
+  if((char)uip_buf[0] == '!') {
     PRINTF("Got configuration message of type %c\n", uip_buf[1]);
     uip_len = 0;
     if((char)uip_buf[1] == 'P') {
