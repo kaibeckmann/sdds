@@ -25,7 +25,7 @@
 #ifndef __SSID_CONFIG_H__
 #define __SSID_CONFIG_H__
 
-#define WIFI_SSID "mywifissid"
-#define WIFI_PASS "my secret password"
+#define WIFI_SSID "SDDS_TEST"
+#define WIFI_PASS "test1234"
 
 #endif // __SSID_CONFIG_H__
