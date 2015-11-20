@@ -25,3 +25,7 @@ gen_constants.h
 *-ds.c
 *_sdds_impl.h
 *_sdds_impl.c
+
+# Temporary editor files
+*.swp
+*.bak
