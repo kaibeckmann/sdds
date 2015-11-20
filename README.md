@@ -189,7 +189,7 @@ To get started with your first app add it to the 'example/examples.xml':
     ...
     <example name = "my_example" os = "myos">My sDDS example</example>
     ...
-</examples
+</examples>
 ```
 
 Then run the 'example/generate_examples.sh' to create the stub for your app.
@@ -263,3 +263,7 @@ The entry point is 'sdds.gsl':
 * sdds_constants.gsl - Generate the default constants for sDDS
 * sdds_make\_$(OS).gsl - Generates the Makefiles for the different operating systems
 * sdds_skeleton - Generates a skeleton for new examples dependent on topics and roles
+
+## Acknowledgements
+
+sDDS Logo Copyright CC BY 3.0 - Scheme by Flaticon from Freepik
