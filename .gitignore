@@ -1,0 +1,27 @@
+# Object files
+*.o
+*.co
+*.ko
+*.so
+*.pyc
+*/example/*/contiki-avr-atmega128rfa1.map
+*/example/*/obj_avr-atmega128rfa1
+*/example/*/objs-128rfa1
+*/example/*/objs-linux
+*/example/*/objs-riot
+*/example/*/bin
+
+# Executables
+*.out
+*.elf
+*.hex
+
+# Code Generation
+sdds/scripts/gsl
+
+# Generated files
+gen_constants.h
+*-ds.h
+*-ds.c
+*_sdds_impl.h
+*_sdds_impl.c
