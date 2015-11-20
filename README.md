@@ -271,3 +271,4 @@ The entry point is 'sdds.gsl':
 ## Acknowledgements
 
 sDDS Logo Copyright CC BY 3.0 - Scheme by Flaticon from Freepik
+
