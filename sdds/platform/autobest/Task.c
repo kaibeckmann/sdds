@@ -8,7 +8,7 @@
 
 #define TASK_MNG_TICK 1000
 #define TASK_MNG_TASK_ID 3
-#define TASK_MNG_MUL_SEC_TO_NANO_SEC 1000000000UL
+#define TASK_MNG_MUL_SEC_TO_NANO_SEC 1000000000ULL
 #define TASK_MNG_MUL_USEC_TO_NANO_SEC 1000UL
 
 
@@ -32,7 +32,7 @@ static bool isTaskListEmpty;
 static void addTask(struct Task_struct* t);
 static void stopTask(struct Task_struct* t);
 static void deleteTask(struct Task_struct* t);
-static void doMng(void);
+static inline void doMng(void);
 static void checkFireTimes(void);
 
 void* TaskMngLoop(void* foo){
@@ -140,7 +140,7 @@ static void deleteTask(struct Task_struct* t){
     Memory_free(t);
 }
 
-static void doMng(){
+static inline void doMng(){
     if(!isTaskListEmpty){
         checkFireTimes();
     }
