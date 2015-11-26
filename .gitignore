@@ -4,12 +4,12 @@
 *.ko
 *.so
 *.pyc
-*/example/*/contiki-avr-atmega128rfa1.map
-*/example/*/obj_avr-atmega128rfa1
-*/example/*/objs-128rfa1
-*/example/*/objs-linux
-*/example/*/objs-riot
-*/example/*/bin
+**/contiki-avr-atmega128rfa1.map
+**/obj_avr-atmega128rfa1
+**/objs-128rfa1
+**/objs-linux
+**/objs-riot
+**/bin
 
 # Executables
 *.out
