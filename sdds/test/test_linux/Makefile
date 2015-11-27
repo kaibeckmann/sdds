@@ -1,4 +1,4 @@
-APPLICATION_NAME = linux_autobest
+APPLICATION_NAME = test_linux
 
 export APPLICATION_NAME
 
