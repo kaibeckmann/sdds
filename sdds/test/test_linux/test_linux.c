@@ -1,19 +1,19 @@
 #include <unistd.h>
-#include "linux_test_sdds_impl.h"
+#include "test_linux_sdds_impl.h"
 
 int main()
 {
-    printf ("Running selftest:\n");
-    printf ("   Linux (unicast): ");
-	Log_setLvl(5);
-	sDDS_init();
+    printf ("Linux (unicast): ");
+	Log_setLvl (5);
+	sDDS_init ();
 
     //  Create a strings sample
     Strings strings_pub;
     strings_pub.schar = 'H';
-    strncpy (strings_pub.s_string,   "E", 1);
-    strncpy (strings_pub.m_string,   "Es", 2);
-    strncpy (strings_pub.l_string,   "Es gibt im Moment in diese Mannschaft, oh, einige ", 50);
+    strncpy ((char*) strings_pub.s_string,   "E", 1);
+    strncpy ((char*) strings_pub.m_string,   "Es", 2);
+    strncpy ((char*) strings_pub.l_string,   "Es gibt im Moment in dies", 25);
+    strncpy ((char*) strings_pub.xl_string,   "Es gibt im Moment in diese Mannschaft, oh, einige ", 50);
     Strings strings_sub;
     Strings *strings_sub_p = &strings_sub;
 
@@ -42,9 +42,10 @@ int main()
         sleep (1);
     }
     assert (strings_sub_p->schar == 'H');
-    assert (strcmp (strings_sub_p->s_string, "E") == 0);
-    assert (strcmp (strings_sub_p->m_string, "Es") == 0);
-    assert (strcmp (strings_sub_p->l_string, "Es gibt im Moment in diese Mannschaft, oh, einige ") == 0);
+    assert (strcmp ((const char*) strings_sub_p->s_string, "E") == 0);
+    assert (strcmp ((const char*) strings_sub_p->m_string, "Es") == 0);
+    assert (strcmp ((const char*) strings_sub_p->l_string, "Es gibt im Moment in dies") == 0);
+    assert (strcmp ((const char*) strings_sub_p->xl_string, "Es gibt im Moment in diese Mannschaft, oh, einige ") == 0);
 
     //  Write a numbers sample
     ret = DDS_NumbersDataWriter_write (g_Numbers_writer, &numbers_pub, NULL);
@@ -65,6 +66,5 @@ int main()
     assert (numbers_sub_p->ulong == 16);
 
     printf ("OK\n");
-    printf ("All tests passed!\n");
     return 0;
 }

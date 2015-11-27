@@ -18,6 +18,7 @@
 
 # Code Generation
 sdds/scripts/gsl
+error.log
 
 # Generated files
 gen_constants.h

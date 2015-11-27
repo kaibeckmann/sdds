@@ -1,4 +1,4 @@
-APPLICATION_NAME = linux_test
+APPLICATION_NAME = test_bitarray
 
 export APPLICATION_NAME
 
