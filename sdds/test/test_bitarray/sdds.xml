@@ -1,0 +1,19 @@
+<project
+    name = "test_bitarray"
+    script = "sdds.gsl"
+    endian = "little"
+    os = "linux"
+    iface = "eth0"
+    ip = "fe80::219:99ff:fede:9b09"
+    port = "23234"
+    >
+    Linux basic publisher example
+
+    <!--
+        Includes are processed first, so XML in included files will be
+        part of the XML tree
+    -->
+    <include filename = "../topics/testing.xml" />
+
+    <role topic = "strings" type = "subscriber" />
+</project>

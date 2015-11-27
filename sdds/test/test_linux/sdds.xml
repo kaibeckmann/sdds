@@ -1,5 +1,5 @@
 <project
-    name = "linux_test"
+    name = "test_linux"
     script = "sdds.gsl"
     endian = "little"
     os = "linux"
