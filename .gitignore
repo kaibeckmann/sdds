@@ -29,3 +29,7 @@ gen_constants.h
 # Temporary editor files
 *.swp
 *.bak
+
+# Eclipse
+.project
+.cproject
