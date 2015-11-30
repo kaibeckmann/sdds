@@ -4,7 +4,7 @@
 int main()
 {
     printf ("Linux (unicast): ");
-	Log_setLvl (1);
+	Log_setLvl (5);
 	sDDS_init ();
 	NodeConfig_getNodeID();
     //  Create a strings sample
@@ -47,9 +47,11 @@ int main()
     assert (strcmp ((const char*) strings_sub_p->l_string, "Es gibt im Moment in dies") == 0);
     assert (strcmp ((const char*) strings_sub_p->xl_string, "Es gibt im Moment in diese Mannschaft, oh, einige ") == 0);
 
+
     //  Write a numbers sample
     ret = DDS_NumbersDataWriter_write (g_Numbers_writer, &numbers_pub, NULL);
     assert (ret == DDS_RETCODE_OK);
+
 
     //  Read a numbers sample
     for (index = 0; index < 3; index++) {

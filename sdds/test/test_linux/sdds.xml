@@ -2,9 +2,9 @@
     name = "test_linux"
     script = "sdds.gsl"
     endian = "little"
-    os = "linuxx"
-    iface = "vioif0"
-    ip = "fe80:2::5054:ff:fe12:3456"
+    os = "linux"
+    iface = "tap0"
+    ip = "fe80::6c10:2bff:fe85:fa24"
     port = "23234"
     >
     Linux basic publisher example
@@ -16,12 +16,12 @@
     <include filename = "../topics/testing.xml" />
 
     <role topic = "strings" type = "publisher">
-        <subscriber ip = "fe80:2::5054:ff:fe12:3456" port = "23234"/>
+        <subscriber ip = "fe80::6c10:2bff:fe85:fa24" port = "23234"/>
     </role>
     <role topic = "strings" type = "subscriber" />
 
     <role topic = "numbers" type = "publisher">
-        <subscriber ip = "fe80:2::5054:ff:fe12:3456" port = "23234"/>
+        <subscriber ip = "fe80::6c10:2bff:fe85:fa24" port = "23234"/>
     </role>
     <role topic = "numbers" type = "subscriber" />
 </project>

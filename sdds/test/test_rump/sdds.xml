@@ -1,0 +1,27 @@
+<project
+    name = "test_linux"
+    script = "sdds.gsl"
+    endian = "little"
+    os = "netbsd"
+    iface = "vioif0"
+    ip = "fe80:2::5054:ff:fe12:3456"
+    port = "23234"
+    >
+    Linux basic publisher example
+
+    <!--
+        Includes are processed first, so XML in included files will be
+        part of the XML tree
+    -->
+    <include filename = "../topics/testing.xml" />
+
+    <role topic = "strings" type = "publisher">
+        <subscriber ip = "fe80:2::5054:ff:fe12:3456" port = "23234"/>
+    </role>
+    <role topic = "strings" type = "subscriber" />
+
+    <role topic = "numbers" type = "publisher">
+        <subscriber ip = "fe80:2::5054:ff:fe12:3456" port = "23234"/>
+    </role>
+    <role topic = "numbers" type = "subscriber" />
+</project>

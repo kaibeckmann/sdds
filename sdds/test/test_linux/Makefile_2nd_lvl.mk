@@ -1,6 +1,5 @@
 SDDS_TOPDIR := ../..
 
-CC=x86_64-rumprun-netbsd-gcc
 SDDS_OBJDIR := objs-linux
 TARGET := linux
 SDDS_PLATFORM := linux
@@ -41,8 +40,11 @@ $(LOCAL_CONSTANTS):
 	touch $(LOCAL_CONSTANTS)
 
 CFLAGS += -I.
+# required for timer_t (POSIX.1b (real-time extensions))
+# and getline
+CFLAGS += -D_POSIX_C_SOURCE=200809L
 CFLAGS += -O0 -ggdb3 -Werror
-LDLIBS += -lpthread
+LDLIBS += -lrt -lpthread
 
 $(SDDS_OBJDIR)/%.o: %.c
 	echo $(SDDS_OBJS) $(IMPL_DEPEND_OBJS) $(DATA_DEPEND_OBJS)
