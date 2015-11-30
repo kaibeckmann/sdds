@@ -1,5 +1,6 @@
 SDDS_TOPDIR := ../..
 
+CC=x86_64-rumprun-netbsd-gcc
 SDDS_OBJDIR := objs-linux
 TARGET := linux
 SDDS_PLATFORM := linux

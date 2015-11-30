@@ -4,9 +4,9 @@
 int main()
 {
     printf ("Linux (unicast): ");
-	Log_setLvl (5);
+	Log_setLvl (1);
 	sDDS_init ();
-
+	NodeConfig_getNodeID();
     //  Create a strings sample
     Strings strings_pub;
     strings_pub.schar = 'H';
