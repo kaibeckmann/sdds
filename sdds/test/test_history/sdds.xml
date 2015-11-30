@@ -4,7 +4,7 @@
     endian = "little"
     os = "linux"
     iface = "tap0"
-    ip = "fe80::10"
+    ip = "fe80::20"
     port = "23234"
     >
     Linux basic publisher example
