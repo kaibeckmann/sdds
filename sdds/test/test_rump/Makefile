@@ -1,4 +1,4 @@
-APPLICATION_NAME = test_linux
+APPLICATION_NAME = test_rump
 
 export APPLICATION_NAME
 

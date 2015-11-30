@@ -8,9 +8,9 @@ SDDS_ARCH := x86
 
 LOCAL_CONSTANTS := local_constants.h
 
-IMPL_DEPEND_OBJS = $(SDDS_OBJDIR)/test_linux_sdds_impl.o
+IMPL_DEPEND_OBJS = $(SDDS_OBJDIR)/test_rump_sdds_impl.o
 ALL_OBJS += $(IMPL_DEPEND_OBJS)
-ALL_OBJS += $(SDDS_OBJDIR)/test_linux.o
+ALL_OBJS += $(SDDS_OBJDIR)/test_rump.o
 
 SDDS_CONSTANTS_FILE := ./gen_constants.h
 
@@ -42,7 +42,6 @@ $(LOCAL_CONSTANTS):
 
 CFLAGS += -I.
 CFLAGS += -O0 -ggdb3 -Werror
-LDLIBS += -lpthread
 
 $(SDDS_OBJDIR)/%.o: %.c
 	echo $(SDDS_OBJS) $(IMPL_DEPEND_OBJS) $(DATA_DEPEND_OBJS)
@@ -53,7 +52,7 @@ $(SDDS_OBJDIR)/%.o: %.c
 
 $(APPLICATION_NAME).c: $(LOCAL_CONSTANTS) $(SDDS_OBJDIR) $(IMPL_DEPEND_SRCS) $(DATA_DEPEND_SRCS)
 
-$(APPLICATION_NAME): $(SDDS_OBJDIR)/test_linux.o $(SDDS_OBJS) $(IMPL_DEPEND_OBJS) $(DATA_DEPEND_OBJS)
+$(APPLICATION_NAME): $(SDDS_OBJDIR)/test_rump.o $(SDDS_OBJS) $(IMPL_DEPEND_OBJS) $(DATA_DEPEND_OBJS)
 	$(CC) -o $@ $^ $(LDLIBS)
 
 %-ds.c %-ds.h %_sdds_impl.c %_sdds_impl.h:
@@ -63,7 +62,7 @@ code:
 	$(shell ./generate.sh)
 
 clean:
-	$(RM) ./$(APPLICATION_NAME)
+	$(RM) ./$(APPLICATION_NAME) ./$(APPLICATION_NAME).bin
 	$(RM) $(CLEAN)
 	$(RM) $(SDDS_OBJS) $(SDDS_OBJS_DEPEND)
 	$(RM) -rf $(SDDS_OBJDIR)
