@@ -34,3 +34,4 @@ gen_constants.h
 # Eclipse
 .project
 .cproject
+.settings/
