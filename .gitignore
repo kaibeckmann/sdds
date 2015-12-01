@@ -35,7 +35,10 @@ gen_constants.h
 # Eclipse
 .project
 .cproject
-<<<<<<< HEAD
 .settings/
-=======
->>>>>>> 5c4e8c1e10b556c945474d4a2a9c847d06c899dc
+
+# local examples
+**/linux_olga1
+**/linux_olga2
+**/linux_mcast1_steffen
+**/linux_mcast2_steffen
