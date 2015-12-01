@@ -35,3 +35,7 @@ gen_constants.h
 .project
 .cproject
 .settings/
+
+# local examples
+**/linux_olga1
+**/linux_olga2
