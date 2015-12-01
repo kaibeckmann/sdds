@@ -39,3 +39,5 @@ gen_constants.h
 # local examples
 **/linux_olga1
 **/linux_olga2
+**/linux_mcast1_steffen
+**/linux_mcast2_steffen
