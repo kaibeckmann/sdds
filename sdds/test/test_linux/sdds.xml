@@ -4,7 +4,7 @@
     endian = "little"
     os = "linux"
     iface = "eth0"
-    ip = "fe80::219:99ff:fede:9b09"
+    ip = "fe80::219:99ff:fede:9a7a"
     port = "23234"
     >
     Linux basic publisher example
@@ -16,12 +16,12 @@
     <include filename = "../topics/testing.xml" />
 
     <role topic = "strings" type = "publisher">
-        <subscriber ip = "fe80::219:99ff:fede:9b09" port = "23234"/>
+        <subscriber ip = "fe80::219:99ff:fede:9a7a" port = "23234"/>
     </role>
     <role topic = "strings" type = "subscriber" />
 
     <role topic = "numbers" type = "publisher">
-        <subscriber ip = "fe80::219:99ff:fede:9b09" port = "23234"/>
+        <subscriber ip = "fe80::219:99ff:fede:9a7a" port = "23234"/>
     </role>
     <role topic = "numbers" type = "subscriber" />
 </project>
