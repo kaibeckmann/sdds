@@ -33,6 +33,7 @@ clean:
 .output "Makefile_2nd_lvl.mk"
 SDDS_TOPDIR := ../..
 
+CC=x86_64-rumprun-netbsd-gcc
 SDDS_OBJDIR := objs-linux
 TARGET := linux
 SDDS_PLATFORM := linux
@@ -74,10 +75,7 @@ all:
 	touch \$(LOCAL_CONSTANTS)
 
 CFLAGS += -I.
-# required for timer_t (POSIX.1b (real-time extensions))
-# and getline
-CFLAGS += -g -D_POSIX_C_SOURCE=200809L
-LDLIBS += -lrt
+CFLAGS += -O0 -ggdb3 -Werror
 
 \$(SDDS_OBJDIR)/%.o: %.c
 	echo \$(SDDS_OBJS) \$(IMPL_DEPEND_OBJS) \$(DATA_DEPEND_OBJS)
@@ -98,7 +96,7 @@ code:
 	\$(shell ./generate.sh)
 
 clean:
-	\$(RM) ./\$(APPLICATION_NAME)
+	\$(RM) ./\$(APPLICATION_NAME) ./\$(APPLICATION_NAME).bin
 	\$(RM) \$(CLEAN)
 	\$(RM) \$(SDDS_OBJS) \$(SDDS_OBJS_DEPEND)
 	\$(RM) -rf \$(SDDS_OBJDIR)

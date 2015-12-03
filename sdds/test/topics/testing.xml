@@ -1,5 +1,5 @@
 <domain id = "1">
-    <topic name = "strings" domain = "0" id = "1">
+    <topic name = "strings" domain = "1" id = "1">
         Test topic which send different representations of strings
         <attribute name = "schar" type = "DDS_char">8-Bit char value</attribute>
         <attribute name = "s_string" type = "DDS_string" size = "1">1 char</attribute>
@@ -7,7 +7,7 @@
         <attribute name = "l_string" type = "DDS_string" size = "25">25 chars</attribute>
         <attribute name = "xl_string" type = "DDS_string" size = "50">50 chars</attribute>
     </topic>
-    <topic name = "numbers" domain = "0" id = "2">
+    <topic name = "numbers" domain = "1" id = "2">
         Test topic which sends different representations of numbers
         <attribute name = "sbool" type = "DDS_boolean" />
         <attribute name = "sshort" type = "DDS_short">16-Bit signed</attribute>

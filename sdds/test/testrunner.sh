@@ -9,12 +9,13 @@ for test in ./* ; do
         make clean >/dev/null 2>&1
         make >/dev/null 2> ../error.log
         if [ $? -ne 0 ]; then
-            echo "   $BASENAME: FAILED"
+            echo "$BASENAME: FAILED"
             echo ""
             echo "Some tests failed! See error.log for details."
             exit 1
         fi
         ./$BASENAME
+        make clean >/dev/null 2>&1
         if [ $? -ne 0 ]; then
             echo "FAILED"
             exit 1

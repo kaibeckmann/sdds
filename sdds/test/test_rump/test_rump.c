@@ -1,9 +1,9 @@
 #include <unistd.h>
-#include "test_linux_sdds_impl.h"
+#include "test_rump_sdds_impl.h"
 
 int main()
 {
-    printf ("Linux (unicast): ");
+    printf ("Rumprun (unicast): ");
 	Log_setLvl (5);
 	sDDS_init ();
 	NodeConfig_getNodeID();
@@ -47,11 +47,9 @@ int main()
     assert (strcmp ((const char*) strings_sub_p->l_string, "Es gibt im Moment in dies") == 0);
     assert (strcmp ((const char*) strings_sub_p->xl_string, "Es gibt im Moment in diese Mannschaft, oh, einige ") == 0);
 
-
     //  Write a numbers sample
     ret = DDS_NumbersDataWriter_write (g_Numbers_writer, &numbers_pub, NULL);
     assert (ret == DDS_RETCODE_OK);
-
 
     //  Read a numbers sample
     for (index = 0; index < 3; index++) {

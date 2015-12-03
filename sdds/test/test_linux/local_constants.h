@@ -1,1 +1,2 @@
-#define SDDS_SELFTEST
+#define UTILS_DEBUG
+

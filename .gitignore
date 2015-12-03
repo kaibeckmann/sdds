@@ -10,6 +10,7 @@
 **/objs-linux
 **/objs-riot
 **/bin
+core
 
 # Executables
 *.out

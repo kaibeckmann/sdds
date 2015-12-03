@@ -1,5 +1,5 @@
 <project
-    name = "test_bitarray"
+    name = "test_history"
     script = "sdds.gsl"
     endian = "little"
     os = "linux"
