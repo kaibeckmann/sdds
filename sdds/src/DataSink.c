@@ -16,8 +16,7 @@
  * =====================================================================================
  */
 
-#include "DataSink.h"
-#include "Qos.h"
+#include "sDDS.h"
 
 struct _DataSink_t {
     DataReader_t readers[SDDS_DATA_READER_MAX_OBJS];
@@ -144,7 +143,8 @@ DataSink_processFrame(NetBuffRef_t* buff) {
             {
                 DataReader_t* data_reader = DataSink_DataReader_by_topic(topic_id);
                 if (data_reader == NULL) {
-                    Log_error("Couĺdn't get Data Reader for topic id %d: Discard submessage\n", topic_id);
+                    Log_error("Couĺdn't get Data Reader for topic id %d: "
+                              "Discard submessage\n", topic_id);
                     SNPS_discardSubMsg(buff);
                     return SDDS_RT_FAIL;
                 }

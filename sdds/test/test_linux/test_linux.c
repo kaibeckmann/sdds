@@ -5,8 +5,9 @@ int main()
 {
     printf ("Linux (unicast): ");
 	Log_setLvl (5);
-	sDDS_init ();
-	NodeConfig_getNodeID();
+	DDS_ReturnCode_t ret;
+	ret = sDDS_init ();
+    assert (ret == DDS_RETCODE_OK);
     //  Create a strings sample
     Strings strings_pub;
     strings_pub.schar = 'H';
@@ -28,7 +29,6 @@ int main()
     Numbers numbers_sub;
     Numbers *numbers_sub_p = &numbers_sub;
 
-	DDS_ReturnCode_t ret;
     //  Write a strings sample
     ret = DDS_StringsDataWriter_write (g_Strings_writer, &strings_pub, NULL);
     assert (ret == DDS_RETCODE_OK);
@@ -41,6 +41,7 @@ int main()
             break;
         sleep (1);
     }
+    assert (ret == DDS_RETCODE_OK);
     assert (strings_sub_p->schar == 'H');
     assert (strcmp ((const char*) strings_sub_p->s_string, "E") == 0);
     assert (strcmp ((const char*) strings_sub_p->m_string, "Es") == 0);
@@ -60,6 +61,7 @@ int main()
             break;
         sleep (1);
     }
+    assert (ret == DDS_RETCODE_OK);
     assert (numbers_sub_p->sbool == true);
     assert (numbers_sub_p->sshort == 12);
     assert (numbers_sub_p->slong == 13);

@@ -3,31 +3,7 @@ extern "C"
 {
 #endif
 
-#include "BuiltinTopic.h"
-#include "DataSource.h"
-#include "Discovery.h"
-#include "Debug.h"
-#include "DataSink.h"
-
-#include "os-ssal/NodeConfig.h"
-#include "os-ssal/Thread.h"
-#include "os-ssal/Memory.h"
-#include "os-ssal/Task.h"
-
-#include <sdds/DataSink.h>
-#include <sdds/DataSource.h>
-#include <sdds/LocatorDB.h>
-#include <sdds/Marshalling.h>
-#include <sdds/Network.h>
-#include <sdds/TopicDB.h>
-#include <sdds/TopicMarshalling.h>
-#include <sdds/sDDS.h>
-#include <sdds/Log.h>
-
-#include <dds/DDS_DCPS.h>
-
-#include <stdio.h>
-#include <string.h>
+#include "sDDS.h"
 
 #ifdef __cplusplus
 }
@@ -169,9 +145,10 @@ Discovery_sendPublicationTopics(void* data) {
     if (ret == SDDS_RT_OK) {
         int i;
         for (i = 0; i < len; i++) {
-            if (DDS_DCPSPublicationDataWriter_write(g_DCPSPublication_writer,
+            DDS_ReturnCode_t r = DDS_DCPSPublicationDataWriter_write(g_DCPSPublication_writer,
                                                     &pubT[i],
-                                                    NULL) == DDS_RETCODE_ERROR) {
+                                                    NULL);
+            if (r == DDS_RETCODE_ERROR) {
                 // handle error
                 Log_error("Send publication topic failed.\n");
             }

@@ -25,24 +25,6 @@ $(project.GENERATED_WARNING_HEADER:)
 #ifndef $(PROJECT.NAME)_SDDS_IMPL_H_INC
 #define $(PROJECT.NAME)_SDDS_IMPL_H_INC
 
-#include "gen_constants.h"
-
-#include <dds/DDS_DCPS.h>
-#include <os-ssal/Memory.h>
-#include <os-ssal/NodeConfig.h>
-#include <sdds/DataSink.h>
-#include <sdds/DataSource.h>
-#include <sdds/LocatorDB.h>
-#include <sdds/Log.h>
-#include <sdds/Network.h>
-#include <sdds/sDDS.h>
-#ifdef FEATURE_SDDS_DISCOVERY_ENABLED
-#include <sdds/Discovery.h>
-#endif
-#ifdef FEATURE_SDDS_BUILTIN_TOPICS_ENABLED
-#include <sdds/BuiltinTopic.h>
-#endif
-
 .for project.topic
 #include "$(topic.c_name)-ds.h"
 .endfor
