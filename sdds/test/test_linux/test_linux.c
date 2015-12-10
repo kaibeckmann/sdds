@@ -33,6 +33,13 @@ int main()
     ret = DDS_StringsDataWriter_write (g_Strings_writer, &strings_pub, NULL);
     assert (ret == DDS_RETCODE_OK);
 
+
+    // Create a testqosreliability sample
+    Testqosreliability testqosreliability_pub;
+    testqosreliability_pub.number = 12;
+    //  Write a testqosreliability sample
+    ret = DDS_TestqosreliabilityDataWriter_write (g_Testqosreliability_writer, &testqosreliability_pub, NULL);
+
     //  Read a strings sample
     int index;
     for (index = 0; index < 3; index++) {
