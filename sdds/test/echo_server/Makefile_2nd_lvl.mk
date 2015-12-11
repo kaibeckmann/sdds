@@ -1,5 +1,6 @@
 SDDS_TOPDIR := ../..
 
+CC=x86_64-rumprun-netbsd-gcc
 SDDS_OBJDIR := objs-linux
 TARGET := linux
 SDDS_PLATFORM := linux
@@ -7,16 +8,16 @@ SDDS_ARCH := x86
 
 LOCAL_CONSTANTS := local_constants.h
 
-IMPL_DEPEND_OBJS = $(SDDS_OBJDIR)/test_linux_sdds_impl.o
+IMPL_DEPEND_OBJS = $(SDDS_OBJDIR)/echo_server_sdds_impl.o
 ALL_OBJS += $(IMPL_DEPEND_OBJS)
-ALL_OBJS += $(SDDS_OBJDIR)/test_linux.o
+ALL_OBJS += $(SDDS_OBJDIR)/echo_server.o
 
 SDDS_CONSTANTS_FILE := ./gen_constants.h
 
 include $(SDDS_TOPDIR)/sdds.mk
 
+DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/numbersecho-ds.o
 DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/numbers-ds.o
-DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/strings-ds.o
 ALL_OBJS += $(DATA_DEPEND_OBJS)
 
 DATA_DEPEND_SRCS += $(patsubst $(SDDS_OBJDIR)/%.o,%.c,$(DATA_DEPEND_OBJS))
@@ -40,10 +41,7 @@ $(LOCAL_CONSTANTS):
 	touch $(LOCAL_CONSTANTS)
 
 CFLAGS += -I.
-# required for timer_t (POSIX.1b (real-time extensions))
-# and getline
-CFLAGS += -g -D_POSIX_C_SOURCE=200809L
-LDLIBS += -lrt
+CFLAGS += -O0 -ggdb3 -Werror
 
 $(SDDS_OBJDIR)/%.o: %.c
 	echo $(SDDS_OBJS) $(IMPL_DEPEND_OBJS) $(DATA_DEPEND_OBJS)
@@ -54,7 +52,7 @@ $(SDDS_OBJDIR)/%.o: %.c
 
 $(APPLICATION_NAME).c: $(LOCAL_CONSTANTS) $(SDDS_OBJDIR) $(IMPL_DEPEND_SRCS) $(DATA_DEPEND_SRCS)
 
-$(APPLICATION_NAME): $(SDDS_OBJDIR)/test_linux.o $(SDDS_OBJS) $(IMPL_DEPEND_OBJS) $(DATA_DEPEND_OBJS)
+$(APPLICATION_NAME): $(SDDS_OBJDIR)/echo_server.o $(SDDS_OBJS) $(IMPL_DEPEND_OBJS) $(DATA_DEPEND_OBJS)
 	$(CC) -o $@ $^ $(LDLIBS)
 
 %-ds.c %-ds.h %_sdds_impl.c %_sdds_impl.h:
@@ -64,7 +62,7 @@ code:
 	$(shell ./generate.sh)
 
 clean:
-	$(RM) ./$(APPLICATION_NAME)
+	$(RM) ./$(APPLICATION_NAME) ./$(APPLICATION_NAME).bin
 	$(RM) $(CLEAN)
 	$(RM) $(SDDS_OBJS) $(SDDS_OBJS_DEPEND)
 	$(RM) -rf $(SDDS_OBJDIR)
