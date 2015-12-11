@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Install rumprun
+if [ ! -d $(pwd)/rumprun/rumprun ]; then
+    cd rumprun
+    ./install_rumprun.sh
+    cd -
+fi
+export PATH="${PATH}:$(pwd)/rumprun/rumprun/rumprun/bin"
+
 echo "Running sdds selftest"
 echo ""
 for test in ./* ; do
