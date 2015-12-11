@@ -1,0 +1,23 @@
+<project
+    name = "echo_server"
+    script = "sdds.gsl"
+    endian = "little"
+    os = "netbsd"
+    iface = "vioif0"
+    ip = "fe80::5054:0ff:fe62:bf16"
+    port = "23234"
+    >
+    Rumpkernel basic publisher example
+
+    <!--
+        Includes are processed first, so XML in included files will be
+        part of the XML tree
+    -->
+    <include filename = "../topics/testing.xml" />
+
+    <!--<role topic = "stringsEcho" type = "publisher"/>-->
+    <!--<role topic = "strings" type = "subscriber" />-->
+
+    <role topic = "numbersEcho" type = "publisher"/>
+    <role topic = "numbers" type = "subscriber" />
+</project>
