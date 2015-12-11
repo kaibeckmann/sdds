@@ -19,6 +19,7 @@ core
 
 # Code Generation
 sdds/scripts/gsl
+sdds/test/rumprun/rumprun
 error.log
 
 # Generated files
