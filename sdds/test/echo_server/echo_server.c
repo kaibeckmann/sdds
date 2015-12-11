@@ -46,7 +46,7 @@ print_ip () {
 
 int main() {
     printf ("Started rumprun (echo server)\n");
-	Log_setLvl (2);
+	Log_setLvl (1);
 	DDS_ReturnCode_t ret;
 	ret = sDDS_init ();
     print_ip ();
