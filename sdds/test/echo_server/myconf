@@ -1,0 +1,5 @@
+version 20150930
+
+create hw_sdds 'my cool new config'
+        assimilate hw_sdds hw_virtio
+        remove hw_sdds -lrumpfs_cd9660

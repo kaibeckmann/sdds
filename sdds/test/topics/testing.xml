@@ -1,5 +1,5 @@
 <domain id = "1">
-    <topic name = "strings" domain = "1" id = "1">
+    <topic name = "strings" domain = "1" id = "6">
         Test topic which send different representations of strings
         <attribute name = "schar" type = "DDS_char">8-Bit char value</attribute>
         <attribute name = "s_string" type = "DDS_string" size = "1">1 char</attribute>
@@ -7,7 +7,29 @@
         <attribute name = "l_string" type = "DDS_string" size = "25">25 chars</attribute>
         <attribute name = "xl_string" type = "DDS_string" size = "50">50 chars</attribute>
     </topic>
-    <topic name = "numbers" domain = "1" id = "2">
+
+    <topic name = "stringsEcho" domain = "1" id = "7">
+        Test topic which send different representations of strings
+        <attribute name = "schar" type = "DDS_char">8-Bit char value</attribute>
+        <attribute name = "s_string" type = "DDS_string" size = "1">1 char</attribute>
+        <attribute name = "m_string" type = "DDS_string" size = "2">2 chars</attribute>
+        <attribute name = "l_string" type = "DDS_string" size = "25">25 chars</attribute>
+        <attribute name = "xl_string" type = "DDS_string" size = "50">50 chars</attribute>
+    </topic>
+
+    <topic name = "numbers" domain = "1" id = "8">
+        Test topic which sends different representations of numbers
+        <attribute name = "sbool" type = "DDS_boolean" />
+        <attribute name = "sshort" type = "DDS_short">16-Bit signed</attribute>
+        <attribute name = "slong" type = "DDS_long">32-Bit signed</attribute>
+        <!--<attribute name = "slong long" type = "DDS_long_long">64-Bit signed</attribute>-->
+        <attribute name = "uoctet" type = "DDS_octet">8-Bit unsigned</attribute>
+        <attribute name = "ushort" type = "DDS_unsigned_short">16-Bit unsigned</attribute>
+        <attribute name = "ulong" type = "DDS_unsigned_long">32-Bit unsigned</attribute>
+        <!--<attribute name = "ulong long" type = "DDS_unsigned_long_long">64-Bit unsigned</attribute>-->
+    </topic>
+
+    <topic name = "numbersEcho" domain = "1" id = "9">
         Test topic which sends different representations of numbers
         <attribute name = "sbool" type = "DDS_boolean" />
         <attribute name = "sshort" type = "DDS_short">16-Bit signed</attribute>

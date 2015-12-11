@@ -1,10 +1,10 @@
 <project
-    name = "test_history"
+    name = "test_echo_linux"
     script = "sdds.gsl"
     endian = "little"
     os = "linux"
-    iface = "eth0"
-    ip = "fe80::921b:eff:fe11:30e8"
+    iface = "tap0"
+    ip = "fe80::8489:5ff:fec8:31af"
     port = "23234"
     >
     Linux basic publisher example
@@ -15,5 +15,9 @@
     -->
     <include filename = "../topics/testing.xml" />
 
-    <role topic = "strings" type = "subscriber" />
+    <!--<role topic = "strings" type = "publisher"/>-->
+    <!--<role topic = "stringsEcho" type = "subscriber" />-->
+
+    <role topic = "numbers" type = "publisher"/>
+    <role topic = "numbersEcho" type = "subscriber" />
 </project>
