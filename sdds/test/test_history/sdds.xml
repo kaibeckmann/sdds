@@ -3,8 +3,9 @@
     script = "sdds.gsl"
     endian = "little"
     os = "linux"
-    iface = "eth0"
-    ip = "fe80::921b:eff:fe11:30e8"
+    iface = "tap0"
+    protocol = "AF_INET6"
+    ip = "fe80::c0ef:62ff:fed4:d26a"
     port = "23234"
     >
     Linux basic publisher example
