@@ -52,38 +52,40 @@ int main()
     Testqosreliabilityhuge* testqosreliabilityhuge_sub_p = &testqosreliabilityhuge_sub;
 
     //  R/W some strings samples
-    for (int i=0; i<5; i++){
+    for (int i=0; i<1; i++){
         DDS_StringsDataWriter_write (g_Strings_writer, &strings_pub, NULL);
+        usleep(2);
         DDS_StringsDataReader_take_next_sample(g_Strings_reader, &strings_sub_p, NULL);
     }
 
     //  R/W some testqosreliability samples
     for (int i=0; i<20; i++){
         DDS_TestqosreliabilitybasicDataWriter_write (g_Testqosreliabilitybasic_writer, &testqosreliabilitybasic_pub, NULL);
-        usleep(1);
+        usleep(2);
         DDS_TestqosreliabilitybasicDataReader_take_next_sample (g_Testqosreliabilitybasic_reader, &testqosreliabilitybasic_sub_p, NULL);
     }
 
     for (int i=0; i<1; i++){
         DDS_TestqosreliabilitysmallDataWriter_write (g_Testqosreliabilitysmall_writer, &testqosreliabilitysmall_pub, NULL);
-        usleep(1);
+        usleep(2);
         DDS_TestqosreliabilitysmallDataReader_take_next_sample (g_Testqosreliabilitysmall_reader, &testqosreliabilitysmall_sub_p, NULL);
     }
 
     for (int i=0; i<1; i++){
         DDS_TestqosreliabilitybigDataWriter_write (g_Testqosreliabilitybig_writer, &testqosreliabilitybig_pub, NULL);
-        usleep(1);
+        usleep(2);
         DDS_TestqosreliabilitybigDataReader_take_next_sample (g_Testqosreliabilitybig_reader, &testqosreliabilitybig_sub_p, NULL);
     }
 
     for (int i=0; i<1; i++){
         DDS_TestqosreliabilityhugeDataWriter_write (g_Testqosreliabilityhuge_writer, &testqosreliabilityhuge_pub, NULL);
-        usleep(1);
+        usleep(2);
         DDS_TestqosreliabilityhugeDataReader_take_next_sample (g_Testqosreliabilityhuge_reader, &testqosreliabilityhuge_sub_p, NULL);
     }
 
-    for (int i=0; i<5; i++){
+    for (int i=0; i<1; i++){
         DDS_NumbersDataWriter_write (g_Numbers_writer, &numbers_pub, NULL);
+        usleep(2);
         DDS_NumbersDataReader_take_next_sample(g_Numbers_reader, &numbers_sub_p, NULL);
     }
     //TODO: check seqNr & co
