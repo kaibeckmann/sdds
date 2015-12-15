@@ -9,6 +9,7 @@
 **/objs-128rfa1
 **/objs-linux
 **/objs-riot
+**/objs-autobest
 **/bin
 core
 
@@ -43,3 +44,6 @@ gen_constants.h
 **/linux_olga2
 **/linux_mcast1_steffen
 **/linux_mcast2_steffen
+
+#Bitscope csv-file
+sdds/tools/BitScope.csv
