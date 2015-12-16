@@ -1,0 +1,50 @@
+<project
+    name = "test_qos_reliability"
+    script = "sdds.gsl"
+    endian = "little"
+    os = "linux"
+    iface = "eth0"
+    ip = "fe80::219:99ff:fede:9a7a"
+    protocol = "AF_INET6"
+    port = "23235"
+    >
+    Linux basic publisher example
+
+    <!--
+        Includes are processed first, so XML in included files will be
+        part of the XML tree
+    -->
+    <include filename = "../topics/testing.xml" />
+
+    <role topic = "testqosreliabilitybasic" type = "publisher">
+        <subscriber ip = "fe80::219:99ff:fede:9a7a" port = "23235"/>
+    </role>
+    <role topic = "testqosreliabilitybasic" type = "subscriber" />
+
+    <role topic = "testqosreliabilitysmall" type = "publisher">
+        <subscriber ip = "fe80::219:99ff:fede:9a7a" port = "23235"/>
+    </role>
+    <role topic = "testqosreliabilitysmall" type = "subscriber" />
+
+    <role topic = "testqosreliabilitybig" type = "publisher">
+        <subscriber ip = "fe80::219:99ff:fede:9a7a" port = "23235"/>
+    </role>
+    <role topic = "testqosreliabilitybig" type = "subscriber" />
+
+    <role topic = "testqosreliabilityhuge" type = "publisher">
+        <subscriber ip = "fe80::219:99ff:fede:9a7a" port = "23235"/>
+    </role>
+    <role topic = "testqosreliabilityhuge" type = "subscriber" />
+
+    <role topic = "strings" type = "publisher">
+        <subscriber ip = "fe80::219:99ff:fede:9a7a" port = "23235"/>
+    </role>
+    <role topic = "strings" type = "subscriber" />
+
+    <role topic = "numbers" type = "publisher">
+        <subscriber ip = "fe80::219:99ff:fede:9a7a" port = "23235"/>
+    </role>
+    <role topic = "numbers" type = "subscriber" />
+
+
+</project>
