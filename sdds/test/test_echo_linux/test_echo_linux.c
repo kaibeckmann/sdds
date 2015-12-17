@@ -4,7 +4,7 @@
 int main()
 {
     printf ("Linux (multicast, echo): ");
-	Log_setLvl (5);
+	Log_setLvl (2);
 	sDDS_init ();
     //  Create a strings sample
     /*Strings strings_pub;*/

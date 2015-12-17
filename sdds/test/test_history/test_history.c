@@ -26,7 +26,7 @@ int main()
     rc = sdds_History_setup (&history, &samples[0], 1);
     assert (rc == SDDS_RT_OK);
     //  Enqueue
-    rc = sdds_History_enqueue (&history, &buff);
+    rc = sdds_History_enqueue_buffer (&history, &buff);
     assert (rc == SDDS_RT_OK);
 
     //  Dequeue
