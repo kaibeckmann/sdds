@@ -17,6 +17,8 @@ include $(SDDS_TOPDIR)/sdds.mk
 
 DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/numbersecho-ds.o
 DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/numbers-ds.o
+DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/stringsecho-ds.o
+DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/strings-ds.o
 ALL_OBJS += $(DATA_DEPEND_OBJS)
 
 DATA_DEPEND_SRCS += $(patsubst $(SDDS_OBJDIR)/%.o,%.c,$(DATA_DEPEND_OBJS))
