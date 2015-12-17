@@ -54,21 +54,21 @@ int main() {
     assert (ret == DDS_RETCODE_OK);
 
     //  Create sub samples
-    /*Strings strings_sub;*/
-    /*Strings *strings_sub_p = &strings_sub;*/
+    Strings strings_sub;
+    Strings *strings_sub_p = &strings_sub;
     Numbers numbers_sub;
     Numbers *numbers_sub_p = &numbers_sub;
 
     for (;;) {
         //  Read strings sample and echo it
-        /*ret = DDS_StringsDataReader_take_next_sample(g_Strings_reader, &strings_sub_p, NULL);*/
-        /*if (ret != DDS_RETCODE_NO_DATA) {*/
-            /*printf ("Got strings\n");*/
-            /*ret = DDS_StringsEchoDataWriter_write (g_StringsEcho_writer,*/
-                                                   /*(StringsEcho *) strings_sub_p,*/
-                                                   /*NULL);*/
-            /*assert (ret == DDS_RETCODE_OK);*/
-        /*}*/
+        ret = DDS_StringsDataReader_take_next_sample(g_Strings_reader, &strings_sub_p, NULL);
+        if (ret != DDS_RETCODE_NO_DATA) {
+            printf ("Got strings\n");
+            ret = DDS_StringsEchoDataWriter_write (g_StringsEcho_writer,
+                                                   (StringsEcho *) strings_sub_p,
+                                                   NULL);
+            assert (ret == DDS_RETCODE_OK);
+        }
 
         //  Read numbers sample and echo it
         ret = DDS_NumbersDataReader_take_next_sample(g_Numbers_reader, &numbers_sub_p, NULL);
@@ -80,7 +80,7 @@ int main() {
             assert (ret == DDS_RETCODE_OK);
         }
 
-        usleep (200);
+        usleep (250);
     }
 
     printf ("OK\n");

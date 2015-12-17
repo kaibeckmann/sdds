@@ -16,8 +16,8 @@
     -->
     <include filename = "../topics/testing.xml" />
 
-    <!--<role topic = "strings" type = "publisher"/>-->
-    <!--<role topic = "stringsEcho" type = "subscriber" />-->
+    <role topic = "strings" type = "publisher"/>
+    <role topic = "stringsEcho" type = "subscriber" />
 
     <role topic = "numbers" type = "publisher"/>
     <role topic = "numbersEcho" type = "subscriber" />
