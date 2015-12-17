@@ -4,8 +4,8 @@
     endian = "little"
     os = "linux"
     iface = "tap0"
-    protocol = "AF_INET6"
     ip = "fe80::c0ef:62ff:fed4:d26a"
+    protocol = "AF_INET6"
     port = "23234"
     >
     Linux basic publisher example
