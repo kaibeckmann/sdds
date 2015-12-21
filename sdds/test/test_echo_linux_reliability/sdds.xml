@@ -1,0 +1,27 @@
+<project
+    name = "test_echo_linux_reliability"
+    script = "sdds.gsl"
+    endian = "little"
+    os = "linux"
+    iface = "tap0"
+    protocol = "AF_INET6"
+    ip = "fe80::c0ef:62ff:fed4:d26a"
+    port = "23234"
+    >
+    Linux basic publisher example
+
+    <!--
+        Includes are processed first, so XML in included files will be
+        part of the XML tree
+    -->
+    <include filename = "../topics/testing.xml" />
+
+    <role topic = "testqosreliabilitybasic" type = "publisher"/>
+    <role topic = "testqosreliabilitybasic" type = "subscriber"/>
+    <role topic = "testqosreliabilitysmall" type = "publisher"/>
+    <role topic = "testqosreliabilitysmall" type = "subscriber"/>
+    <role topic = "testqosreliabilitybig" type = "publisher"/>
+    <role topic = "testqosreliabilitybig" type = "subscriber"/>
+    <role topic = "testqosreliabilityhuge" type = "publisher"/>
+    <role topic = "testqosreliabilityhuge" type = "subscriber"/>
+</project>
