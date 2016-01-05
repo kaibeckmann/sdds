@@ -50,4 +50,5 @@ sdds/example/linux_autobest/linux_autobest
 #Bitscope csv-file
 sdds/tools/BitScope.csv
 sdds/tools/BitScope_trace.csv
+sdds/tools/BitScope_trace_debug.csv
 
