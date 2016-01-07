@@ -1,4 +1,4 @@
-APPLICATION_NAME = test_echo_linux
+APPLICATION_NAME = test_echo_linux_latencybudget
 
 export APPLICATION_NAME
 

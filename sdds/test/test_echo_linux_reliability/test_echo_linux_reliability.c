@@ -30,21 +30,26 @@ int main()
     struct timeval start, tmp;
     gettimeofday (&start, NULL);
     bool allSubsFound = false;
-    rc_t retBasic, retSmall, retBig, retHuge;
+    rc_t retBasic = -1;
+    rc_t retSmall = -1;
+    rc_t retBig = -1;
+    rc_t retHuge = -1;
     while (!allSubsFound){
         DDS_TestqosreliabilitybasicDataWriter_write (g_Testqosreliabilitybasic_writer, &testqosreliabilitybasic_pub, NULL);
         DDS_TestqosreliabilitysmallDataWriter_write (g_Testqosreliabilitysmall_writer, &testqosreliabilitysmall_pub, NULL);
         DDS_TestqosreliabilitybigDataWriter_write (g_Testqosreliabilitybig_writer, &testqosreliabilitybig_pub, NULL);
         DDS_TestqosreliabilityhugeDataWriter_write (g_Testqosreliabilityhuge_writer, &testqosreliabilityhuge_pub, NULL);
 
-        retBasic = DDS_TestqosreliabilitybasicDataReader_take_next_sample (g_Testqosreliabilitybasic_reader, &testqosreliabilitybasic_sub_p, NULL);
-        retSmall = DDS_TestqosreliabilitysmallDataReader_take_next_sample (g_Testqosreliabilitysmall_reader, &testqosreliabilitysmall_sub_p, NULL);
-        retBig = DDS_TestqosreliabilitybigDataReader_take_next_sample (g_Testqosreliabilitybig_reader, &testqosreliabilitybig_sub_p, NULL);
-        retHuge = DDS_TestqosreliabilityhugeDataReader_take_next_sample (g_Testqosreliabilityhuge_reader, &testqosreliabilityhuge_sub_p, NULL);
+        if (retBasic != SDDS_RT_OK)
+            retBasic = DDS_TestqosreliabilitybasicDataReader_take_next_sample (g_Testqosreliabilitybasic_reader, &testqosreliabilitybasic_sub_p, NULL);
+        if (retSmall != SDDS_RT_OK)
+            retSmall = DDS_TestqosreliabilitysmallDataReader_take_next_sample (g_Testqosreliabilitysmall_reader, &testqosreliabilitysmall_sub_p, NULL);
+        if (retBig != SDDS_RT_OK)
+            retBig = DDS_TestqosreliabilitybigDataReader_take_next_sample (g_Testqosreliabilitybig_reader, &testqosreliabilitybig_sub_p, NULL);
+        if (retHuge != SDDS_RT_OK)
+            retHuge = DDS_TestqosreliabilityhugeDataReader_take_next_sample (g_Testqosreliabilityhuge_reader, &testqosreliabilityhuge_sub_p, NULL);
 
-        if (retBasic == SDDS_RT_OK && retSmall == SDDS_RT_OK && retBig == SDDS_RT_OK && retHuge == SDDS_RT_OK){
-            allSubsFound = true;
-        }
+        allSubsFound = retBasic == SDDS_RT_OK && retSmall == SDDS_RT_OK && retBig == SDDS_RT_OK && retHuge == SDDS_RT_OK;
 
         gettimeofday (&tmp, NULL);
         if (tmp.tv_sec >= (start.tv_sec + 20)){
