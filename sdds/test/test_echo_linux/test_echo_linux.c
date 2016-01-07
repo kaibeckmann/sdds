@@ -35,11 +35,11 @@ int main()
         //  Write samples
         if (!strings_received) {
             ret = DDS_StringsDataWriter_write (g_Strings_writer, &strings_pub, NULL);
-            assert (ret == DDS_RETCODE_OK);
+            assert (ret != DDS_RETCODE_ERROR);
         }
         if (!numbers_received) {
             ret = DDS_NumbersDataWriter_write (g_Numbers_writer, &numbers_pub, NULL);
-            assert (ret == DDS_RETCODE_OK);
+            assert (ret != DDS_RETCODE_ERROR);
         }
 
         sleep (2);

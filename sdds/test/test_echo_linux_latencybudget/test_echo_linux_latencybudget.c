@@ -1,9 +1,9 @@
 #include <unistd.h>
-#include "test_echo_linux_sdds_impl.h"
+#include "test_echo_linux_latencybudget_sdds_impl.h"
 
 int main()
 {
-    printf ("Linux (multicast, echo): ");
+    printf ("Linux (multicast, echo) Latency Budget: ");
 	Log_setLvl (1);
 	sDDS_init ();
     //  Create a strings sample
