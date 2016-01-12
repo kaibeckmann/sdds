@@ -47,8 +47,9 @@ gen_constants.h
 sdds/example/linux_autobest/linux_autobest
 
 
-#Bitscope csv-file
+#Trace csv-files
 sdds/tools/BitScope.csv
 sdds/tools/BitScope_trace.csv
 sdds/tools/BitScope_trace_debug.csv
+sdds/tools/Bus.csv
 
