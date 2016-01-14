@@ -43,12 +43,23 @@ s_init(Locator_t* _this);
 #ifdef UTILS_DEBUG
 static void
 s_print() {
+    printf("\n\nLOCATOR DB \n");
     for (int i = 0; i < SDDS_NET_MAX_LOCATOR_COUNT; i++) {
         char srcAddr[NI_MAXHOST];
-        Locator_getAddress(db.pool[i], srcAddr);
-        printf("[%d,%d, %s] ", i, db.pool[i]->refCount, srcAddr);
+        if (Locator_getAddress(db.pool[i], srcAddr) != SDDS_RT_OK) {
+            srcAddr[0] = '0';
+            srcAddr[1] = '\0';
+        }
+        char *type = "UNI";
+        if (db.pool[i]->type == SDDS_LOCATOR_TYPE_MULTI) {
+            type = "MUL";
+        }
+
+        assert(!((i == 3) && (strcmp(srcAddr, "ff02::30") == 0)));
+
+        printf("[(%p) %d,%d, %s, %s] ", db.pool[i], i, db.pool[i]->refCount, srcAddr, type);
     }
-    printf("\nfreeLoc: %d\n", db.freeLoc);
+    printf("\nfreeLoc: %d\n\n", db.freeLoc);
 }
 #endif
 
@@ -262,7 +273,7 @@ Locator_upRef(Locator_t* _this) {
 
 #ifdef UTILS_DEBUG
     if (_this->refCount == 0) {
-        Log_error("unauthorized upRef on:\n");
+        Log_error("unauthorized upRef on %p:\n", _this);
 
         Locator_print(_this);
         s_print();
@@ -306,10 +317,20 @@ s_init(Locator_t* _this) {
     _this->isDest = false;
     _this->isSender = false;
 
-    return SDDS_RT_OK;
+    _this->type = SDDS_LOCATOR_TYPE_UNI;
+    rc_t ret = Network_setPlatformAddressToLocator(_this);
+
+    return ret;
 }
 
 uint8_t
 LocatorDB_freeLocators() {
     return db.freeLoc;
+}
+
+void
+LocatorDB_print() {
+    Mutex_lock(mutex);
+    s_print();
+    Mutex_unlock(mutex);
 }
