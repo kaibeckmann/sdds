@@ -7,6 +7,7 @@
  *      c&p from https://github.com/adafruit/TSL2561-Arduino-Library/blob/master/TSL2561.h
  */
 
+#include "local_constants.h"
 
 #include "TSL2561.h"
 #include "sdds_types.h"
@@ -158,8 +159,9 @@ rc_t TSL2561_readID(uint8_t* id) {
 }
 
 rc_t _setTimeing() {
-
+    printf("%s %d\n", __FUNCTION__, __LINE__);
 	rc_t ret = _enable();
+	printf("%s %d\n", __FUNCTION__, __LINE__);
 	if (ret != SDDS_RT_OK)
 		return ret;
 
@@ -343,7 +345,6 @@ rc_t TSL2561_getChannels(uint16_t* channel0, uint16_t* channel1) {
 rc_t TSL2561_init(void) {
 
 	twi_init();
-
 	// set default gain and integration time
 	_setTimeing();
 

@@ -1,3 +1,5 @@
+#include "local_constants.h"
+
 #include "twi.h"
 
 #include "Log.h"

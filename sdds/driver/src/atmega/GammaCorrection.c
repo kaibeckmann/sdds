@@ -5,7 +5,7 @@
  *      Author: kai
  */
 
-
+#include "local_constants.h"
 #include "GammaCorrection.h"
 
 #ifdef DRIVER_LED_DIMMING_GAMMACORRECTION

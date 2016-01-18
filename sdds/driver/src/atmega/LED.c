@@ -5,6 +5,8 @@
  *      Author: k_beckma
  */
 
+#include "local_constants.h"
+
 #include "avr/io.h"
 
 #include "sdds/Log.h"
