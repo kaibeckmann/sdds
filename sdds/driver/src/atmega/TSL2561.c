@@ -133,7 +133,7 @@ static TSL2561_IntegrationTime_t g_integrationtime = TSL2561_INTEGRATIONTIME_13M
  */
 static rc_t _enable(void) {
 
-	rc_t ret = twi_writeByte(DRIVER_TSL2561_TWI_ADDRESS,
+    rc_t ret = twi_writeByte(DRIVER_TSL2561_TWI_ADDRESS,
 			(DRIVER_TSL2561_COMMAND_BIT | TSL2561_REGISTER_CONTROL),
 			DRIVER_TSL2561_CONTROL_POWERON);
 
@@ -152,17 +152,17 @@ static rc_t _disable(void) {
 
 rc_t TSL2561_readID(uint8_t* id) {
 
-	rc_t ret = twi_readByte(DRIVER_TSL2561_TWI_ADDRESS,
+    rc_t ret = twi_readByte(DRIVER_TSL2561_TWI_ADDRESS,
 			TSL2561_REGISTER_ID, id);
 
 	return ret;
 }
 
 rc_t _setTimeing() {
-    printf("%s %d\n", __FUNCTION__, __LINE__);
-	rc_t ret = _enable();
-	printf("%s %d\n", __FUNCTION__, __LINE__);
-	if (ret != SDDS_RT_OK)
+
+    rc_t ret = _enable();
+
+    if (ret != SDDS_RT_OK)
 		return ret;
 
 	ret = twi_writeByte(DRIVER_TSL2561_TWI_ADDRESS,

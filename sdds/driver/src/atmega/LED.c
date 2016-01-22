@@ -144,7 +144,6 @@ rc_t LED_init(LED _this) {
 #ifdef DRIVER_LED_DIMMING
 
 	if (_this->bank == HAL_LED_BANK_B && _this->pin == HAL_LED_PIN_5 && (_this->mode & HAL_LED_DIM_ACTIVATE)) {
-		Log_debug("Conf B5 for dimming\n");
 		// timer 1
 		TCCR1A |= _BV(COM1A1);
 		if (_this->sourceing == false) {
@@ -270,8 +269,6 @@ rc_t LED_switchOn(LED _this) {
 	if (_this == NULL ) {
 		return SDDS_RT_BAD_PARAMETER;
 	}
-	Log_debug("Lamp %x \n", _this->pin);
-
 	_switchOn(_this);
 
 #ifdef DRIVER_LED_DIMMING
@@ -340,8 +337,6 @@ rc_t LED_switchOff(LED _this) {
 	if (_this == NULL ) {
 		return SDDS_RT_BAD_PARAMETER;
 	}
-	Log_debug("Lamp %x \n", _this->pin);
-
 	_switchOff(_this);
 
 
@@ -493,7 +488,6 @@ rc_t LED_dim(LED _this, uint8_t setValue) {
 	if (_this == NULL ) {
 		return SDDS_RT_BAD_PARAMETER;
 	}
-	Log_debug("New Value %u\n", setValue);
 	_this->dimValue = setValue;
 
 

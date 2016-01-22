@@ -283,6 +283,7 @@ rc_t twi_writeByte(uint8_t addr, uint8_t reg, uint8_t data) {
 		return SDDS_RT_FAIL;
 
 	//return failed_command;
+	printf("%s %d\n", __FUNCTION__, __LINE__);
 
 	return SDDS_RT_OK;
 
