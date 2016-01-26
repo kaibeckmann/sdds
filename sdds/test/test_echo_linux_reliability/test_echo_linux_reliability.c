@@ -27,13 +27,15 @@ int main()
 
     // active testing until all subscibers have been found
     // timeout = 20 secs
-    struct timeval start, tmp;
-    gettimeofday (&start, NULL);
+    struct timeval start;
+    struct timeval tmp;
     bool allSubsFound = false;
-    rc_t retBasic = -1;
-    rc_t retSmall = -1;
-    rc_t retBig = -1;
-    rc_t retHuge = -1;
+    rc_t retBasic = SDDS_RT_NODATA;
+    rc_t retSmall = SDDS_RT_NODATA;
+    rc_t retBig = SDDS_RT_NODATA;
+    rc_t retHuge = SDDS_RT_NODATA;
+
+    gettimeofday (&start, NULL);
     while (!allSubsFound){
         DDS_TestqosreliabilitybasicDataWriter_write (g_Testqosreliabilitybasic_writer, &testqosreliabilitybasic_pub, NULL);
         DDS_TestqosreliabilitysmallDataWriter_write (g_Testqosreliabilitysmall_writer, &testqosreliabilitysmall_pub, NULL);
@@ -49,10 +51,10 @@ int main()
         if (retHuge != SDDS_RT_OK)
             retHuge = DDS_TestqosreliabilityhugeDataReader_take_next_sample (g_Testqosreliabilityhuge_reader, &testqosreliabilityhuge_sub_p, NULL);
 
-        allSubsFound = retBasic == SDDS_RT_OK && retSmall == SDDS_RT_OK && retBig == SDDS_RT_OK && retHuge == SDDS_RT_OK;
+        allSubsFound = (retBasic == SDDS_RT_OK) && (retSmall == SDDS_RT_OK) && (retBig == SDDS_RT_OK) && (retHuge == SDDS_RT_OK);
 
         gettimeofday (&tmp, NULL);
-        if (tmp.tv_sec >= (start.tv_sec + 20)){
+        if (tmp.tv_sec > (start.tv_sec + 20)){
             printf("ERROR: Not all subscriptions could be found until timeout!\n");
             return SDDS_RT_FAIL;
         }
