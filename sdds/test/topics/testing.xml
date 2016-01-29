@@ -6,6 +6,7 @@
         <attribute name = "m_string" type = "DDS_string" size = "2">2 chars</attribute>
         <attribute name = "l_string" type = "DDS_string" size = "25">25 chars</attribute>
         <attribute name = "xl_string" type = "DDS_string" size = "50">50 chars</attribute>
+        <config type = "qos_history" depth = "5" />
     </topic>
 
     <topic name = "stringsEcho" domain = "1" id = "7">
@@ -15,6 +16,7 @@
         <attribute name = "m_string" type = "DDS_string" size = "2">2 chars</attribute>
         <attribute name = "l_string" type = "DDS_string" size = "25">25 chars</attribute>
         <attribute name = "xl_string" type = "DDS_string" size = "50">50 chars</attribute>
+        <config type = "qos_history" depth = "5" />
     </topic>
 
     <topic name = "numbers" domain = "1" id = "8">
@@ -27,6 +29,7 @@
         <attribute name = "ushort" type = "DDS_unsigned_short">16-Bit unsigned</attribute>
         <attribute name = "ulong" type = "DDS_unsigned_long">32-Bit unsigned</attribute>
         <!--<attribute name = "ulong long" type = "DDS_unsigned_long_long">64-Bit unsigned</attribute>-->
+        <config type = "qos_history" depth = "15" />
     </topic>
 
     <topic name = "numbersEcho" domain = "1" id = "9">
@@ -39,6 +42,7 @@
         <attribute name = "ushort" type = "DDS_unsigned_short">16-Bit unsigned</attribute>
         <attribute name = "ulong" type = "DDS_unsigned_long">32-Bit unsigned</attribute>
         <!--<attribute name = "ulong long" type = "DDS_unsigned_long_long">64-Bit unsigned</attribute>-->
+        <config type = "qos_history" depth = "15" />
     </topic>
 <!--QOS RELIABILITY-->
     <topic name = "testqosreliabilitybasic" domain = "1" id = "A">
