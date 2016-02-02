@@ -29,6 +29,8 @@ gen_constants.h
 *-ds.c
 *_sdds_impl.h
 *_sdds_impl.c
+*_shm.c
+*_shm.h
 
 # Temporary editor files
 *.swp
@@ -53,4 +55,3 @@ sdds/tools/BitScope_trace.csv
 sdds/tools/BitScope_trace_debug.csv
 sdds/tools/Bus.csv
 sdds/tools/Bus_1_sec.csv
-

@@ -132,7 +132,6 @@ sdds_History_enqueue_buffer(History_t* self, NetBuffRef_t* buff) {
 #endif
     }
 #endif
-
     rc_t ret = SNPS_readData(buff, topic->Data_decode, (Data) self->samples[self->in_needle].data);
     if (ret == SDDS_RT_FAIL) {
         return ret;

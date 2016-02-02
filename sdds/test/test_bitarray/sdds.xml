@@ -14,6 +14,9 @@
         Includes are processed first, so XML in included files will be
         part of the XML tree
     -->
+    <define name="UTILS_DEBUG" />
+    <define name="SDDS_SELFTEST" />
+    
     <include filename = "../topics/testing.xml" />
 
     <role topic = "strings" type = "subscriber" />
