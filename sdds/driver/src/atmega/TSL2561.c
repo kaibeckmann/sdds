@@ -7,6 +7,7 @@
  *      c&p from https://github.com/adafruit/TSL2561-Arduino-Library/blob/master/TSL2561.h
  */
 
+#include "local_constants.h"
 
 #include "TSL2561.h"
 #include "sdds_types.h"
@@ -132,7 +133,7 @@ static TSL2561_IntegrationTime_t g_integrationtime = TSL2561_INTEGRATIONTIME_13M
  */
 static rc_t _enable(void) {
 
-	rc_t ret = twi_writeByte(DRIVER_TSL2561_TWI_ADDRESS,
+    rc_t ret = twi_writeByte(DRIVER_TSL2561_TWI_ADDRESS,
 			(DRIVER_TSL2561_COMMAND_BIT | TSL2561_REGISTER_CONTROL),
 			DRIVER_TSL2561_CONTROL_POWERON);
 
@@ -151,7 +152,7 @@ static rc_t _disable(void) {
 
 rc_t TSL2561_readID(uint8_t* id) {
 
-	rc_t ret = twi_readByte(DRIVER_TSL2561_TWI_ADDRESS,
+    rc_t ret = twi_readByte(DRIVER_TSL2561_TWI_ADDRESS,
 			TSL2561_REGISTER_ID, id);
 
 	return ret;
@@ -159,8 +160,9 @@ rc_t TSL2561_readID(uint8_t* id) {
 
 rc_t _setTimeing() {
 
-	rc_t ret = _enable();
-	if (ret != SDDS_RT_OK)
+    rc_t ret = _enable();
+
+    if (ret != SDDS_RT_OK)
 		return ret;
 
 	ret = twi_writeByte(DRIVER_TSL2561_TWI_ADDRESS,
@@ -343,7 +345,6 @@ rc_t TSL2561_getChannels(uint16_t* channel0, uint16_t* channel1) {
 rc_t TSL2561_init(void) {
 
 	twi_init();
-
 	// set default gain and integration time
 	_setTimeing();
 

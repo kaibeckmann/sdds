@@ -1,5 +1,5 @@
 #include "contiki.h"
-#include "contiki_olga1_sdds_impl.h"
+#include "contiki_demosub_sdds_impl.h"
 
 PROCESS(contiki_olga1, "Empfange RGB-Topic");
 AUTOSTART_PROCESSES(&contiki_olga1);
@@ -33,7 +33,7 @@ s_init_drivers() {
                       .dimValue = 0
 
       };
-//
+
       static struct LED_t g_led_stc = {
                       .bank = HAL_LED_BANK_B,
                       .pin = HAL_LED_PIN_6,
@@ -43,7 +43,7 @@ s_init_drivers() {
                       .dimValue = 0
 
       };
-//
+
       static struct LED_t b_led_stc = {
                       .bank = HAL_LED_BANK_B,
                       .pin = HAL_LED_PIN_7,
@@ -57,15 +57,15 @@ s_init_drivers() {
       r_LED = &r_led_stc;
       g_LED = &g_led_stc;
       b_LED = &b_led_stc;
-//
+
       ret = LED_init(r_LED);
       ret = LED_init(g_LED);
       ret = LED_init(b_LED);
-//
+
       LED_switchOff(r_LED);
       LED_switchOff(g_LED);
       LED_switchOff(b_LED);
-//
+
       LED_dim(r_LED, 0);
       LED_dim(g_LED, 0);
       LED_dim(b_LED, 0);
@@ -73,24 +73,6 @@ s_init_drivers() {
       return SDDS_RT_OK;
 }
 
-int getValue(){
-    static clock_time_t start;
-    static clock_time_t stop;
-
-    start = clock_time();
-
-    for (int i = 0; i<10000; i++){
-        // wait for PINE4 to get low again
-        while( (PINE & (1 << PE4)) );
-        // wait until PINE4 is high
-        while( !(PINE & (1 << PE4)) );
-        // Resetting the watchdog Timer
-    }
-
-    stop = clock_time();
-
-    return stop - start;
-}
 
 #include <avr/eeprom.h>
 char atmega128rfa1_macadress[8]     EEMEM;
@@ -122,13 +104,7 @@ PROCESS_THREAD(contiki_olga1, ev, data)
 		return 1;
 	}
 	Log_setLvl(1);
-/*
-	static int value = 0;
-    Blue blue_pub;
-    blue_pub.value = 0;
-    //Green green_pub;
-    //green_pub.value = 0;
-*/
+
     for (;;) {
 
 	    ret = DDS_BlueDataReader_take_next_sample(g_Blue_reader,
@@ -149,16 +125,6 @@ PROCESS_THREAD(contiki_olga1, ev, data)
             LED_dim(r_LED, red_sub.value);
         }
 
-
-/*
-        value = getValue();
-        blue_pub.value = value;
-        printf("%d\n", blue_pub.value);
-        //green_pub.value = value;
-
-        ret = DDS_BlueDataWriter_write (g_Blue_writer, &blue_pub, NULL);
-        //ret = DDS_GreenDataWriter_write (g_Green_writer, &green_pub, NULL);
-*/
 		etimer_set(&g_wait_timer, (CLOCK_SECOND/100));
 		PROCESS_YIELD_UNTIL(etimer_expired(&g_wait_timer));
     }
