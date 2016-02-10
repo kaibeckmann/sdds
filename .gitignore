@@ -50,8 +50,4 @@ sdds/example/linux_autobest/linux_autobest
 
 
 #Trace csv-files
-sdds/tools/BitScope.csv
-sdds/tools/BitScope_trace.csv
-sdds/tools/BitScope_trace_debug.csv
-sdds/tools/Bus.csv
-sdds/tools/Bus_1_sec.csv
+sdds/tools/*.csv
