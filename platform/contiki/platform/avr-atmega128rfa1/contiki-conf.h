@@ -157,6 +157,7 @@ typedef unsigned short uip_stats_t;
 
 #define UIP_CONF_LL_802154        1
 #define UIP_CONF_LLH_LEN          0
+#define UIP_CONF_BUFFER_SIZE      512
 
 /* 10 bytes per stateful address context - see sicslowpan.c */
 /* Default is 1 context with prefix aaaa::/64 */
