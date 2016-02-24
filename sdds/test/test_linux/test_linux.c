@@ -4,6 +4,7 @@
 int main()
 {
     printf ("Linux (unicast): ");
+    fflush(stdout);
 	Log_setLvl (5);
 	DDS_ReturnCode_t ret;
 	ret = sDDS_init ();

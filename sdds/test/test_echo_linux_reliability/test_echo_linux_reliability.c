@@ -7,7 +7,7 @@
 
 int main()
 {
-    printf ("Linux (multicast, echo) reliability: ");
+    printf ("Linux (multicast, echo) Reliability: ");
     fflush(stdout);
 	Log_setLvl (5);
 	sDDS_init ();
