@@ -1,48 +1,32 @@
+.set GIT=https://zenon.cs.hs-rm.de/sdds/sdds.git
 
-<A name="toc1-2" title="sDDS" />
 # sDDS
 
-<center>
-<img src="https://zenon.cs.hs-rm.de/sdds/sdds.git/raw/master/images/README_1.png" alt="1">
-</center>
+[diagram]
+    /--------------------------------\+\
+    |/-------------------------------/||
+    ||      +------\ +------\ /------\||
+    ||      |+----\| |+----\| |/-----/||
+    ||      ||    || ||    || ||      ||
+    |+----\ ||    || ||    || |+-----\||
+    \----+| ||    || ||    || \-----+|||
+         || \/    || \/    ||       ||||
+         || /-----/| /-----/| /-----+|||
+         || +------/ +------/ \------/||
+    /----+|+--------------------------/|
+    \-----/+---------------------------/
+[/diagram]
 
-<A name="toc2-20" title="Contents" />
 ## Contents
 
+.toc 2
 
-**<a href="#toc2-25">Overview</a>**
-
-**<a href="#toc2-30">Scope and Goals</a>**
-
-**<a href="#toc2-33">Legacy README</a>**
-*  <a href="#toc3-51">BitCloud</a>
-*  <a href="#toc3-139">Linux</a>
-*  <a href="#toc3-144">CC2430</a>
-*  <a href="#toc3-149">Contiki</a>
-
-**<a href="#toc2-194">Style Guide</a>**
-
-**<a href="#toc2-199">sDDS - Code Generator</a>**
-*  <a href="#toc3-202">Overview</a>
-&emsp;<a href="#toc4-207">Scope and Goals</a>
-&emsp;<a href="#toc4-222">Getting started</a>
-*  <a href="#toc3-237">Configuration</a>
-&emsp;<a href="#toc4-240">Topics</a>
-&emsp;<a href="#toc4-258">Example</a>
-*  <a href="#toc3-311">Code Generator</a>
-&emsp;<a href="#toc4-316">Generate an app stub</a>
-&emsp;<a href="#toc4-336">Generate example app</a>
-*  <a href="#toc3-369">This Document</a>
-
-<A name="toc2-25" title="Overview" />
 ## Overview
 
 sDDS is a DDS implementation for embedded device as low as 8-bit microcontrollers.
 
-<A name="toc2-30" title="Scope and Goals" />
 ## Scope and Goals
 
-<A name="toc2-33" title="Legacy README" />
 ## Legacy README
 
 NOTE: This information is probably obsolete!
@@ -60,7 +44,6 @@ This solution was picked because of the following reasons:
 - No need for modifications on sDDS Makefiles if Makefiles in the SDK
   change.
 
-<A name="toc3-51" title="BitCloud" />
 ### BitCloud
 
 The top level directory of the BitCloud SDK is refered to as TOPDIR
@@ -148,17 +131,14 @@ clean:
 Now you can modify the INCLUDES, LIBS and SRCS make variables in the edited Makefile
 for your needs and execute make all to build your application.
 
-<A name="toc3-139" title="Linux" />
 ### Linux
 
 An example that builds on a linux system is provided in example/temper.
 
-<A name="toc3-144" title="CC2430" />
 ### CC2430
 
 TODO
 
-<A name="toc3-149" title="Contiki" />
 ### Contiki
 
 There's an example in examples/weather.
@@ -203,20 +183,16 @@ object files to the resulting binary. Fiddle with the Makefile as you like,
 e.g. by creating an all target or use the contiki APPS features, to build
 common objects and use common dependencies.
 
-<A name="toc2-194" title="Style Guide" />
 ## Style Guide
 
 sDDS uses [uCLASS] (https://zenon.cs.hs-rm.de/sdds/sdds/blob/master/style_guide.md) guild for code style.
 
-<A name="toc2-199" title="sDDS - Code Generator" />
 ## sDDS - Code Generator
 
-<A name="toc3-202" title="Overview" />
 ### Overview
 
 The sDDS Code Generator is responsible for generating DDS topic and DDS participant dependent code. It uses [GSL/4.1](https://github.com/imatix/gsl) as code construction tool.
 
-<A name="toc4-207" title="Scope and Goals" />
 #### Scope and Goals
 
 The sDDS Code Generator has these primary goals:
@@ -231,7 +207,6 @@ Makefile generation is currently supported for:
 * Linux
 * Contiki
 
-<A name="toc4-222" title="Getting started" />
 #### Getting started
 
 To get started with your first app add it to the 'example/examples.xml':
@@ -246,10 +221,8 @@ To get started with your first app add it to the 'example/examples.xml':
 
 Then run the 'example/generate_examples.sh' to create the stub for your app.
 
-<A name="toc3-237" title="Configuration" />
 ### Configuration
 
-<A name="toc4-240" title="Topics" />
 #### Topics
 
 Topics are configured in a xml file. By convention these files are placed into 'example/topics' to avoid topic duplication and copy\&paste madness.
@@ -267,7 +240,6 @@ Topics are configured in a xml file. By convention these files are placed into '
 </domain>
 ```
 
-<A name="toc4-258" title="Example" />
 #### Example
 
 To configure your example use the generated sdds.xml and change it to your needs.
@@ -320,28 +292,54 @@ Once you're done configuring your example run 'generate.sh' to create the Makefi
 
 NOTE: The first time you're running 'generate.sh' it will download and install the code generator which will take some time!
 
-<A name="toc3-311" title="Code Generator" />
 ### Code Generator
 
 The code generator is split into two distinct generation processes:
 
-<A name="toc4-316" title="Generate an app stub" />
 #### Generate an app stub
 
-<center>
-<img src="https://zenon.cs.hs-rm.de/sdds/sdds.git/raw/master/images/README_2.png" alt="2">
-</center>
+[diagram]
+    +---------------------------+           +---------------------+
+    | scripts/sdds_examples.gsl |   Input   | example.xml         |
+    +---------------------------+<----------+---------------------+
+    | Script to generate app    |           | Defines all example |
+    | stub.                 cFDA|           | apps            cFDA|
+    +-------------+-------------+           +---------------------+
+                  |
+                  |                         +---------------------+
+                  |       Output            | example/your_app/   |
+                  +------------------------>+---------------------+
+                                            | * sdds.xml      cFAD|
+                                            +---------------------+
+[/diagram]
 
 This is done by 'sdds_examples.gsl'.
 
-<A name="toc4-336" title="Generate example app" />
 #### Generate example app
 
 The entry point is 'sdds.gsl':
 
-<center>
-<img src="https://zenon.cs.hs-rm.de/sdds/sdds.git/raw/master/images/README_3.png" alt="3">
-</center>
+[diagram]
+    +---------------------------+           +---------------------+
+    | scripts/sdds.gsl          |   Input   | sdds.xml            |
+    +---------------------------+<----------+---------------------+
+    | Script to generate sdds   |           | Describes you app's |
+    | constants, topics,    cFDA|           | configuration and   |
+    | skeletion and glue code.  |           | features.       cFDA|
+    +-------------+-------------+           +---------------------+
+                  |
+                  |                         +--------------------------+
+                  |       Output            | example/your_app/        |
+                  +------------------------>+--------------------------+
+                                            | * <your_app>_topic.(c|h) |
+                                            | * <your_app>_impl.(c|h)  |
+                                            | * gen_constants.h        |
+                                            | * local_constants.h      |
+                                            | * <your_app>.c           |
+                                            | * Makefile               |
+                                            | * Makefile_2nd_lvl   cFAD|
+                                            +--------------------------+
+[/diagram]
 
 * sdds_topic.gsl - Generate the topics
 * sdds_impl.gsl - Generate the implementation of the topics
@@ -349,7 +347,4 @@ The entry point is 'sdds.gsl':
 * sdds_make\_<OS>.gsl - Generates the Makefiles for the different operating systems
 * sdds_skeleton - Generates a skeleton for new examples dependent on topics and roles
 
-<A name="toc3-369" title="This Document" />
 ### This Document
-
-_This documentation was generated using [Gitdown](https://github.com/zeromq/gitdown)_
