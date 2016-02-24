@@ -5,6 +5,7 @@
 int main()
 {
     printf ("History: ");
+    fflush(stdout);
     Log_setLvl(5);
     sDDS_init ();
 

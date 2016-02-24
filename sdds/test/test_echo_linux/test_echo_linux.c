@@ -4,6 +4,7 @@
 int main()
 {
     printf ("Linux (multicast, echo): ");
+    fflush(stdout);
 	Log_setLvl (1);
 	sDDS_init ();
     //  Create a strings sample
