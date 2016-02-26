@@ -14,7 +14,7 @@
         Includes are processed first, so XML in included files will be
         part of the XML tree
     -->
-    
+
     <define name = "FEATURE_SDDS_MULTICAST_ENABLED" />
     <define name = "FEATURE_SDDS_BUILTIN_TOPICS_ENABLED" />
     <define name = "FEATURE_SDDS_DISCOVERY_ENABLED" />
@@ -28,8 +28,9 @@
     <define name = "SDDS_QOS_DW_LATBUD" value = "5000"/>
     <define name = "SDDS_QOS_DW_COMM" value = "1000"/>
     <define name = "SDDS_QOS_DW_READ" value = "1000"/>
-    
-    <include filename = "../topics/testing.xml" />
+
+    <include filename = "../topics/basic.xml" />
+    <include filename = "../topics/qos_reliability.xml" />
 
     <role topic = "strings" type = "publisher"/>
     <role topic = "stringsEcho" type = "subscriber" />

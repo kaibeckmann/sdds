@@ -1,4 +1,4 @@
-APPLICATION_NAME = test_history
+APPLICATION_NAME = test_history_reliable
 
 export APPLICATION_NAME
 
