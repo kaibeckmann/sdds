@@ -160,8 +160,8 @@ uint8_t
 params_get_eui64(uint8_t *eui64) {
   uint8_t buffer[sizeof(linkaddr_t)];
   cli();
-//  eeprom_read_block ((void *)eui64, &eemem_mac_address, sizeof(linkaddr_t));
-  eeprom_read_block ((void *)buffer, 0x0000, sizeof(linkaddr_t));
+  eeprom_read_block ((void *)eui64, &eemem_mac_address, sizeof(linkaddr_t));
+//  eeprom_read_block ((void *)buffer, 0x0000, sizeof(linkaddr_t));
   sei();
   uint8_t j = 0;
   for (uint8_t i = sizeof(linkaddr_t) ; i > 0; i--, j++){

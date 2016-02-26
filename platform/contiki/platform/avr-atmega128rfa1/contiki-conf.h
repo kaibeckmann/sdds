@@ -159,6 +159,28 @@ typedef unsigned short uip_stats_t;
 #define UIP_CONF_LLH_LEN          0
 #define UIP_CONF_BUFFER_SIZE      512
 
+//#define	UIP_CONF_IPV6_MULTICAST 1
+
+/* Change this to switch engines. Engine codes in uip-mcast6-engines.h */
+//#define UIP_MCAST6_CONF_ENGINE UIP_MCAST6_ENGINE_SMRF
+
+/* For Imin: Use 16 over NullRDC, 64 over Contiki MAC */
+#define ROLL_TM_CONF_IMIN_1         64
+
+#undef UIP_CONF_IPV6_RPL
+#undef UIP_CONF_ND6_SEND_RA
+#undef UIP_CONF_ROUTER
+#define UIP_CONF_ND6_SEND_RA         0
+#define UIP_CONF_ROUTER              1
+#define UIP_MCAST6_ROUTE_CONF_ROUTES 1
+
+/* Code/RAM footprint savings so that things will fit on our device */
+#undef UIP_CONF_DS6_NBR_NBU
+#undef UIP_CONF_DS6_ROUTE_NBU
+#define UIP_CONF_DS6_NBR_NBU        10
+#define UIP_CONF_DS6_ROUTE_NBU      10
+
+
 /* 10 bytes per stateful address context - see sicslowpan.c */
 /* Default is 1 context with prefix aaaa::/64 */
 /* These must agree with all the other nodes or there will be a failure to communicate! */
@@ -189,7 +211,7 @@ typedef unsigned short uip_stats_t;
 #define NETSTACK_CONF_RDC         sicslowmac_driver
 #define NETSTACK_CONF_FRAMER      framer_802154
 #define NETSTACK_CONF_RADIO       rf230_driver
-#define CHANNEL_802_15_4          26
+#define CHANNEL_802_15_4          11
 /* AUTOACK receive mode gives better rssi measurements, even if ACK is never requested */
 #define RF230_CONF_AUTOACK        1
 /* 1 + Number of auto retry attempts 0-15 (0 implies don't use extended TX_ARET_ON mode) */
