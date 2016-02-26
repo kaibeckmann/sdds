@@ -28,10 +28,11 @@
     <define name = "SDDS_DISCOVERY_PARTICIPANT_TIMER" value = "1"/>
     <define name = "SDDS_DISCOVERY_PUBLICATION_TIMER" value = "5"/>
     <define name = "SDDS_DISCOVERY_TOPIC_TIMER" value = "0"/>
- 
-    
-    
-    <include filename = "../topics/testing.xml" />
+
+
+
+    <include filename = "../topics/basic.xml" />
+    <include filename = "../topics/qos_reliability.xml" />
 
     <role topic = "stringsEcho" type = "publisher"/>
     <role topic = "strings" type = "subscriber" />

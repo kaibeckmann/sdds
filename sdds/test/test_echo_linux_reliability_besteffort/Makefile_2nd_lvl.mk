@@ -7,15 +7,18 @@ SDDS_ARCH := x86
 
 LOCAL_CONSTANTS := local_constants.h
 
-IMPL_DEPEND_OBJS = $(SDDS_OBJDIR)/test_history_reliable_sdds_impl.o
+IMPL_DEPEND_OBJS = $(SDDS_OBJDIR)/test_echo_linux_reliability_besteffort_sdds_impl.o
 ALL_OBJS += $(IMPL_DEPEND_OBJS)
-ALL_OBJS += $(SDDS_OBJDIR)/test_history_reliable.o
+ALL_OBJS += $(SDDS_OBJDIR)/test_echo_linux_reliability_besteffort.o
 
 SDDS_CONSTANTS_FILE := ./gen_constants.h
 
 include $(SDDS_TOPDIR)/sdds.mk
 
-DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/strings-ds.o
+DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/testqosreliabilityhugebesteffort-ds.o
+DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/testqosreliabilitybigbesteffort-ds.o
+DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/testqosreliabilitysmallbesteffort-ds.o
+DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/testqosreliabilitybasicbesteffort-ds.o
 ALL_OBJS += $(DATA_DEPEND_OBJS)
 
 DATA_DEPEND_SRCS += $(patsubst $(SDDS_OBJDIR)/%.o,%.c,$(DATA_DEPEND_OBJS))
@@ -53,7 +56,7 @@ $(SDDS_OBJDIR)/%.o: %.c
 
 $(APPLICATION_NAME).c: $(LOCAL_CONSTANTS) $(SDDS_OBJDIR) $(IMPL_DEPEND_SRCS) $(DATA_DEPEND_SRCS)
 
-$(APPLICATION_NAME): $(SDDS_OBJDIR)/test_history_reliable.o $(SDDS_OBJS) $(IMPL_DEPEND_OBJS) $(DATA_DEPEND_OBJS)
+$(APPLICATION_NAME): $(SDDS_OBJDIR)/test_echo_linux_reliability_besteffort.o $(SDDS_OBJS) $(IMPL_DEPEND_OBJS) $(DATA_DEPEND_OBJS)
 	$(CC) -o $@ $^ $(LDLIBS)
 
 %-ds.c %-ds.h %_sdds_impl.c %_sdds_impl.h:

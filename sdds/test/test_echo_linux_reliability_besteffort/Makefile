@@ -1,4 +1,4 @@
-APPLICATION_NAME = test_history_reliable
+APPLICATION_NAME = test_echo_linux_reliability_besteffort
 
 export APPLICATION_NAME
 

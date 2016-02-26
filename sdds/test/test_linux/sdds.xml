@@ -15,8 +15,8 @@
         part of the XML tree
     -->
     <define name = "UTILS_DEBUG" />
-    
-    <include filename = "../topics/testing.xml" />
+
+    <include filename = "../topics/basic.xml" />
 
     <role topic = "strings" type = "publisher">
         <subscriber ip = "fe80::c0ef:62ff:fed4:d26a" port = "23234"/>

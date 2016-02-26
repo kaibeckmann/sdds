@@ -20,7 +20,7 @@
     <define name = "SDDS_HAS_QOS_RELIABILITY" />
     <define name = "SDDS_HAS_QOS_RELIABILITY_KIND_BESTEFFORT" />
 
-    <include filename = "../topics/testing.xml" />
+    <include filename = "../topics/basic.xml" />
 
     <role topic = "strings" type = "subscriber" />
 </project>

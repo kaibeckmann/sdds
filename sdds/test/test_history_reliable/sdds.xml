@@ -1,5 +1,5 @@
 <project
-    name = "test_history"
+    name = "test_history_reliable"
     script = "sdds.gsl"
     endian = "little"
     os = "linux"
@@ -18,9 +18,9 @@
     <define name = "UTILS_DEBUG" />
     <define name = "SDDS_SELFTEST" />
     <define name = "SDDS_HAS_QOS_RELIABILITY" />
-    <define name = "SDDS_HAS_QOS_RELIABILITY_KIND_BESTEFFORT" />
+    <define name = "SDDS_HAS_QOS_RELIABILITY_KIND_RELIABLE_BESTEFFORT" />
 
-    <include filename = "../topics/testing.xml" />
+    <include filename = "../topics/basic.xml" />
 
     <role topic = "strings" type = "subscriber" />
 </project>
