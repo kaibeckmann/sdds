@@ -79,11 +79,37 @@ fi
 export PATH="${PATH}:$(pwd)/rumprun/rumprun/rumprun/bin"
 
 if (( $# > 0 )); then
-    echo "Running selective sdds selftest"
-    echo ""
-    for BASENAME in "$@"; do
-        fkt_test $BASENAME
-    done
+
+    if [ "$1" = "-exclude" ]; then
+        shift #shifts parameters, so "-exclude" is ignored
+        echo "Running full sdds selftest with exclusions"
+        echo ""
+
+        for test in ./test* ; do
+            BASENAME=$(basename "$test")
+            if [ -d "$BASENAME" ]; then
+                test_shall_be_executed=1
+                for exclusion in "$@" ; do
+                    if [ $BASENAME == $exclusion ]; then
+                        test_shall_be_executed=0
+                    fi
+                done
+                if [ $test_shall_be_executed -eq "1" ]; then
+                    fkt_test $BASENAME
+                fi
+            fi
+        done
+        
+    else
+
+        echo "Running selective sdds selftests"
+        echo ""
+        for BASENAME in "$@"; do
+            if [ -d "$BASENAME" ]; then
+                fkt_test $BASENAME
+            fi
+        done
+    fi
 
 else
 
