@@ -1,5 +1,5 @@
 #include <unistd.h>
-#include "test_echo_linux_reliability_reliable_sdds_impl.h"
+#include "test_echo_linux_reliability_reliable_ack_sdds_impl.h"
 #include <sys/time.h>
 #include <time.h>
 #include <stdlib.h>
@@ -7,7 +7,7 @@
 
 int main()
 {
-    printf ("Linux (multicast, echo) Reliability - reliable: ");
+    printf ("Linux (multicast, echo) Reliability - reliable ack: ");
     fflush(stdout);
 	Log_setLvl (5);
 	sDDS_init ();

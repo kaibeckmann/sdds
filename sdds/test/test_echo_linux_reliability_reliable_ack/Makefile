@@ -1,4 +1,4 @@
-APPLICATION_NAME = test_echo_linux_reliability_reliable
+APPLICATION_NAME = test_echo_linux_reliability_reliable_ack
 
 export APPLICATION_NAME
 
