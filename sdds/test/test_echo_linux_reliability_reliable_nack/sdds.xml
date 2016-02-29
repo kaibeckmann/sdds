@@ -1,5 +1,5 @@
 <project
-    name = "test_echo_linux_reliability_reliable"
+    name = "test_echo_linux_reliability_reliable_nack"
     script = "sdds.gsl"
     endian = "little"
     os = "linux"
@@ -30,12 +30,12 @@
     <include filename = "../topics/basic.xml" />
     <include filename = "../topics/qos_reliability.xml" />
 
-    <role topic = "testQosReliabilityBasicReliableAck" type = "publisher"/>
-    <role topic = "testQosReliabilityBasicReliableAck" type = "subscriber"/>
-    <role topic = "testQosReliabilitySmallReliableAck" type = "publisher"/>
-    <role topic = "testQosReliabilitySmallReliableAck" type = "subscriber"/>
-    <role topic = "testQosReliabilityBigReliableAck" type = "publisher"/>
-    <role topic = "testQosReliabilityBigReliableAck" type = "subscriber"/>
-    <role topic = "testQosReliabilityHugeReliableAck" type = "publisher"/>
-    <role topic = "testQosReliabilityHugeReliableAck" type = "subscriber"/>
+    <role topic = "testQosReliabilityBasicReliableNack" type = "publisher"/>
+    <role topic = "testQosReliabilityBasicReliableNack" type = "subscriber"/>
+    <role topic = "testQosReliabilitySmallReliableNack" type = "publisher"/>
+    <role topic = "testQosReliabilitySmallReliableNack" type = "subscriber"/>
+    <role topic = "testQosReliabilityBigReliableNack" type = "publisher"/>
+    <role topic = "testQosReliabilityBigReliableNack" type = "subscriber"/>
+    <role topic = "testQosReliabilityHugeReliableNack" type = "publisher"/>
+    <role topic = "testQosReliabilityHugeReliableNack" type = "subscriber"/>
 </project>
