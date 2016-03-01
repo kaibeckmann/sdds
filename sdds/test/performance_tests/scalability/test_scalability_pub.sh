@@ -4,7 +4,7 @@ cd linux_scalability_pub/
 make clean
 ./generate.sh
 make all
-../scripts/./end_test.sh linux_scalability_pub $1 &
+../../scripts/./end_test.sh linux_scalability_pub $1 &
 ./linux_scalability_pub 
 make clean
 exit
