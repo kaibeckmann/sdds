@@ -1,0 +1,29 @@
+<project
+    name = "linux_scalability_pub"
+    script = "sdds.gsl"
+    endian = "little"
+    os = "linux"
+    iface = "{iface}"
+    ip = "{ip}"
+    port = "23234"
+    protocol = "AF_INET6"
+    >
+    Scalability test publisher.
+
+    <define name = "FEATURE_SDDS_MULTICAST_ENABLED"/>
+    <define name = "FEATURE_SDDS_BUILTIN_TOPICS_ENABLED"/>
+    <define name = "FEATURE_SDDS_DISCOVERY_ENABLED"/>
+
+    <define name = "SDDS_NET_MAX_BUF_SIZE" value = "128"/>
+    <define name = "SDDS_QOS_HISTORY_DEPTH" value = "3"/>
+    <define name = "SDDS_NET_MAX_LOCATOR_COUNT" value = "10"/>
+
+    <define name = "SDDS_DISCOVERY_RECEIVE_TIMER" value = "1"/>
+    <define name = "SDDS_DISCOVERY_PARTICIPANT_TIMER" value = "10"/>
+    <define name = "SDDS_DISCOVERY_PUBLICATION_TIMER" value = "10"/>
+    <define name = "SDDS_DISCOVERY_TOPIC_TIMER" value = "0"/>
+    
+    <include filename = "../../topics/heating.xml" />
+    <role topic = "thermometer" type = "publisher" />
+
+</project>
