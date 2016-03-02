@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 ############################### FUNCTION SECTION ##############################
-function fkt_error () {
+function fkt_throw_error () {
     echo "$1: FAILED"
     echo ""
     echo "Some tests failed! See error.log for details."
@@ -15,7 +15,7 @@ function fkt_error () {
     exit 1
 }
 
-function fkt_test () {
+function fkt_run_test () {
     if [[ $1 == test_echo* ]]; then
         # Start echo server
         cd echo_server
@@ -29,11 +29,11 @@ function fkt_test () {
         make clean >/dev/null 2>&1
         make -j8 >/dev/null 2> ../error.log
         if [ $? -ne 0 ]; then
-            fkt_error $1
+            fkt_throw_error $1
         fi
         ./$1 2> ../error.log
         if [ $? -ne 0 ]; then
-            fkt_error $1
+            fkt_throw_error $1
         fi
         make clean >/dev/null 2>&1
         if [ $? -ne 0 ]; then
@@ -51,11 +51,11 @@ function fkt_test () {
         make clean >/dev/null 2>&1
         make -j8 >/dev/null 2> ../error.log
         if [ $? -ne 0 ]; then
-           fkt_error $1
+           fkt_throw_error $1
        fi
         ./$1 2> ../error.log
         if [ $? -ne 0 ]; then
-            fkt_error $1
+            fkt_throw_error $1
         fi
         make clean >/dev/null 2>&1
         if [ $? -ne 0 ]; then
@@ -68,7 +68,7 @@ function fkt_test () {
     fi
 }
 
-##################################### BEGIN OF SCRIPT##########################
+############################ BEGINNING OF SCRIPT ###############################
 
 # Install rumprun
 if [ ! -d $(pwd)/rumprun/rumprun ]; then
@@ -79,8 +79,7 @@ fi
 export PATH="${PATH}:$(pwd)/rumprun/rumprun/rumprun/bin"
 
 if (( $# > 0 )); then
-
-    if [ "$1" = "-exclude" ]; then
+    if [ "$1" = "--exclude" ] || [ "$1" = "-e" ]; then
         shift #shifts parameters, so "-exclude" is ignored
         echo "Running full sdds selftest with exclusions"
         echo ""
@@ -95,33 +94,32 @@ if (( $# > 0 )); then
                     fi
                 done
                 if [ $test_shall_be_executed -eq "1" ]; then
-                    fkt_test $BASENAME
+                    fkt_run_test $BASENAME
                 fi
             fi
         done
-        
-    else
-
+    elif [ "$1" = "--include" ] || [ "$1" = "-i" ]; then
         echo "Running selective sdds selftests"
         echo ""
         for BASENAME in "$@"; do
             if [ -d "$BASENAME" ]; then
-                fkt_test $BASENAME
+                fkt_run_test $BASENAME
             fi
         done
+    else
+        echo "sDDS Testrunner Help"
+        echo "testrunner [--include/-i testfolder ...] [--exclude/-e testfolder ...]"
+        exit 0
     fi
-
 else
-
     echo "Running full sdds selftest"
     echo ""
     for test in ./test* ; do
         BASENAME=$(basename "$test")
         if [ -d "$BASENAME" ]; then
-            fkt_test $BASENAME
+            fkt_run_test $BASENAME
         fi
     done
-
 fi
 
 echo ""
