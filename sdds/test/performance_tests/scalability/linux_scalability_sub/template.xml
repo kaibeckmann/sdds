@@ -22,7 +22,13 @@
     <define name = "SDDS_DISCOVERY_PARTICIPANT_TIMER" value = "10"/>
     <define name = "SDDS_DISCOVERY_PUBLICATION_TIMER" value = "10"/>
     <define name = "SDDS_DISCOVERY_TOPIC_TIMER" value = "0"/>
-    
+    <define name = "SCALABILITY_LOG" value="&quot;../../scal_sub_msg_count.log&quot;"/>
+<!--
+    <define name = "SDDS_QOS_LATENCYBUDGET"/>
+    <define name = "SDDS_QOS_DW_LATBUD" value = "{lbud_dur}"/>
+    <define name = "SDDS_QOS_DW_COMM" value = "{lbud_com}"/>
+    <define name = "SDDS_QOS_DW_READ" value = "{lbud_read}"/>
+-->    
     <include filename = "../../topics/heating.xml" />
     <role topic = "thermostat" type = "subscriber" />
 

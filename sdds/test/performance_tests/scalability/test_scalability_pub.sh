@@ -1,7 +1,7 @@
 #!/bin/bash
 cd ~/sdds/sdds/test/performance_tests/scalability/linux_scalability_pub/
 echo -e "preparing pub test @$2"
-./prepare_test.sh
+./prepare_test.sh $3 $4 $5 $6
 make clean >/dev/null 2>&1
 ./generate.sh >/dev/null 2>&1
 echo "building pub test @$2"

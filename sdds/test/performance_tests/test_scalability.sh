@@ -9,7 +9,7 @@ host=(
     )
 
 if (($# < 4)); then
-	echo "usage: $0 <number of pubs> <number of pub_subs> <number of subs> <duration (min)>"
+	echo "usage: $0 <number of pubs> <number of pub_subs> <number of subs> <duration (min)> [lbud] [budget] [com] [read]"
 	exit
 fi
 
@@ -23,20 +23,20 @@ pub_start=0;
 pub_end=$1
 for (( i=$pub_start; i<$pub_end; i++ )); do
 	echo "connect to ${host[$i]}"
-	ssh ${host[$i]} -l pi 'bash -s' < scalability/test_scalability_pub.sh $4 ${host[$i]} &
+	ssh ${host[$i]} -l pi 'bash -s' < scalability/test_scalability_pub.sh $4 ${host[$i]} $5 $6 $7 $8 &
 done
 
 pub_sub_start=$pub_end;
 pub_sub_end=$pub_end+$2
 for (( i=$pub_sub_start; i<$pub_sub_end; i++ )); do
 	echo "connect to ${host[$i]}"
-	ssh ${host[$i]} -l pi 'bash -s' < scalability/test_scalability_pub_sub.sh $4 ${host[$i]} &
+	ssh ${host[$i]} -l pi 'bash -s' < scalability/test_scalability_pub_sub.sh $4 ${host[$i]} $5 $6 $7 $8 &
 done
 
 sub_start=$pub_sub_end;
 sub_end=$pub_sub_end+$3
 for (( i=$sub_start; i<$sub_end; i++ )); do
 	echo "connect to ${host[$i]}"
-	ssh ${host[$i]} -l pi 'bash -s' < scalability/test_scalability_sub.sh $4 ${host[$i]} &
+	ssh ${host[$i]} -l pi 'bash -s' < scalability/test_scalability_sub.sh $4 ${host[$i]} $5 $6 $7 $8 &
 done
 exit
