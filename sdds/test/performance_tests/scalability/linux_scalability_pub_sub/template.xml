@@ -22,6 +22,7 @@
     <define name = "SDDS_DISCOVERY_PARTICIPANT_TIMER" value = "10"/>
     <define name = "SDDS_DISCOVERY_PUBLICATION_TIMER" value = "10"/>
     <define name = "SDDS_DISCOVERY_TOPIC_TIMER" value = "0"/>
+    <define name = "TEST_SCALABILITY"/>
     <define name = "SCALABILITY_LOG" value="&quot;../../scal_pub_sub_msg_count.log&quot;"/>
 <!--
     <define name = "SDDS_QOS_LATENCYBUDGET"/>
