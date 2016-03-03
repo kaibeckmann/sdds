@@ -19,8 +19,10 @@
     <define name = "SDDS_SELFTEST" />
     <define name = "SDDS_HAS_QOS_RELIABILITY" />
     <define name = "SDDS_HAS_QOS_RELIABILITY_KIND_BESTEFFORT" />
+    <define name = "SDDS_QOS_RELIABILITY_MAX_TOPIC_PARTICIPANTS" value = "1"/>
 
     <include filename = "../topics/basic.xml" />
+    <include filename = "../topics/qos_reliability.xml" />
 
     <role topic = "strings" type = "subscriber" />
 </project>
