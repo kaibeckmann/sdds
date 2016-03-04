@@ -1,7 +1,7 @@
 #!/bin/bash
 cd ~/sdds/sdds/test/performance_tests/scalability/linux_scalability_pub_sub/
 echo -e "preparing pub_sub test @$2"
-./prepare_test.sh $3 $4 $5 $6
+./prepare_test.sh $3 $4 $5 $6 $7
 make clean >/dev/null 2>&1
 ./generate.sh >/dev/null 2>&1
 echo "building pub_sub test @$2"
@@ -12,5 +12,6 @@ echo "running pub_sub test @$2"
 echo "pub_sub test @$2 completed"
 echo "cleaning up pub_sub test $2"
 make clean >/dev/null 2>&1
+rm -rf sdds.xml
 echo "done @$2"
 exit
