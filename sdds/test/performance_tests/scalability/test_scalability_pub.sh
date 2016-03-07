@@ -1,5 +1,5 @@
 #!/bin/bash
-cd ~/sdds/sdds/test/performance_tests/scalability/linux_scalability_pub/
+cd ~/sdds/sdds/test/performance_tests/linux_scalability_pub/
 echo -e "preparing pub test @$2"
 ./prepare_test.sh $3 $4 $5 $6 $7
 make clean >/dev/null 2>&1
