@@ -21,25 +21,25 @@ fi
 
 pub_start=0;
 pub_end=$1
-pub_log="\"..\\/..\\/scalability_pub_$1_$2_$3.log\""
 for (( i=$pub_start; i<$pub_end; i++ )); do
 	echo "connect to ${host[$i]}"
+	pub_log="\"..\\/..\\/scalability_pub_${host[$i]}_$1_$2_$3.log\""
 	ssh ${host[$i]} -l pi 'bash -s' < scalability/test_scalability_pub.sh $4 ${host[$i]} $pub_log $5 $6 $7 $8 &
 done
 
 pub_sub_start=$pub_end;
 pub_sub_end=$pub_end+$2
-pub_sub_log="\"..\\/..\\/scalability_pub_sub_$1_$2_$3.log\""
 for (( i=$pub_sub_start; i<$pub_sub_end; i++ )); do
 	echo "connect to ${host[$i]}"
+	pub_sub_log="\"..\\/..\\/scalability_pub_sub_${host[$i]}_$1_$2_$3.log\""
 	ssh ${host[$i]} -l pi 'bash -s' < scalability/test_scalability_pub_sub.sh $4 ${host[$i]} $pub_sub_log $5 $6 $7 $8 &
 done
 
 sub_start=$pub_sub_end;
 sub_end=$pub_sub_end+$3
-sub_log="\"..\\/..\\/scalability_sub_$1_$2_$3.log\""
 for (( i=$sub_start; i<$sub_end; i++ )); do
 	echo "connect to ${host[$i]}"
+	sub_log="\"..\\/..\\/scalability_sub_${host[$i]}_$1_$2_$3.log\""
 	ssh ${host[$i]} -l pi 'bash -s' < scalability/test_scalability_sub.sh $4 ${host[$i]} $sub_log $5 $6 $7 $8 &
 done
 exit
