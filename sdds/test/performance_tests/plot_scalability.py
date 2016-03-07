@@ -112,7 +112,9 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 			s = i
 		y.append(scal_eval.getMsgCount_all(p,ps,s))
 
-	plt.plot(x, y)
+	plot_all = plt.plot(x, y, label="all")
+	print "\t"+str(x).strip('[]').replace(",", "\t")
+	print "all\t"+str(y).strip('[]').replace(",", "\t")
 
 	x = []
 	y = []
@@ -138,7 +140,8 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 
 
 	os.chdir("..")
-	plt.plot(x, y)
+	plot_ws = plt.plot(x, y, label="wireshark")
+	print "wshark\t"+str(y).strip('[]').replace(",", "\t")
 
 	x = []
 	y = []
@@ -152,7 +155,8 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 			s = i
 		y.append(scal_eval.getMsgCount_id(p,ps,s))
 
-	plt.plot(x, y)
+	plot_id = plt.plot(x, y, label="id")
+	print "id\t"+str(y).strip('[]').replace(",", "\t")
 
 	x = []
 	y = []
@@ -166,7 +170,8 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 			s = i
 		y.append(scal_eval.getMsgCount_data(p,ps,s))
 
-	plt.plot(x, y)
+	plot_data = plt.plot(x, y, label="data")
+	print "data\t"+str(y).strip('[]').replace(",", "\t")
 
 	x = []
 	y = []
@@ -180,7 +185,8 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 			s = i
 		y.append(scal_eval.getMsgCount_pub(p,ps,s))
 
-	plt.plot(x, y)
+	plot_pub = plt.plot(x, y, label="pub")
+	print "pub\t"+str(y).strip('[]').replace(",", "\t")
 
 	x = []
 	y = []
@@ -194,7 +200,9 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 			s = i
 		y.append(scal_eval.getMsgCount_sub(p,ps,s))
 
-	plt.plot(x, y)
+	plot_sub = plt.plot(x, y, label="sub")
+	print "sub\t"+str(y).strip('[]').replace(",", "\t")
+	plt.legend(["all", "wireshark", "id", "data", "pub", "sub"])
 
 def plot_iterate_pub(p, ps, s, scal_eval):
 	plot_iterate(0, p, ps, s, scal_eval)
@@ -245,12 +253,14 @@ if argc < 5 or (sys.argv[1] != "pub" and sys.argv[1] != "pubSub" and sys.argv[1]
 	print "example: "+ sys.argv[0] + " sub 1 1 6 \t\t--- iterate over sub ((1, 1, (1-6))"
 	quit()
 
+scal_eval = process_log()
+
 typ = 0
 p = int(sys.argv[2])
 ps = int(sys.argv[3])
 s = int(sys.argv[4])
 lbud = ""
-title = "Scalability "
+title = "Scalability "+scal_eval.samples[0].dur+" min "
 if sys.argv[1] == "pub":
 	typ = 0
 	plt.xlabel('Publisher')
@@ -266,7 +276,6 @@ if sys.argv[1] == "sub":
 if argc > 5 and sys.argv[5] == 'lbud':
 	lbud = "with latency budget"
 
-scal_eval = process_log()
 
 plot_iterate(typ, p, ps, s, scal_eval)
 
