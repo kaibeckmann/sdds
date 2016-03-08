@@ -10,6 +10,7 @@ int main()
 	}
 	Log_setLvl(0);
 
+#ifdef PUB1
     static Thermometer thermometer_pub;
 
     for (;;) {
@@ -21,6 +22,21 @@ int main()
 
         sleep (30);
     }
+#endif
+
+#ifdef PUB2
+    static Thermostat thermostat_pub;
+
+    for (;;) {
+	thermostat_pub.temp_c = 21;
+	ret = DDS_ThermostatDataWriter_write (g_Thermostat_writer, &thermostat_pub, NULL);
+	if (ret != DDS_RETCODE_OK) {
+	    Log_error("Failed to send topic thermostat\n");
+	}
+
+        sleep (30);
+    }
+#endif
 
     return 0;
 }

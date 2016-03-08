@@ -24,13 +24,19 @@
     <define name = "SDDS_DISCOVERY_TOPIC_TIMER" value = "0"/>
     <define name = "TEST_SCALABILITY"/>
     <define name = "SCALABILITY_LOG" value="&quot;{log}&quot;"/>
-<!--
+<!--lbud
     <define name = "SDDS_QOS_LATENCYBUDGET"/>
     <define name = "SDDS_QOS_DW_LATBUD" value = "{lbud_dur}"/>
     <define name = "SDDS_QOS_DW_COMM" value = "{lbud_com}"/>
     <define name = "SDDS_QOS_DW_READ" value = "{lbud_read}"/>
--->    
+lbud--> 
+<!--pub1   
     <include filename = "../../topics/heating.xml" />
     <role topic = "thermometer" type = "publisher" />
-
+    <define name = "PUB1"/>
+pub1-->
+<!--pub2
+    <role topic = "thermostat" type = "publisher" />
+    <define name = "PUB2"/>
+pub2-->
 </project>

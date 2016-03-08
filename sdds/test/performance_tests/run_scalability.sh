@@ -25,18 +25,10 @@ mkdir eval_scalability
 test_dur=$1
 
 for (( i=1; i<5; i++ )); do
-	./test_scalability.sh $i 1 1 $test_dur $2 $3 $4 $5
+	./test_scalability.sh $i 0 1 $test_dur $2 $3 $4 $5
 	dur=$[60*($test_dur+1)]
-	file="eval_scalability/scalability_wireshark_"$i"_1_1.pcapng"	
+	file="eval_scalability/scalability_wireshark_"$i"_0_1.pcapng"	
 	tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w $file
 done
-
-#./test_scalability.sh 2 1 2 $test_dur
-#dur=$[60*$test_dur]
-#tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w eval_scalability/scalability_wireshark_2_1_2.pcapng
-
-#./test_scalability.sh 2 2 2 $test_dur
-#dur=$[60*$test_dur]
-#tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w eval_scalability/scalability_wireshark_2_2_2.pcapng
 
 exit
