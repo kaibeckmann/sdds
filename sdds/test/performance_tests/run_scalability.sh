@@ -1,4 +1,10 @@
 #!/bin/bash
+
+if (($# < 1)); then
+	echo "usage $0 <duration min> [lbud] [budget] [com] [read]"
+	exit
+fi
+
 host=(
 	pi06
 	pi05
@@ -19,9 +25,10 @@ mkdir eval_scalability
 test_dur=$1
 
 for (( i=1; i<5; i++ )); do
-	./test_scalability.sh $i 1 1 $test_dur
+	./test_scalability.sh $i 1 1 $test_dur $2 $3 $4 $5
 	dur=$[60*($test_dur+1)]
-	tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w eval_scalability/scalability_wireshark_$i_1_1.pcapng
+	file="eval_scalability/scalability_wireshark_"$i"_1_1.pcapng"	
+	tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w $file
 done
 
 #./test_scalability.sh 2 1 2 $test_dur
