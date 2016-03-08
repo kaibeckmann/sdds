@@ -9,7 +9,7 @@ host=(
     )
 
 for pi in ${host[@]}; do
-	echo "connect to $pi"
-	ssh $pi -l pi "cd ~/sdds; git stash; git pull upstream master;" &
+	echo "reboot $pi"
+	ssh $pi -l pi "sudo shutdown -r now" &
 done
 exit
