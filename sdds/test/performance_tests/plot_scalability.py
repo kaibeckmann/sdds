@@ -140,7 +140,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 
 
 	os.chdir("..")
-	eval_line = "wshark\t"+str(y).strip('[]').replace(",", "\t")
+	eval_line = "UDP\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
 	plot_ws = plt.plot(x, y, label="wireshark")
@@ -257,7 +257,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 
 	os.chdir("..")
 	plot_ws = plt.plot(x, y, label="wireshark")
-	eval_line = "wshark\t"+str(y).strip('[]').replace(",", "\t")
+	eval_line = "UDP\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
 
