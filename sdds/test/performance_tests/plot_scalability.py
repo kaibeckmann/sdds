@@ -93,12 +93,113 @@ class ScalabilityEval:
 			count += val
 		return count
 
-def plot_iterate(typ, p, ps, s, scal_eval):
+def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
+	eval_line = "Scalability "+scal_eval.samples[0].dur+" min\n\n\t"
 	os.chdir(eval_dir)
 	eval_file = open("scalability.eval", "w")
 
 	x = []
+	for i in range(0, len(p_fix)):
+		p = p_fix[i]
+		ps = ps_fix[i]
+		s = s_fix[i]
+		eval_line = eval_line+"(%d,"%p+"%d,"%ps+"%d)\t"%s
+		x.append(i)
+
+	print eval_line
+	eval_file.write(eval_line+"\n")
+
 	y = []
+	for i in range(0, len(p_fix)):
+		p = p_fix[i]
+		ps = ps_fix[i]
+		s = s_fix[i]
+		y.append(scal_eval.getMsgCount_all(p,ps,s))
+
+	plot_all = plt.plot(x, y, label="all")
+	eval_line = "all\t"+str(y).strip('[]').replace(",", "\t")
+	print eval_line
+	eval_file.write(eval_line+"\n")
+
+	y = []
+	for i in range(0, len(p_fix)):
+		p = p_fix[i]
+		ps = ps_fix[i]
+		s = s_fix[i]
+		for f in glob.glob("*.wslog"):
+			split = f.split(".wslog")[0].split("_")
+			count = len(split)
+			sub = int(split[count-1])
+			pubSub = int(split[count-2])
+			pub = int(split[count-3])
+			if pub == p and pubSub == ps and sub == s:
+				y.append(sum(1 for line in open(f)))
+
+	while len(x) > len(y):
+		y.append(0)
+
+
+	os.chdir("..")
+	eval_line = "wshark\t"+str(y).strip('[]').replace(",", "\t")
+	print eval_line
+	eval_file.write(eval_line+"\n")
+	plot_ws = plt.plot(x, y, label="wireshark")
+
+	y = []
+	for i in range(0, len(p_fix)):
+		p = p_fix[i]
+		ps = ps_fix[i]
+		s = s_fix[i]
+		y.append(scal_eval.getMsgCount_id(p,ps,s))
+		
+	plot_id = plt.plot(x, y, label="id")
+	eval_line = "id\t"+str(y).strip('[]').replace(",", "\t")
+	print eval_line
+	eval_file.write(eval_line+"\n")
+
+	y = []
+	for i in range(0, len(p_fix)):
+		p = p_fix[i]
+		ps = ps_fix[i]
+		s = s_fix[i]
+		y.append(scal_eval.getMsgCount_data(p,ps,s))
+		
+	plot_data = plt.plot(x, y, label="data")
+	eval_line = "data\t"+str(y).strip('[]').replace(",", "\t")
+	print eval_line
+	eval_file.write(eval_line+"\n")
+
+	y = []
+	for i in range(0, len(p_fix)):
+		p = p_fix[i]
+		ps = ps_fix[i]
+		s = s_fix[i]
+		y.append(scal_eval.getMsgCount_pub(p,ps,s))
+		
+	plot_pub = plt.plot(x, y, label="pub")
+	eval_line = "pub\t"+str(y).strip('[]').replace(",", "\t")
+	print eval_line
+	eval_file.write(eval_line+"\n")
+
+	y = []
+	for i in range(0, len(p_fix)):
+		p = p_fix[i]
+		ps = ps_fix[i]
+		s = s_fix[i]
+		y.append(scal_eval.getMsgCount_sub(p,ps,s))
+		
+	plot_sub = plt.plot(x, y, label="sub")
+	eval_line = "sub\t"+str(y).strip('[]').replace(",", "\t")
+	print eval_line
+	eval_file.write(eval_line+"\n")
+
+
+def plot_iterate(typ, p, ps, s, scal_eval):
+	x = []
+	y = []
+	if typ >= 3:
+		plot_fix(p, ps, s, scal_eval)
+		return	
 	if typ == 0:
 		nodes = p+1
 		eval_line = "Scalability "+scal_eval.samples[0].dur+" min (x, %d, "%ps+"%d)\n"%s
@@ -109,6 +210,10 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 		nodes = s+1
 		eval_line = "Scalability "+scal_eval.samples[0].dur+" min (%d, "%p+"%d, x)\n"%ps
 
+	os.chdir(eval_dir)
+	eval_file = open("scalability.eval", "w")
+
+	print eval_line
 	eval_file.write(eval_line+"\n")
 	for i in xrange(1, nodes):
 		x.append(i)
@@ -264,8 +369,8 @@ def process_log():
 
 argc = len(sys.argv)
 
-if argc < 6 or (sys.argv[2] != "pub" and sys.argv[2] != "pubSub" and sys.argv[2] != "sub"):
-	print "usage: " + sys.argv[0] + " <eval_dir> <pub|pubSub|sub> <x> <y> <z> [lbud]"
+if argc < 6 or (sys.argv[2] != "pub" and sys.argv[2] != "pubSub" and sys.argv[2] != "sub" and sys.argv[2] != "fix"):
+	print "usage: " + sys.argv[0] + " <eval_dir> <pub|pubSub|sub|fix> <x> <y> <z> [lbud]"
 	print "example: "+ sys.argv[0] + " eval_scalability pub 4 1 1 \t\t--- iterate over pub ((1-4), 1, 1)"
 	print "example: "+ sys.argv[0] + " eval_scalability pubSub 1 3 1 \t--- iterate over pubSub (1, (1-3), 1)"
 	print "example: "+ sys.argv[0] + " eval_scalability sub 1 1 6 \t\t--- iterate over sub ((1, 1, (1-6))"
@@ -275,7 +380,7 @@ eval_dir = sys.argv[1]
 
 scal_eval = process_log()
 
-typ = 0
+typ = 3
 p = int(sys.argv[3])
 ps = int(sys.argv[4])
 s = int(sys.argv[5])
@@ -293,11 +398,29 @@ if sys.argv[2] == "sub":
 	typ = 2
 	plt.xlabel('Subscriber')
 	title = title+"(%d"%p+", %d"%ps+", x) "
+if sys.argv[2] == "fix":
+	typ = 3
+	plt.xlabel('Subscriber')
 if argc > 6 and sys.argv[6] == 'lbud':
 	lbud = "with latency budget"
 
-
-plot_iterate(typ, p, ps, s, scal_eval)
+if typ == 3:
+	p_fix = []
+	ps_fix = []
+	s_fix = []
+	for i in range(3,argc, 3):
+		if i+2 >= argc:
+			break;
+		p = int(sys.argv[i])
+		ps = int(sys.argv[i+1])
+		s = int(sys.argv[i+2])
+		title = title+"(%d"%p+",%d"%ps+",%d) "%s
+		p_fix.append(p)
+		ps_fix.append(ps)	
+		s_fix.append(s)
+	plot_iterate(typ, p_fix, ps_fix, s_fix, scal_eval)
+else:
+	plot_iterate(typ, p, ps, s, scal_eval)
 
 plt.ylabel("Messages")
 plt.title(title+lbud)
