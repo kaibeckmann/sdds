@@ -34,4 +34,4 @@ if [ "$2" = "pub2" ]; then
 	pub2_com_close=""
 fi
 
-sed s/{ip}/$ip/ template.xml | sed s/{iface}/$iface/ | sed s/"<!--lbud"/$lbud_com_open/ | sed s/"lbud-->"/$lbud_com_close/ | sed s/"<!--pub1"/$pub1_com_open/ | sed s/"pub1-->"/$pub1_com_close/ | sed s/"<!--pub2"/$pub2_com_open/ | sed s/"pub2-->"/$pub2_com_close/ | sed s/{log}/$1/ | sed s/{lbud_dur}/$4/ | sed s/{lbud_com}/$5/ | sed s/{lbud_read}/$6/ > sdds.xml
+sed s/{ip}/$ip/ template.xml | sed s/{iface}/$iface/ | sed s/{device}/$dev/ | sed s/"<!--lbud"/$lbud_com_open/ | sed s/"lbud-->"/$lbud_com_close/ | sed s/"<!--pub1"/$pub1_com_open/ | sed s/"pub1-->"/$pub1_com_close/ | sed s/"<!--pub2"/$pub2_com_open/ | sed s/"pub2-->"/$pub2_com_close/ | sed s/{log}/$1/ | sed s/{lbud_dur}/$4/ | sed s/{lbud_com}/$5/ | sed s/{lbud_read}/$6/ > sdds.xml
