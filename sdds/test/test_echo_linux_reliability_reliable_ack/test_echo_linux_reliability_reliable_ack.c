@@ -5,8 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-int main()
-{
+int main() {
+
     printf ("Linux (multicast, echo) Reliability - reliable ack: ");
     fflush(stdout);
 	Log_setLvl (5);
@@ -35,6 +35,7 @@ int main()
     rc_t retBig = SDDS_RT_NODATA;
     rc_t retHuge = SDDS_RT_NODATA;
 
+
     gettimeofday (&start, NULL);
     while (!allSubsFound){
         DDS_TestQosReliabilityBasicReliableAckDataWriter_write (g_TestQosReliabilityBasicReliableAck_writer, &testQosReliabilityBasicReliableAck_pub, NULL);
@@ -62,39 +63,33 @@ int main()
         sleep (1);
     }
 
-    // TEST1: Proper upcount & overflow behavior of all seqSizes
-    ((Reliable_DataWriter_t*)g_TestQosReliabilityBasicReliableAck_writer)->seqNr = 13;
-    ((Reliable_DataWriter_t*)g_TestQosReliabilitySmallReliableAck_writer)->seqNr = 253;
-    ((Reliable_DataWriter_t*)g_TestQosReliabilityBigReliableAck_writer)->seqNr = 65533;
-    ((Reliable_DataWriter_t*)g_TestQosReliabilityHugeReliableAck_writer)->seqNr = 4294967293;
-    for (int i=0; i<5; i++){
-        DDS_TestQosReliabilityBasicReliableAckDataWriter_write (g_TestQosReliabilityBasicReliableAck_writer, &testQosReliabilityBasicReliableAck_pub, NULL);
-        DDS_TestQosReliabilitySmallReliableAckDataWriter_write (g_TestQosReliabilitySmallReliableAck_writer, &testQosReliabilitySmallReliableAck_pub, NULL);
-        DDS_TestQosReliabilityBigReliableAckDataWriter_write (g_TestQosReliabilityBigReliableAck_writer, &testQosReliabilityBigReliableAck_pub, NULL);
-        DDS_TestQosReliabilityHugeReliableAckDataWriter_write (g_TestQosReliabilityHugeReliableAck_writer, &testQosReliabilityHugeReliableAck_pub, NULL);
-        usleep (5);
 
-        DDS_TestQosReliabilityBasicReliableAckDataReader_take_next_sample (g_TestQosReliabilityBasicReliableAck_reader, &testQosReliabilityBasicReliableAck_sub_p, NULL);
-        DDS_TestQosReliabilitySmallReliableAckDataReader_take_next_sample (g_TestQosReliabilitySmallReliableAck_reader, &testQosReliabilitySmallReliableAck_sub_p, NULL);
-        DDS_TestQosReliabilityBigReliableAckDataReader_take_next_sample (g_TestQosReliabilityBigReliableAck_reader, &testQosReliabilityBigReliableAck_sub_p, NULL);
-        DDS_TestQosReliabilityHugeReliableAckDataReader_take_next_sample (g_TestQosReliabilityHugeReliableAck_reader, &testQosReliabilityHugeReliableAck_sub_p, NULL);
+
+    // TEST 1: Proper enqueing in acknowledgement-list on DW
+
+    for (int i=0; i<3; i++){
+        sleep (5);
+        DDS_TestQosReliabilityBasicReliableAckDataWriter_write (g_TestQosReliabilityBasicReliableAck_writer, &testQosReliabilityBasicReliableAck_pub, NULL);
+        usleep (5);
     }
 
-    assert((((Reliable_DataWriter_t*)g_TestQosReliabilityBasicReliableAck_writer)->seqNr & 0x0f) == 2);
-    assert( (uint8_t) ((Reliable_DataWriter_t*)g_TestQosReliabilitySmallReliableAck_writer)->seqNr == 2);
-    assert( (uint16_t) ((Reliable_DataWriter_t*)g_TestQosReliabilityBigReliableAck_writer)->seqNr == 2);
-    assert( (uint32_t) ((Reliable_DataWriter_t*)g_TestQosReliabilityHugeReliableAck_writer)->seqNr == 2);
+    for (int i=0; i<3; i++){
+        DDS_TestQosReliabilityBasicReliableAckDataReader_take_next_sample (g_TestQosReliabilityBasicReliableAck_reader, &testQosReliabilityBasicReliableAck_sub_p, NULL);
+    }
 
-    // TEST2: Proper discarding of older messages
-    ((Reliable_DataWriter_t*)g_TestQosReliabilityBasicReliableAck_writer)->seqNr = 8;
-    ((Reliable_DataWriter_t*)g_TestQosReliabilitySmallReliableAck_writer)->seqNr = 8;
-    ((Reliable_DataWriter_t*)g_TestQosReliabilityBigReliableAck_writer)->seqNr = 8;
-    ((Reliable_DataWriter_t*)g_TestQosReliabilityHugeReliableAck_writer)->seqNr = 8;
+sleep (5);
 
-    // clearing of history
-    // TODO
+    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
+        Reliable_DataWriter_t* dw1 = (Reliable_DataWriter_t*)g_TestQosReliabilityBasicReliableAck_writer;
+        ReliableSample_t s1 = dw1->reliableSamples[i];
 
-    //
+        if (((Reliable_DataWriter_t*)g_TestQosReliabilityBasicReliableAck_writer)->reliableSamples[i].isUsed == 1){
+
+        }
+    }
+
+
+
     printf ("OK\n");
     return 0;
 }
