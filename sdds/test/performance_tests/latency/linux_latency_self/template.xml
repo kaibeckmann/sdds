@@ -1,0 +1,36 @@
+<project
+    name = "linux_latency_self"
+    script = "sdds.gsl"
+    endian = "little"
+    os = "linux"
+    iface = "{iface}"
+    ip = "{ip}"
+    port = "23234"
+    protocol = "AF_INET6"
+    >
+    Latency test with self communication
+
+    <define name = "SDDS_NET_MAX_BUF_SIZE" value = "2048"/>
+    <define name = "SDDS_QOS_HISTORY_DEPTH" value = "5"/>
+    <define name = "SDDS_NET_MAX_LOCATOR_COUNT" value = "10"/>
+
+    <define name = "SDDS_DISCOVERY_RECEIVE_TIMER" value = "1"/>
+    <define name = "SDDS_DISCOVERY_PARTICIPANT_TIMER" value = "30"/>
+    <define name = "SDDS_DISCOVERY_PUBLICATION_TIMER" value = "60"/>
+    <define name = "SDDS_DISCOVERY_TOPIC_TIMER" value = "0"/>
+    <define name = "LATENCY_MSG_COUNT" value = "{msg_count}"/>
+    <define name = "LATENCY_MSG_SIZE" value = "{msg_size}"/>
+    <define name = "TEST_LATENCY"/>
+    <define name = "LATENCY_LOG" value="&quot;../../latency_self_{msg_count}_{msg_size}.log&quot;"/>
+
+    <topic name = "latency" domain = "1" id = "6">
+	    Topic for measuring latency
+        <attribute name = "time" type = "DDS_long_long">timestamp set by the application</attribute>
+        <attribute name = "data" type = "DDS_string" size = "{msg_size}">playload in bytes</attribute>
+    </topic>
+
+    <role topic = "latency" type = "publisher">
+	    <subscriber ip = "{sub_ip}" />	
+    </role>
+    <role topic = "latency" type = "subscriber" />
+</project>

@@ -28,7 +28,7 @@ subs=$2
 step=$3
 pubs=${#host[@]- $subs}
 for (( i=$step; i<$pubs; i=$i+$step )); do
-	./test_scalability.sh $i 0 $subs $test_dur $4 $5 $6 $7
+	scalability/./test_scalability.sh $i 0 $subs $test_dur $4 $5 $6 $7
 	dur=$[60*($test_dur+1)]
 	file="eval_scalability/scalability_wireshark_"$i"_0_"$subs".pcapng"	
 	tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w $file
@@ -38,7 +38,7 @@ lbud=""
 if [ "$4" = "lbud" ]; then
 	lbud="_lbud_"$5"_"$6"_"$7
 fi
-./eval_scalability.sh
+scalability/./eval_scalability.sh
 timestamp=$(date +%s)
 echo "cp -r eval_scalability eval_scalability_$timestamp$lbud"
 cp -r eval_scalability eval_scalability_$timestamp$lbud

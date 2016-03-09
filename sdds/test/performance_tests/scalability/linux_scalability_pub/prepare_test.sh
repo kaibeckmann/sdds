@@ -1,1 +1,1 @@
-../../scripts/prepare_test.sh
+../../scripts/prepare_scalability_test.sh

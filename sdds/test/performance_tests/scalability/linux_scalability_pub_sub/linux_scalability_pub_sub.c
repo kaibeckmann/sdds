@@ -16,26 +16,26 @@ int main()
 
     for (;;) {
         short temp = 0;
-	int count = 0;
-	while (true) {
-		thermometer_sub_p->temp_c = 0;
+	    int count = 0;
+	    while (true) {
+		    thermometer_sub_p->temp_c = 0;
 
-		ret = DDS_ThermometerDataReader_take_next_sample(g_Thermometer_reader,
-			&thermometer_sub_p, NULL);
-		if (ret == DDS_RETCODE_NO_DATA) {
-			break;
-		}	
-		temp += thermometer_sub_p->temp_c;
-		count++;
-	};
+		    ret = DDS_ThermometerDataReader_take_next_sample(g_Thermometer_reader,
+			    &thermometer_sub_p, NULL);
+		    if (ret == DDS_RETCODE_NO_DATA) {
+		    	break;
+		    }	
+		    temp += thermometer_sub_p->temp_c;
+		    count++;
+	    };
 
-	if (count > 0) {
-		thermostat_pub.temp_c = temp/count;
+	    if (count > 0) {
+		    thermostat_pub.temp_c = temp/count;
 
-		ret = DDS_ThermostatDataWriter_write (g_Thermostat_writer, &thermostat_pub, NULL);
-		if (ret != DDS_RETCODE_OK)
-		    Log_error("Failed to send topic thermostat\n");
-	}
+		    ret = DDS_ThermostatDataWriter_write (g_Thermostat_writer, &thermostat_pub, NULL);
+		    if (ret != DDS_RETCODE_OK)
+		        Log_error("Failed to send topic thermostat\n");
+	    }
         sleep (10);
     }
 
