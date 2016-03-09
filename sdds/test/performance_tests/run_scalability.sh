@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if (($# < 1)); then
-	echo "usage $0 <duration min> [lbud] [budget] [com] [read]"
+if (($# < 3)); then
+	echo "usage $0 <duration min> <subs> <step> [lbud] [budget] [com] [read]"
 	exit
 fi
 
@@ -24,21 +24,27 @@ done
 mkdir eval_scalability
 test_dur=$1
 
-subs=1
+subs=$2
+step=$3
 pubs=${#host[@]- $subs}
-for (( i=1; i<$pubs; i++ )); do
-	./test_scalability.sh $i 0 $subs $test_dur $2 $3 $4 $5
+for (( i=$step; i<$pubs; i=$i+$step )); do
+	pis=$[$i+$subs]
+	if (($pis > ${#host[@]})); then
+		break
+	fi 
+	scalability/./test_scalability.sh $i 0 $subs $test_dur $4 $5 $6 $7
 	dur=$[60*($test_dur+1)]
 	file="eval_scalability/scalability_wireshark_"$i"_0_"$subs".pcapng"	
-	tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w $file > /dev/null
+	tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w $file
 done
 
 lbud=""
-if (($2 == "lbud")); then
-	lbud="_lbud_"$3"_"$4"_"$5
+if [ "$4" = "lbud" ]; then
+	lbud="_lbud_"$5"_"$6"_"$7
 fi
-./eval_scalability.sh
+scalability/./eval_scalability.sh
 timestamp=$(date +%s)
+echo "cp -r eval_scalability eval_scalability_$timestamp$lbud"
 cp -r eval_scalability eval_scalability_$timestamp$lbud
 
 exit

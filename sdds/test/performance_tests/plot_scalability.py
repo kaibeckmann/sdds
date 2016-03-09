@@ -95,6 +95,7 @@ class ScalabilityEval:
 
 def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 	eval_line = "Scalability "+scal_eval.samples[0].dur+" min\n\n\t"
+    prev_dir = os.getcwd()
 	os.chdir(eval_dir)
 	eval_file = open("scalability.eval", "w")
 
@@ -139,11 +140,11 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 		y.append(0)
 
 
-	os.chdir("..")
+    os.chdir(prev_dir)
 	eval_line = "UDP\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
-	plot_ws = plt.plot(x, y, label="wireshark")
+	plot_ws = plt.plot(x, y, label="UDP")
 
 	y = []
 	for i in range(0, len(p_fix)):
@@ -192,6 +193,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 	eval_line = "sub\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
+	plt.legend(["all", "UDP", "id", "data", "pub", "sub"])
 
 
 def plot_iterate(typ, p, ps, s, scal_eval):
@@ -210,6 +212,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 		nodes = s+1
 		eval_line = "Scalability "+scal_eval.samples[0].dur+" min (%d, "%p+"%d, x)\n"%ps
 
+    prev_dir = os.getcwd()
 	os.chdir(eval_dir)
 	eval_file = open("scalability.eval", "w")
 
@@ -255,8 +258,8 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 			y.append(0)
 
 
-	os.chdir("..")
-	plot_ws = plt.plot(x, y, label="wireshark")
+    os.chdir(prev_dir)
+	plot_ws = plt.plot(x, y, label="UDP")
 	eval_line = "UDP\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
@@ -328,7 +331,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 	eval_line = "sub\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
-	plt.legend(["all", "wireshark", "id", "data", "pub", "sub"])
+	plt.legend(["all", "UDP", "id", "data", "pub", "sub"])
 
 def plot_iterate_pub(p, ps, s, scal_eval):
 	plot_iterate(0, p, ps, s, scal_eval)
@@ -340,6 +343,7 @@ def plot_iterate_sub(p, ps, s, scal_eval):
 	plot_iterate(2, p, ps, s, scal_eval)
 
 def process_log():
+    prev_dir = os.getcwd()
 	os.chdir(eval_dir)
 	scal_eval = ScalabilityEval()
 
@@ -362,7 +366,8 @@ def process_log():
 		scal = ScalabilitySample(typ, host, pub, pubSub, sub, p_all, p_id, p_pub, p_sub, p_data, dur)
 		scal_eval.add(scal)
 		log.close()
-	os.chdir("..")
+
+    os.chdir(prev_dir)
 	return scal_eval	
 
 
