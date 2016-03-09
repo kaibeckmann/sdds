@@ -35,22 +35,33 @@ int main()
         if (ret != DDS_RETCODE_OK) {
             continue;
         }
+        
+        start_time = (start.tv_sec * 1000000 + start.tv_usec);
+        bool skip = false;
 
         do {
 		    ret = DDS_LatencyEchoDataReader_take_next_sample(g_LatencyEcho_reader,
 			    &latencyEcho_sub_p, NULL);
+
+            gettimeofday(&end, NULL);
+            end_time = end.tv_sec * 1000000 + end.tv_usec;
+            // if it takes more then 10 sec skip the message
+            if ( (end_time - start_tim) >= 10000000) {
+                skip = true;
+                break;
+            }
         } while (ret != DDS_RETCODE_OK); 
 
-        gettimeofday(&end, NULL);
-        start_time = latencyEcho_sub_p->time;
-        end_time = end.tv_sec * 1000000 + end.tv_usec;
-        // half round trip time
-        duration = (end_time - start_time) / 2;
+        if (!skip) {
+                start_time = latencyEcho_sub_p->time;
+                // half round trip time
+                duration = (end_time - start_time) / 2;
 
-        if (msg_count != 0) {
-            fprintf(log, "%ld\n", duration); 
+                if (msg_count != 0) {
+                    fprintf(log, "%ld\n", duration); 
+                }
+                msg_count++;
         }
-        msg_count++;
     }
 
     fclose(log);

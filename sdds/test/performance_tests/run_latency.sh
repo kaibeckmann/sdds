@@ -30,6 +30,8 @@ elif [ "$4" = "echo" ]; then
     for (( i=$step; i<=$size; i=$i+$step )); do
         ssh $echo -l pi 'bash -s' < latency/./test_latency_echo.sh $1 $i $echo $echo_ip $host $host_ip $5 
         ssh $host -l pi 'bash -s' < latency/./test_latency_host.sh $1 $i $host $host_ip $echo $echo_ip $5 
+        # echo server is runnung forever, abort
+        latency/./abort_latency.sh "echo" $echo
     done
 fi
 

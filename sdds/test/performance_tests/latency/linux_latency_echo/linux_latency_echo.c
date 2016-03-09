@@ -13,9 +13,7 @@ int main()
     static Latency latency_sub;
     Latency* latency_sub_p = &latency_sub;
 
-    static int msg_count = 0;
-
-    while (msg_count < LATENCY_MSG_COUNT+1) {
+    while (true) {
         do {
 		    ret = DDS_LatencyDataReader_take_next_sample(g_Latency_reader, &latency_sub_p, NULL);
         } while (ret != DDS_RETCODE_OK); 
@@ -23,8 +21,6 @@ int main()
         do {
             ret = DDS_LatencyEchoDataWriter_write (g_LatencyEcho_writer, (LatencyEcho*) latency_sub_p, NULL);
         } while (ret != DDS_RETCODE_OK);
-
-        msg_count++;
     }
 
     return 0;
