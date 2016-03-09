@@ -1,3 +1,5 @@
+# vim: noet
+
 import os, glob, sys, csv
 from os import path
 import numpy as np
@@ -6,11 +8,10 @@ import matplotlib.pyplot as plt
 def read_files(eval_dir):
     prev_dir = os.getcwd()
     os.chdir(eval_dir)
+    eval_file = open("latency.eval", "w")
 
     msg_count = 0
     logs = [] 
-    #for f in glob.glob("*.log"):
-    #    logs.append([])
     logs.append([])
     logs.append([])
         
@@ -32,7 +33,7 @@ def read_files(eval_dir):
         log.close()
     
     os.chdir(prev_dir)
-    return logs, msg_count
+    return logs, msg_count, eval_file
 
 argc = len(sys.argv)
 
@@ -42,7 +43,7 @@ if argc < 2:
 
 eval_dir = sys.argv[1]
 
-raw_log, msg_count = read_files(eval_dir)
+raw_log, msg_count, eval_file = read_files(eval_dir)
 
 sort_log = []
 sort_size = sorted(raw_log[0])
@@ -65,10 +66,18 @@ for log in sort_log:
     maxs.append(ma)
     avrs.append(av)
 
-print sort_size
-print mins
-print maxs
-print avrs
+eval_line = "byte\t"+str(sort_size).strip('[]').replace(",", "\t\t")
+eval_file.write(eval_line+"\n")
+print eval_line
+eval_line = "min\t"+str(mins).strip('[]').replace(",", "\t\t")
+eval_file.write(eval_line+"\n")
+print eval_line
+eval_line = "max\t"+str(maxs).strip('[]').replace(",", "\t\t")
+eval_file.write(eval_line+"\n")
+print eval_line
+eval_line = "avrg\t"+str(avrs).strip('[]').replace(",", "\t")
+eval_file.write(eval_line+"\n")
+print eval_line
 
 plt.plot(sort_size, mins, '-o')
 plt.plot(sort_size, maxs, '-o')
