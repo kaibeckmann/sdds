@@ -43,7 +43,7 @@ int main()
         start_time = latencyEcho_sub_p->time;
         end_time = end.tv_sec * 1000000 + end.tv_usec;
         // half round trip time
-        duration = (end_time - start_time);
+        duration = (end_time - start_time) / 2;
 
         msg_count++;
         fprintf(log, "%ld\n", duration); 

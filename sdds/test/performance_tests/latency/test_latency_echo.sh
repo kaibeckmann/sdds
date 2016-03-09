@@ -14,7 +14,7 @@ host=$6
 ip=$7
 iface="eth0"
 if [ "$#" -gt 5 ]; then
-    iface=$6
+    iface=$8
 fi
 
 cd ~/sdds/sdds/test/performance_tests/latency/linux_latency_echo
@@ -27,7 +27,8 @@ for (( i=$step; i<=$size; i=$i+$step )); do
     echo "make latency $count $i"
     make > /dev/null 2> $make_log
     echo "run latency $count $i"
-    ./linux_latency_echo > /dev/null 2>&1
+    log="print_"$host"_"$count"_"$i".log"
+    ./linux_latency_echo > $log 2>&1
     echo "clean"
     make clean >/dev/null 2>&1
 done
