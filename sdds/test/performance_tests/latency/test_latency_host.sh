@@ -27,7 +27,8 @@ for (( i=$step; i<=$size; i=$i+$step )); do
     echo "make latency $count $i"
     make > /dev/null 2> $make_log
     echo "run latency $count $i"
-    ./linux_latency_host > /dev/null 2>&1
+    log="print_"$host"_"$count"_"$i".log"
+    ./linux_latency_host > $log 2>&1
     echo "clean"
     make clean >/dev/null 2>&1
 done
