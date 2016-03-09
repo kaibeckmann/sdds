@@ -14,7 +14,7 @@ if [ "$#" -gt 4 ]; then
     iface=$5
 fi
 
-cd linux_latency_self 
+cd ~/sdds/sdds/test/performance_tests/latency/linux_latency_self 
 rm -f *.log
 
 for (( i=$step; i<=$size; i=$i+$step )); do

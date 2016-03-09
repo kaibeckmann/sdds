@@ -11,7 +11,7 @@
     >
     Latency test with self communication
 
-    <define name = "SDDS_NET_MAX_BUF_SIZE" value = "2048"/>
+    <define name = "SDDS_NET_MAX_BUF_SIZE" value = "128+{msg_size}"/>
     <define name = "SDDS_QOS_HISTORY_DEPTH" value = "5"/>
     <define name = "SDDS_NET_MAX_LOCATOR_COUNT" value = "10"/>
 
