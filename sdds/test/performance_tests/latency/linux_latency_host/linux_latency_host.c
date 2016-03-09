@@ -27,7 +27,7 @@ int main()
 
     sleep(5);
 
-    while (msg_count < LATENCY_MSG_COUNT) {
+    while (msg_count < LATENCY_MSG_COUNT+1) {
         gettimeofday(&start, NULL);
         latency_pub.time = (start.tv_sec * 1000000 + start.tv_usec);
 
@@ -47,8 +47,10 @@ int main()
         // half round trip time
         duration = (end_time - start_time) / 2;
 
+        if (msg_count != 0) {
+            fprintf(log, "%ld\n", duration); 
+        }
         msg_count++;
-        fprintf(log, "%ld\n", duration); 
     }
 
     fclose(log);

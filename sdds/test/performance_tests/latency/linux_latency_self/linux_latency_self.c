@@ -25,7 +25,7 @@ int main()
     static int msg_count = 0;
     FILE* log = fopen(LATENCY_LOG, "w+");
 
-    while (msg_count < LATENCY_MSG_COUNT) {
+    while (msg_count < LATENCY_MSG_COUNT+1) {
         gettimeofday(&start, NULL);
         latency_pub.time = (start.tv_sec * 1000000 + start.tv_usec);
 
@@ -44,8 +44,10 @@ int main()
         end_time = end.tv_sec * 1000000 + end.tv_usec;
         duration = end_time - start_time;
 
+        if (msg_count != 0) {
+            fprintf(log, "%ld\n", duration); 
+        }
         msg_count++;
-        fprintf(log, "%ld\n", duration); 
     }
 
     fclose(log);
