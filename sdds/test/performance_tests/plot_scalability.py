@@ -1,3 +1,5 @@
+# vim: noet
+
 import os, glob, sys
 from os import path
 import numpy as np
@@ -95,7 +97,7 @@ class ScalabilityEval:
 
 def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 	eval_line = "Scalability "+scal_eval.samples[0].dur+" min\n\n\t"
-    prev_dir = os.getcwd()
+	prev_dir = os.getcwd()
 	os.chdir(eval_dir)
 	eval_file = open("scalability.eval", "w")
 
@@ -117,7 +119,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 		s = s_fix[i]
 		y.append(scal_eval.getMsgCount_all(p,ps,s))
 
-	plot_all = plt.plot(x, y, label="all")
+	plot_all = plt.plot(x, y, '-o')
 	eval_line = "all\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
@@ -139,12 +141,11 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 	while len(x) > len(y):
 		y.append(0)
 
-
-    os.chdir(prev_dir)
+	os.chdir(prev_dir)
 	eval_line = "UDP\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
-	plot_ws = plt.plot(x, y, label="UDP")
+	plot_ws = plt.plot(x, y, '-o')
 
 	y = []
 	for i in range(0, len(p_fix)):
@@ -153,7 +154,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 		s = s_fix[i]
 		y.append(scal_eval.getMsgCount_id(p,ps,s))
 		
-	plot_id = plt.plot(x, y, label="id")
+	plot_id = plt.plot(x, y, '-o')
 	eval_line = "id\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
@@ -165,7 +166,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 		s = s_fix[i]
 		y.append(scal_eval.getMsgCount_data(p,ps,s))
 		
-	plot_data = plt.plot(x, y, label="data")
+	plot_data = plt.plot(x, y, '-o')
 	eval_line = "data\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
@@ -177,7 +178,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 		s = s_fix[i]
 		y.append(scal_eval.getMsgCount_pub(p,ps,s))
 		
-	plot_pub = plt.plot(x, y, label="pub")
+	plot_pub = plt.plot(x, y, '-o')
 	eval_line = "pub\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
@@ -189,7 +190,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 		s = s_fix[i]
 		y.append(scal_eval.getMsgCount_sub(p,ps,s))
 		
-	plot_sub = plt.plot(x, y, label="sub")
+	plot_sub = plt.plot(x, y, '-o')
 	eval_line = "sub\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
@@ -212,7 +213,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 		nodes = s+1
 		eval_line = "Scalability "+scal_eval.samples[0].dur+" min (%d, "%p+"%d, x)\n"%ps
 
-    prev_dir = os.getcwd()
+	prev_dir = os.getcwd()
 	os.chdir(eval_dir)
 	eval_file = open("scalability.eval", "w")
 
@@ -228,7 +229,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 			s = i
 		y.append(scal_eval.getMsgCount_all(p,ps,s))
 
-	plot_all = plt.plot(x, y, label="all")
+	plot_all = plt.plot(x, y, '-o')
 	eval_line =  "\t"+str(x).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
@@ -258,8 +259,8 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 			y.append(0)
 
 
-    os.chdir(prev_dir)
-	plot_ws = plt.plot(x, y, label="UDP")
+	os.chdir(prev_dir)
+	plot_ws = plt.plot(x, y, '-o')
 	eval_line = "UDP\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
@@ -276,7 +277,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 			s = i
 		y.append(scal_eval.getMsgCount_id(p,ps,s))
 
-	plot_id = plt.plot(x, y, label="id")
+	plot_id = plt.plot(x, y, '-o')
 	eval_line = "id\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
@@ -293,7 +294,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 			s = i
 		y.append(scal_eval.getMsgCount_data(p,ps,s))
 
-	plot_data = plt.plot(x, y, label="data")
+	plot_data = plt.plot(x, y, '-o')
 	eval_line = "data\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
@@ -310,7 +311,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 			s = i
 		y.append(scal_eval.getMsgCount_pub(p,ps,s))
 
-	plot_pub = plt.plot(x, y, label="pub")
+	plot_pub = plt.plot(x, y, '-o')
 	eval_line = "pub\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
@@ -327,7 +328,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 			s = i
 		y.append(scal_eval.getMsgCount_sub(p,ps,s))
 
-	plot_sub = plt.plot(x, y, label="sub")
+	plot_sub = plt.plot(x, y, '-o')
 	eval_line = "sub\t"+str(y).strip('[]').replace(",", "\t")
 	print eval_line
 	eval_file.write(eval_line+"\n")
@@ -343,7 +344,7 @@ def plot_iterate_sub(p, ps, s, scal_eval):
 	plot_iterate(2, p, ps, s, scal_eval)
 
 def process_log():
-    prev_dir = os.getcwd()
+	prev_dir = os.getcwd()
 	os.chdir(eval_dir)
 	scal_eval = ScalabilityEval()
 
@@ -367,7 +368,7 @@ def process_log():
 		scal_eval.add(scal)
 		log.close()
 
-    os.chdir(prev_dir)
+	os.chdir(prev_dir)
 	return scal_eval	
 
 

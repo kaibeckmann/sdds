@@ -70,9 +70,9 @@ print mins
 print maxs
 print avrs
 
-plt.plot(sort_size, mins, label="min")
-plt.plot(sort_size, maxs, label="max")
-plt.plot(sort_size, avrs, label="avrg")
+plt.plot(sort_size, mins, '-o')
+plt.plot(sort_size, maxs, '-o')
+plt.plot(sort_size, avrs, '-o')
 plt.legend(["min", "max", "avrg"])
 
 title = "Latency Test: %d Messages, %d - %d Bytes" % (msg_count, sort_size[0], sort_size[len(sort_size)-1])
