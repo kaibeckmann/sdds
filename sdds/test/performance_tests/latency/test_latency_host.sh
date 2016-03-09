@@ -28,6 +28,6 @@ echo "make latency host $count $size"
 make > /dev/null 2> $make_log
 echo "run latency host $count $size"
 log="print_"$host"_"$count"_"$size".log"
-./linux_latency_host > $log 2>&1 &
+./linux_latency_host > $log 2>&1 
 
 exit
