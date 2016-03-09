@@ -28,6 +28,10 @@ subs=$2
 step=$3
 pubs=${#host[@]- $subs}
 for (( i=$step; i<$pubs; i=$i+$step )); do
+	pis=$[$i+$subs]
+	if (($pis > ${#host[@]})); then
+		break
+	fi 
 	scalability/./test_scalability.sh $i 0 $subs $test_dur $4 $5 $6 $7
 	dur=$[60*($test_dur+1)]
 	file="eval_scalability/scalability_wireshark_"$i"_0_"$subs".pcapng"	

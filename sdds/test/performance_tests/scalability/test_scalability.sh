@@ -19,6 +19,8 @@ if (($pis > ${#host[@]})); then
 	exit
 fi
 
+cd scalability
+
 pub_start=0;
 pub_end=$1
 for (( i=$pub_start; i<$pub_end; i++ )); do

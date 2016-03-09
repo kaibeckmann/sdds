@@ -9,7 +9,7 @@ if [ "$#" -gt 2 ]; then
     iface=$3
 fi
 
-ip=$(ip addr show dev $iface | sed -e's/^.*inet6 \(fe[^ ]*\)\/.*$/\1/;t;d')
+ip=$(ip addr show dev $iface | sed -e's/^.*inet6 \(fd[^ ]*\)\/.*$/\1/;t;d')
 sub_ip=$ip
 
 msg_count=$1
