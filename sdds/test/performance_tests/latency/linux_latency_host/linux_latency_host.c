@@ -25,6 +25,8 @@ int main()
     static int msg_count = 0;
     FILE* log = fopen(LATENCY_LOG, "w+");
 
+    sleep(5);
+
     while (msg_count < LATENCY_MSG_COUNT) {
         gettimeofday(&start, NULL);
         latency_pub.time = (start.tv_sec * 1000000 + start.tv_usec);

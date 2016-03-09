@@ -23,7 +23,6 @@ elif [ "$4" = "echo" ]; then
 	ssh $echo -l pi 'rm -f ~/sdds/sdds/test/performance_tests/latency_*.log' 'rm -f ~/sdds/sdds/test/performance_tests/latency/*.log' 'rm -f  ~/sdds/sdds/test/performance_tests/latency/linux_latency_echo/*.log' 'killall linux_latency_echo'
     
     ssh $echo -l pi 'bash -s' < latency/./test_latency_echo.sh $1 $2 $3 $echo $echo_ip $host $host_ip $5 &
-    sleep 1
     ssh $host -l pi 'bash -s' < latency/./test_latency_host.sh $1 $2 $3 $host $host_ip $echo $echo_ip $5 &
 fi
 
