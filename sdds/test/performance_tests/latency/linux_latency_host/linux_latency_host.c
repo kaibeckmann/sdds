@@ -46,7 +46,7 @@ int main()
             gettimeofday(&end, NULL);
             end_time = end.tv_sec * 1000000 + end.tv_usec;
             // if it takes more then 10 sec skip the message
-            if ( (end_time - start_tim) >= 10000000) {
+            if ( (end_time - start_time) >= 10000000) {
                 skip = true;
                 break;
             }
