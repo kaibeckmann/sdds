@@ -16,6 +16,8 @@ if [ "$#" -gt 3 ]; then
 fi
 
 cd linux_latency_self 
+rm -f *.log
+
 for (( i=$step; i<=$size; i=$i+$step )); do
     ./prepare_test.sh $count $i $iface 
     ./generate.sh > /dev/null 2>&1
