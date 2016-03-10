@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # vim: noet
 
 import os, glob, sys
@@ -109,7 +110,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 		eval_line = eval_line+"(%d,"%p+"%d,"%ps+"%d)\t"%s
 		x.append(i)
 
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 
 	y = []
@@ -121,7 +122,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 
 	plot_all = plt.plot(x, y, '-o')
 	eval_line = "all\t"+str(y).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 
 	y = []
@@ -143,7 +144,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 
 	os.chdir(prev_dir)
 	eval_line = "UDP\t"+str(y).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 	plot_ws = plt.plot(x, y, '-o')
 
@@ -156,7 +157,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 		
 	plot_id = plt.plot(x, y, '-o')
 	eval_line = "id\t"+str(y).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 
 	y = []
@@ -168,7 +169,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 		
 	plot_data = plt.plot(x, y, '-o')
 	eval_line = "data\t"+str(y).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 
 	y = []
@@ -180,7 +181,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 		
 	plot_pub = plt.plot(x, y, '-o')
 	eval_line = "pub\t"+str(y).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 
 	y = []
@@ -192,7 +193,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 		
 	plot_sub = plt.plot(x, y, '-o')
 	eval_line = "sub\t"+str(y).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 	plt.legend(["all", "UDP", "id", "data", "pub", "sub"])
 
@@ -217,7 +218,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 	os.chdir(eval_dir)
 	eval_file = open("scalability.eval", "w")
 
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 	for i in xrange(1, nodes):
 		x.append(i)
@@ -231,10 +232,10 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 
 	plot_all = plt.plot(x, y, '-o')
 	eval_line =  "\t"+str(x).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 	eval_line = "all\t"+str(y).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 
 	x = []
@@ -262,7 +263,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 	os.chdir(prev_dir)
 	plot_ws = plt.plot(x, y, '-o')
 	eval_line = "UDP\t"+str(y).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 
 	x = []
@@ -279,7 +280,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 
 	plot_id = plt.plot(x, y, '-o')
 	eval_line = "id\t"+str(y).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 
 	x = []
@@ -296,7 +297,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 
 	plot_data = plt.plot(x, y, '-o')
 	eval_line = "data\t"+str(y).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 
 	x = []
@@ -313,7 +314,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 
 	plot_pub = plt.plot(x, y, '-o')
 	eval_line = "pub\t"+str(y).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 
 	x = []
@@ -330,7 +331,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 
 	plot_sub = plt.plot(x, y, '-o')
 	eval_line = "sub\t"+str(y).strip('[]').replace(",", "\t")
-	print eval_line
+	#print eval_line
 	eval_file.write(eval_line+"\n")
 	plt.legend(["all", "UDP", "id", "data", "pub", "sub"])
 

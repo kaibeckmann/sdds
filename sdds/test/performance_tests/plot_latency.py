@@ -1,4 +1,4 @@
-# vim: noet
+#!/usr/bin/python
 
 import os, glob, sys, csv
 from os import path
@@ -60,6 +60,12 @@ avrs = []
 
 for log in sort_log:
     mi = min(log)
+    # 99.99%-ile Maximum
+    one_percent = msg_count / 10000
+    for i in range(0, one_percent):
+        ma = max(log)
+        log.remove(ma)
+        
     ma = max(log)
     av = float(sum(log)) / msg_count
     mins.append(mi)
@@ -68,26 +74,26 @@ for log in sort_log:
 
 eval_line = "byte\t"+str(sort_size).strip('[]').replace(",", "\t\t")
 eval_file.write(eval_line+"\n")
-print eval_line
+#print eval_line
 eval_line = "min\t"+str(mins).strip('[]').replace(",", "\t\t")
 eval_file.write(eval_line+"\n")
-print eval_line
+#print eval_line
 eval_line = "max\t"+str(maxs).strip('[]').replace(",", "\t\t")
 eval_file.write(eval_line+"\n")
-print eval_line
+#print eval_line
 eval_line = "avrg\t"+str(avrs).strip('[]').replace(",", "\t")
 eval_file.write(eval_line+"\n")
-print eval_line
+#print eval_line
 
 plt.plot(sort_size, mins, '-o')
 plt.plot(sort_size, maxs, '-o')
 plt.plot(sort_size, avrs, '-o')
-plt.legend(["min", "max", "avrg"])
+plt.legend(["min", "max: 99.99%-ile", "avrg"])
 
 title = "Latency Test: %d Messages, %d - %d Bytes" % (msg_count, sort_size[0], sort_size[len(sort_size)-1])
 
 plt.ylabel("Latency in usec")
-plt.xlabel("Message size in byte")
+plt.xlabel("Payload Data Size (Bytes)")
 plt.title(title)
 plt.grid(True)
 plt.show()
