@@ -27,16 +27,27 @@ int main()
 
     while (msg_count < LATENCY_MSG_COUNT+1) {
         gettimeofday(&start, NULL);
-        latency_pub.time = (start.tv_sec * 1000000 + start.tv_usec);
+        start_time = (start.tv_sec * 1000000 + start.tv_usec);
+        latency_pub.time = start_time;
 
         ret = DDS_LatencyDataWriter_write (g_Latency_writer, &latency_pub, NULL);
         if (ret != DDS_RETCODE_OK) {
             continue;
         }
 
+        bool skip = false;
+
         do {
 		    ret = DDS_LatencyDataReader_take_next_sample(g_Latency_reader,
 			    &latency_sub_p, NULL);
+
+            gettimeofday(&end, NULL);
+            end_time = end.tv_sec * 1000000 + end.tv_usec;
+            // if it takes more then 10 sec skip the message
+            if ( (end_time - start_time) >= 10000000) {
+                skip = true;
+                break;
+            }
         } while (ret != DDS_RETCODE_OK); 
 
         gettimeofday(&end, NULL);
@@ -44,10 +55,13 @@ int main()
         end_time = end.tv_sec * 1000000 + end.tv_usec;
         duration = end_time - start_time;
 
-        if (msg_count != 0) {
-            fprintf(log, "%ld\n", duration); 
+        // make sure it is the right message
+        if (!skip && (start_time == latencyEcho_sub_p->time)) {
+			if (msg_count != 0) {
+				fprintf(log, "%ld\n", duration);
+			}
+			msg_count++;
         }
-        msg_count++;
     }
 
     fclose(log);
