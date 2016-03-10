@@ -33,11 +33,37 @@ endif
 # Fast-out on old style function definitions.
 # They cause unreadable error compiler errors on missing semicolons.
 # Worse yet they hide errors by accepting wildcard argument types.
-ifeq ($(shell $(CC) -Wstrict-prototypes -Werror=strict-prototypes -Wold-style-definition -Werror=old-style-definition -E - 2>/dev/null >/dev/null </dev/null ; echo $$?),1)
+ifeq ($(shell $(CC) -Wstrict-prototypes -Werror=strict-prototypes -Wold-style-definition -Werror=old-style-definition -E - 2>/dev/null >/dev/null </dev/null ; echo $$?),0)
   # duplicated parameters don't hurt
-  CFLAGS += -Wstrict-prototypes -Werror=strict-prototypes -Wold-style-definition -Werror=old-style-definition
+#  CFLAGS += -Wstrict-prototypes -Werror=strict-prototypes 
+#  -Wold-style-definition -Werror=old-style-definition
   CXXUWFLAGS += -Wstrict-prototypes -Wold-style-definition
 endif
 
 # Unwanted flags for c++
 CXXUWFLAGS += -std=%
+
+ifeq ($(LTO),yes)
+  $(info Building with Link-Time-Optimizations is currently an experimental feature. Expect broken binaries.)
+  LTOFLAGS = -flto -ffat-lto-objects
+  CFLAGS += ${LTOFLAGS}
+  LINKFLAGS += ${LTOFLAGS}
+endif
+
+# Forbid common symbols to prevent accidental aliasing.
+CFLAGS += -fno-common
+
+# Enable all default warnings
+CFLAGS += -Wall
+
+ifeq (,$(filter -DDEVELHELP,$(CFLAGS)))
+  ifneq (1,$(FORCE_ASSERTS))
+    CFLAGS += -DNDEBUG
+  endif
+endif
+
+# Default ARFLAGS for platforms which do not specify it.
+# Note: make by default provides ARFLAGS=rv which we want to override
+ifeq ($(origin ARFLAGS),default)
+  ARFLAGS = rcs
+endif

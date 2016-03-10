@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_arduino-mega2560 Arduino Mega 2560
+ * @defgroup    boards_arduino-mega2560 Arduino Mega 2560
  * @ingroup     boards
  * @brief       Board specific files for the Arduino Mega 2560 board.
  * @{
@@ -18,34 +18,21 @@
  * @author      Hinnerk van Bruinehsen <h.v.bruinehsen@fu-berlin.de>
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "cpu.h"
+#include "arduino_pinmap.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /**
- * Define the nominal CPU core clock in this board
- */
-#define F_CPU               (16000000L)
-
-
-/**
- * Assign the hardware timer
- */
-#define HW_TIMER            TIMER_0
-
-/**
-* @name Define UART device and baudrate for stdio
-* @{
+* @brief As the CPU is too slow to handle 115200 baud, we set the default
+*        baudrate to 9600 for this board
 */
-#define STDIO UART_0
-#define STDIO_BAUDRATE (38400U)
-#define STDIO_RX_BUFSIZE (64U)
-/** @} */
+#define STDIO_BAUDRATE      (9600U)
 
 /**
  * @name LED pin definitions
@@ -73,6 +60,14 @@ extern "C" {
 #define LED_RED_TOGGLE      /* not available */
 /** @} */
 
+/**
+ * @brief xtimer configuration values
+ * @{
+ */
+#define XTIMER_SHIFT                (2)
+#define XTIMER_SHIFT_ON_COMPARE     (8)
+#define XTIMER_BACKOFF              (40)
+/** @} */
 
 /**
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO
@@ -83,5 +78,5 @@ void board_init(void);
 }
 #endif
 
-#endif /** __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */

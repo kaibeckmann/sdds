@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_cc2538dk CC2538DK
+ * @defgroup    boards_cc2538dk CC2538DK
  * @ingroup     boards
  * @brief       Support for the Texas Instruments CC2538DK board.
  * @{
@@ -17,8 +17,8 @@
  * @author      Ian Martin <ian@locicontrols.com>
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "cpu.h"
 #include "periph/gpio.h"
@@ -26,25 +26,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * Define the nominal CPU core clock in this board
- */
-#define F_CPU               XOSC32M_FREQ
-
-/**
- * Assign the hardware timer
- */
-#define HW_TIMER            TIMER_0
-
-/**
- * @name Define UART device and baudrate for stdio
- * @{
- */
-#define STDIO               UART_0
-#define STDIO_BAUDRATE      115200
-#define STDIO_RX_BUFSIZE    (64U)
-/** @} */
 
 /**
  * @name Macros for controlling the on-board LEDs.
@@ -92,6 +73,17 @@ extern "C" {
 /** @} */
 
 /**
+ * @name xtimer configuration
+ * @{
+ */
+#define XTIMER              TIMER_0
+#define XTIMER_CHAN         (0)
+#define XTIMER_SHIFT        (-4)
+#define XTIMER_BACKOFF      (50)
+#define XTIMER_ISR_BACKOFF  (40)
+/** @} */
+
+/**
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO
  */
 void board_init(void);
@@ -100,5 +92,5 @@ void board_init(void);
 } /* end extern "C" */
 #endif
 
-#endif /** __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */

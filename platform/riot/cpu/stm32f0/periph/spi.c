@@ -14,14 +14,16 @@
  * @brief       Low-level GPIO driver implementation
  *
  * @author      Peter Kietzmann <peter.kietzmann@haw-hamburg.de>
- * @author      Hauke Petersen <mail@haukepetersen.de>
+ * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  * @author      Fabian Nack <nack@inf.fu-berlin.de>
+ * @author      Joakim Nohlgård <joakim.nohlgard@eistec.se>
  *
  * @}
  */
 
 #include "cpu.h"
 #include "board.h"
+#include "mutex.h"
 #include "periph/spi.h"
 #include "periph_conf.h"
 #include "thread.h"
@@ -29,6 +31,21 @@
 
 /* guard file in case no SPI device is defined */
 #if SPI_NUMOF
+
+/**
+ * @brief Array holding one pre-initialized mutex for each SPI device
+ */
+static mutex_t locks[] =  {
+#if SPI_0_EN
+    [SPI_0] = MUTEX_INIT,
+#endif
+#if SPI_1_EN
+    [SPI_1] = MUTEX_INIT,
+#endif
+#if SPI_2_EN
+    [SPI_2] = MUTEX_INIT
+#endif
+};
 
 int spi_init_master(spi_t dev, spi_conf_t conf, spi_speed_t speed)
 {
@@ -134,11 +151,30 @@ int spi_conf_pins(spi_t dev)
     for (int i = 0; i < 3; i++) {
         port->MODER &= ~(3 << (pin[i] * 2));
         port->MODER |= (2 << (pin[i] * 2));
+        port->OSPEEDR |= (3 << (pin[i] * 2));
         int hl = (pin[i] < 8) ? 0 : 1;
         port->AFR[hl] &= ~(0xf << ((pin[i] - (hl * 8)) * 4));
         port->AFR[hl] |= (af << ((pin[i] - (hl * 8)) * 4));
     }
 
+    return 0;
+}
+
+int spi_acquire(spi_t dev)
+{
+    if ((unsigned int)dev >= SPI_NUMOF) {
+        return -1;
+    }
+    mutex_lock(&locks[dev]);
+    return 0;
+}
+
+int spi_release(spi_t dev)
+{
+    if ((unsigned int)dev >= SPI_NUMOF) {
+        return -1;
+    }
+    mutex_unlock(&locks[dev]);
     return 0;
 }
 
@@ -163,11 +199,11 @@ int spi_transfer_byte(spi_t dev, char out, char *in)
     }
 
     /* wait for an eventually previous byte to be readily transferred */
-    while(!(spi->SR & SPI_SR_TXE));
+    while(!(spi->SR & SPI_SR_TXE)) {}
     /* put next byte into the output register */
     *((volatile uint8_t *)(&spi->DR)) = (uint8_t)out;
     /* wait until the current byte was successfully transferred */
-    while(!(spi->SR & SPI_SR_RXNE) );
+    while(!(spi->SR & SPI_SR_RXNE)) {}
     /* read response byte to reset flags */
     tmp = *((volatile uint8_t *)(&spi->DR));
     /* 'return' response byte if wished for */
@@ -176,38 +212,6 @@ int spi_transfer_byte(spi_t dev, char out, char *in)
     }
 
     return 1;
-}
-
-int spi_transfer_bytes(spi_t dev, char *out, char *in, unsigned int length)
-{
-    char res;
-    int count = 0;
-
-    for (int i = 0; i < length; i++) {
-        if (out) {
-            count += spi_transfer_byte(dev, out[i], &res);
-        }
-        else {
-            count += spi_transfer_byte(dev, 0, &res);
-        }
-        if (in) {
-            in[i] = res;
-        }
-    }
-
-    return count;
-}
-
-int spi_transfer_reg(spi_t dev, uint8_t reg, char out, char *in)
-{
-    spi_transfer_byte(dev, reg, 0);
-    return spi_transfer_byte(dev, out, in);
-}
-
-int spi_transfer_regs(spi_t dev, uint8_t reg, char *out, char *in, unsigned int length)
-{
-    spi_transfer_byte(dev, reg, 0);
-    return spi_transfer_bytes(dev, out, in, length);
 }
 
 void spi_transmission_begin(spi_t dev, char reset_val)
@@ -236,13 +240,13 @@ void spi_poweroff(spi_t dev)
     switch (dev) {
 #if SPI_0_EN
         case SPI_0:
-            while (SPI_0_DEV->SR & SPI_SR_BSY);
+            while (SPI_0_DEV->SR & SPI_SR_BSY) {}
             SPI_0_CLKDIS();
             break;
 #endif
 #if SPI_1_EN
         case SPI_1:
-            while (SPI_1_DEV->SR & SPI_SR_BSY);
+            while (SPI_1_DEV->SR & SPI_SR_BSY) {}
             SPI_1_CLKDIS();
             break;
 #endif

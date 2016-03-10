@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_stm32f3discovery STM32F3Discovery
+ * @defgroup    boards_stm32f3discovery STM32F3Discovery
  * @ingroup     boards
  * @brief       Board specific files for the STM32F3Discovery board
  * @{
@@ -18,33 +18,14 @@
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "cpu.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * Define the nominal CPU core clock in this board
- */
-#define F_CPU               (72000000UL)
-
-/**
- * @name Assign the hardware timer
- */
-#define HW_TIMER            TIMER_0
-
-/**
- * @name Define the UART used for stdio
- * @{
- */
-#define STDIO               UART_0
-#define STDIO_BAUDRATE      (115200U)
-#define STDIO_RX_BUFSIZE    (64U)
-/** @} */
 
 /**
  * @name LED pin definitions
@@ -99,6 +80,11 @@ extern "C" {
 /** @} */
 
 /**
+ * @brief User button
+ */
+#define BTN_B1_PIN          GPIO_PIN(PORT_A, 0)
+
+/**
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO
  */
 void board_init(void);
@@ -107,5 +93,5 @@ void board_init(void);
 }
 #endif
 
-#endif /** __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */

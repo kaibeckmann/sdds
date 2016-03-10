@@ -11,20 +11,28 @@
  * @ingroup     boards
  * @brief       Support for the ScatterWeb MSB-430 board
  *
- * <h2>Compontents</h2>
+ * @details
+ * See
+ * http://www.mi.fu-berlin.de/inf/groups/ag-tech/projects/Z_Finished_Projects/ScatterWeb/modules/mod_MSB-430.html
+ * for circuit diagram etc.
+ *
+ * <h2>Components</h2>
  * \li MSP430
- * \li CC1100
+ * \li CC1020
+ * \li SHT11
+ * \li MMA7260Q
+ * \li LED
  *
  * @{
  *
  * @file
- * @brief       Central defnitions for the ScatterWeb MSB-430 board
+ * @brief       Central definitions for the ScatterWeb MSB-430 board
  *
  * @author      Freie Universität Berlin, Computer Systems & Telematics, FeuerWhere project
  */
 
-#ifndef _MSB_BOARD_H
-#define _MSB_BOARD_H
+#ifndef MSB_BOARD_H_
+#define MSB_BOARD_H_
 
 #include "board-conf.h"
 
@@ -32,28 +40,46 @@
 extern "C" {
 #endif
 
-// for correct inclusion of <msp430.h>
+/*  for correct inclusion of <msp430.h> */
 #ifndef __MSP430F1612__
 #define __MSP430F1612__
 #endif
 
-//MSB430 core
+/**
+ * @brief   Xtimer configuration
+ * @{
+ */
+#define XTIMER                      (0)
+#define XTIMER_CHAN                 (0)
+#define XTIMER_MASK                 (0xffff0000)
+#define XTIMER_SHIFT_ON_COMPARE     (4)
+#define XTIMER_BACKOFF              (40)
+/** @} */
+
+/* MSB430 core */
 #define MSP430_INITIAL_CPU_SPEED    2457600uL
 #define F_CPU                       MSP430_INITIAL_CPU_SPEED
 #define F_RC_OSCILLATOR             32768
 #define MSP430_HAS_DCOR             1
 #define MSP430_HAS_EXTERNAL_CRYSTAL 0
 
-/* LEDs ports MSB430 */
-#define LEDS_PxDIR P5DIR
-#define LEDS_PxOUT P5OUT
-#define LEDS_CONF_RED       0x80
-#define LEDS_CONF_GREEN     0x00
-#define LEDS_CONF_YELLOW    0x00
+/**
+ * @brief   LED definitions
+ * @{
+ */
+#define LEDS_PxDIR                  (P5DIR)
+#define LEDS_PxOUT                  (P5OUT)
+#define LEDS_CONF_RED               (0x80)
+#define LEDS_CONF_GREEN             (0x00)
+#define LEDS_CONF_YELLOW            (0x00)
 
-#define LED_RED_ON          LEDS_PxOUT &=~LEDS_CONF_RED
-#define LED_RED_OFF         LEDS_PxOUT |= LEDS_CONF_RED
-#define LED_RED_TOGGLE      LEDS_PxOUT ^= LEDS_CONF_RED
+#define LED_RED_ON                  (LEDS_PxOUT &=~LEDS_CONF_RED)
+#define LED_RED_OFF                 (LEDS_PxOUT |= LEDS_CONF_RED)
+#define LED_RED_TOGGLE              (LEDS_PxOUT ^= LEDS_CONF_RED)
+#define LED_GREEN_ON                /* not present */
+#define LED_GREEN_OFF               /* not present */
+#define LED_GREEN_TOGGLE            /* not present */
+/** @} */
 
 #ifdef __cplusplus
 }
@@ -61,7 +87,5 @@ extern "C" {
 
 #include "board-conf.h"
 
-typedef uint8_t radio_packet_length_t;
-
 /** @} */
-#endif // _MSB_BOARD_H
+#endif /*  MSB_BOARD_H_ */
