@@ -27,6 +27,14 @@ elif [ "$4" = "echo" ]; then
     echo "cleaning up on $echo"
 	ssh $echo -l pi 'rm -f ~/sdds/sdds/test/performance_tests/latency_*.log' 'rm -f ~/sdds/sdds/test/performance_tests/latency/*.log' 'rm -f  ~/sdds/sdds/test/performance_tests/latency/linux_latency_echo/*.log'
     
+    # Always start with a message of 1 byte for better plot
+    if (( $step > 1 )); then
+        ssh $echo -l pi 'bash -s' < latency/./test_latency_echo.sh $1 1 $echo $echo_ip $host $host_ip $5 
+        ssh $host -l pi 'bash -s' < latency/./test_latency_host.sh $1 1 $host $host_ip $echo $echo_ip $5 
+        # echo server is runnung forever, abort
+        latency/./abort_latency.sh "echo" $echo
+    fi
+
     for (( i=$step; i<=$size; i=$i+$step )); do
         ssh $echo -l pi 'bash -s' < latency/./test_latency_echo.sh $1 $i $echo $echo_ip $host $host_ip $5 
         ssh $host -l pi 'bash -s' < latency/./test_latency_host.sh $1 $i $host $host_ip $echo $echo_ip $5 
