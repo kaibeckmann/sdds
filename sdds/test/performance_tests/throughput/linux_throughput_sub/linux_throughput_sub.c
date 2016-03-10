@@ -13,7 +13,7 @@ int main()
 	if (sDDS_init() == SDDS_RT_FAIL) {
 		return 1;
 	}
-	Log_setLvl(0);
+	Log_setLvl(5);
 
     static Throughput throughput_sub;
     Throughput *throughput_sub_p = &throughput_sub;
@@ -40,7 +40,7 @@ int main()
         duration = now_time - start_time;
     }
 
-    printf("%uld bytes received\n", bytes_received);
+    printf("%lld bytes received\n", bytes_received);
 
     return 0;
 }
