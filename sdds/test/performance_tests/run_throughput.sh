@@ -41,6 +41,6 @@ for (( size=$step; size<=$max_size; size=$size+$step )); do
     throughput/./abort_throughput.sh "pub" $pub
 done
 
-throughput/./eval_throughput.sh $sub
+throughput/./eval_throughput.sh $sub $duration"min_"$max_size"B_"$max_mbit"mbits"
 
 exit
