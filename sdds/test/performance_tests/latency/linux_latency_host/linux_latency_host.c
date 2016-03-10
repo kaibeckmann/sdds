@@ -29,14 +29,14 @@ int main()
 
     while (msg_count < LATENCY_MSG_COUNT+1) {
         gettimeofday(&start, NULL);
-        latency_pub.time = (start.tv_sec * 1000000 + start.tv_usec);
+        start_time = (start.tv_sec * 1000000 + start.tv_usec);
+        latency_pub.time = start_time;
 
         ret = DDS_LatencyDataWriter_write (g_Latency_writer, &latency_pub, NULL);
         if (ret != DDS_RETCODE_OK) {
             continue;
         }
         
-        start_time = (start.tv_sec * 1000000 + start.tv_usec);
         bool skip = false;
 
         do {
@@ -52,11 +52,12 @@ int main()
             }
         } while (ret != DDS_RETCODE_OK); 
 
-        if (!skip) {
-                start_time = latencyEcho_sub_p->time;
+        // make sure it is the right message
+        if (!skip && (start_time == latencyEcho_sub_p->time)) {
                 // half round trip time
                 duration = (end_time - start_time) / 2;
 
+                // skip first sample
                 if (msg_count != 0) {
                     fprintf(log, "%ld\n", duration); 
                 }
