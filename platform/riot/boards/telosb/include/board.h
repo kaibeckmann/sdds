@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013, 2014 INRIA
+ *               2015 Freie Universität Berlin
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -21,21 +22,33 @@
  * @brief       Basic definitions for the TelosB board
  *
  * @author      Oliver Hahm <oliver.hahm@inria.fr>
+ * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  */
 
-#ifndef _TELOSB_BOARD_H
-#define _TELOSB_BOARD_H
+#ifndef TELOSB_BOARD_H_
+#define TELOSB_BOARD_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// for correct inclusion of <msp430.h>
+/*  for correct inclusion of <msp430.h> */
 #ifndef __MSP430F1611__
 #define __MSP430F1611__
 #endif
 
-//TelosB core
+/**
+ * @brief   Xtimer configuration
+ * @{
+ */
+#define XTIMER                      (0)
+#define XTIMER_CHAN                 (0)
+#define XTIMER_MASK                 (0xffff0000)
+#define XTIMER_SHIFT_ON_COMPARE     (4)
+#define XTIMER_BACKOFF              (40)
+/** @} */
+
+/* TelosB core */
 #define MSP430_INITIAL_CPU_SPEED    2457600uL
 #define F_CPU                       MSP430_INITIAL_CPU_SPEED
 #define F_RC_OSCILLATOR             32768
@@ -67,7 +80,5 @@ extern "C" {
 
 #include <stdint.h>
 
-typedef uint8_t radio_packet_length_t;
-
 /** @} */
-#endif // _TELOSB_BOARD_H
+#endif /*  TELOSB_BOARD_H_ */

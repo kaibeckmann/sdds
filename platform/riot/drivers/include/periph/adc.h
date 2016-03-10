@@ -7,8 +7,8 @@
  */
 
 /**
- * @defgroup    driver_periph_adc ADC
- * @ingroup     driver_periph
+ * @defgroup    drivers_periph_adc ADC
+ * @ingroup     drivers_periph
  * @brief       Low-level ADC peripheral driver
  * @{
  *
@@ -18,8 +18,8 @@
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  */
 
-#ifndef __ADC_H
-#define __ADC_H
+#ifndef ADC_H
+#define ADC_H
 
 #include "periph_conf.h"
 
@@ -141,5 +141,5 @@ float adc_mapf(adc_t dev, int value, float min, float max);
 }
 #endif
 
-#endif /* __ADC_H */
+#endif /* ADC_H */
 /** @} */

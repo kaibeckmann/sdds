@@ -7,10 +7,10 @@
  */
 
 /**
- * @ingroup     board_cc2538dk
+ * @ingroup     boards_cc2538dk
  * @{
  *
- * @file        board.c
+ * @file
  * @brief       Board specific implementations for the CC2538DK board
  *
  * @author      Ian Martin <ian@locicontrols.com>
@@ -20,10 +20,6 @@
 
 #include "board.h"
 #include "cpu.h"
-
-#include "ioc.h"
-#include "lpm.h"
-#include "cc2538-gpio.h"
 
 static void led_init_helper(int gpio_num) {
     gpio_software_control(gpio_num);

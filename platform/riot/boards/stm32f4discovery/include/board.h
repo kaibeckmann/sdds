@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_stm32f4discovery STM32F4Discovery
+ * @defgroup    boards_stm32f4discovery STM32F4Discovery
  * @ingroup     boards
  * @brief       Board specific files for the STM32F4Discovery board
  * @{
@@ -18,8 +18,8 @@
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "cpu.h"
 #include "periph_conf.h"
@@ -29,22 +29,13 @@ extern "C" {
 #endif
 
 /**
- * Define the nominal CPU core clock in this board
- */
-#define F_CPU               CLOCK_CORECLOCK
-
-/**
- * @name Assign the hardware timer
- */
-#define HW_TIMER            TIMER_0
-
-/**
- * @name Define UART device and baudrate for stdio
+ * @name xtimer configuration
  * @{
  */
-#define STDIO               UART_0
-#define STDIO_BAUDRATE      (115200U)
-#define STDIO_RX_BUFSIZE    (64U)
+#define XTIMER              TIMER_0
+#define XTIMER_CHAN         (0)
+#define XTIMER_OVERHEAD     (6)
+#define XTIMER_BACKOFF      (10)
 /** @} */
 
 /**
@@ -85,6 +76,11 @@ extern "C" {
 /** @} */
 
 /**
+ * @brief User button
+ */
+#define BTN_B1_PIN          GPIO_PIN(PORT_A, 0)
+
+/**
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO
  */
 void board_init(void);
@@ -93,5 +89,5 @@ void board_init(void);
 }
 #endif
 
-#endif /** __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */

@@ -11,7 +11,14 @@
  * @defgroup    sys_random Random
  * @ingroup     sys
  * @brief       Random number generator
+ * @{
+ *
+ * @file
+ * @brief       Mersenne Twister - a very fast random number generator
  */
+
+#ifndef RANDOM_H
+#define RANDOM_H
 
 #include <inttypes.h>
 
@@ -28,7 +35,7 @@ extern "C" {
  *
  * @param s seed for the PRNG
  */
-void genrand_init(uint32_t s);
+void random_init(uint32_t s);
 
 /**
  * @brief initialize by an array with array-length
@@ -39,14 +46,28 @@ void genrand_init(uint32_t s);
  * @param init_key array of keys (seeds) to initialize the PRNG
  * @param key_length number of lements in init_key
  */
-void genrand_init_by_array(uint32_t init_key[], int key_length);
+void random_init_by_array(uint32_t init_key[], int key_length);
 
 /**
  * @brief generates a random number on [0,0xffffffff]-interval
  * @return a random number on [0,0xffffffff]-interval
  */
-uint32_t genrand_uint32(void);
+uint32_t random_uint32(void);
 
+/**
+ * @brief   generates a random number r with a <= r < b.
+ *
+ * @param[in] a minimum for random number
+ * @param[in] b upper bound for random number
+ *
+ * @pre     a < b
+ *
+ * @return  a random number on [a,b)-interval
+ */
+static inline uint32_t random_uint32_range(uint32_t a, uint32_t b)
+{
+    return (random_uint32() % (b - a)) + a;
+}
 
 #if PRNG_FLOAT
 /* These real versions are due to Isaku Wada, 2002/01/09 added */
@@ -55,28 +76,31 @@ uint32_t genrand_uint32(void);
  * @brief generates a random number on [0,1)-real-interval
  * @return a random number on [0,1)-real-interval
  */
-double genrand_real(void);
+double random_real(void);
 
 /**
  * @brief generates a random number on [0,1]-real-interval
  * @return a random number on [0,1]-real-interval
  */
-double genrand_real_inclusive(void);
+double random_real_inclusive(void);
 
 /**
  * @brief generates a random number on (0,1)-real-interval
  * @return a random number on (0,1)-real-interval
  */
-double genrand_real_exclusive(void);
+double random_real_exclusive(void);
 
 /**
  * @brief generates a random number on [0,1) with 53-bit resolution
  * @return a random number on [0,1) with 53-bit resolution
  */
-double genrand_res53(void);
+double random_res53(void);
 
 #endif /* PRNG_FLOAT */
 
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* RANDOM_H */
+/** @} */

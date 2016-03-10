@@ -10,7 +10,7 @@
  * @ingroup     driver_periph
  * @{
  *
- * @file        gpio.c
+ * @file
  * @brief       Low-level GPIO driver implementation
  *
  * @author      Ian Martin <ian@locicontrols.com>
@@ -25,9 +25,6 @@
 #include "thread.h"
 #include "periph/gpio.h"
 #include "periph_conf.h"
-
-/* guard file in case no GPIO devices are defined */
-#if GPIO_NUMOF
 
 /**
  * @brief Generate a bit mask in which only the specified bit is high.
@@ -47,12 +44,7 @@
 */
 #define gpio_enabled(dev) ( (enable_lut >> (dev)) & 1 )
 
-typedef struct {
-    gpio_cb_t cb;       /**< callback called from GPIO interrupt */
-    void *arg;          /**< argument passed to the callback */
-} gpio_state_t;
-
-static gpio_state_t gpio_config[GPIO_NUMOF];
+static gpio_isr_ctx_t gpio_config[GPIO_NUMOF];
 
 const uint32_t enable_lut = 0
 #if GPIO_0_EN
@@ -357,7 +349,7 @@ static const uint32_t ioc_mask_lut[] = {
     [GPIO_PULLDOWN] = IOC_OVERRIDE_PDE,
 };
 
-int gpio_init_out(gpio_t dev, gpio_pp_t pushpull)
+int gpio_init(gpio_t dev, gpio_dir_t dir, gpio_pp_t pushpull)
 {
     int pin;
 
@@ -367,28 +359,17 @@ int gpio_init_out(gpio_t dev, gpio_pp_t pushpull)
 
     pin = pin_lut[dev];
     gpio_software_control(pin);
-    gpio_dir_output(pin);
 
-    /* configure the pin's pull resistor state */
-    IOC_PXX_OVER[pin] = IOC_OVERRIDE_OE | ioc_mask_lut[pushpull];
-
-    return 0;
-}
-
-int gpio_init_in(gpio_t dev, gpio_pp_t pushpull)
-{
-    int pin;
-
-    if (!gpio_enabled(dev)) {
-        return -1;
+    if (dir == GPIO_DIR_OUT) {
+        gpio_dir_output(pin);
+        /* configure the pin's pull resistor state */
+        IOC_PXX_OVER[pin] = IOC_OVERRIDE_OE | ioc_mask_lut[pushpull];
     }
-
-    pin = pin_lut[dev];
-    gpio_software_control(pin);
-    gpio_dir_input(pin);
-
-    /* configure the pin's pull resistor state */
-    IOC_PXX_OVER[pin] = ioc_mask_lut[pushpull];
+    else {
+        gpio_dir_input(pin);
+        /* configure the pin's pull resistor state */
+        IOC_PXX_OVER[pin] = ioc_mask_lut[pushpull];
+    }
 
     return 0;
 }
@@ -399,8 +380,8 @@ int gpio_init_int(gpio_t dev, gpio_pp_t pullup, gpio_flank_t flank, gpio_cb_t cb
     uint32_t mask;
     cc2538_gpio_t* instance;
 
-    /* Note: gpio_init_in() also checks if the gpio is enabled. */
-    res = gpio_init_in(dev, pullup);
+    /* Note: gpio_init() also checks if the gpio is enabled. */
+    res = gpio_init(dev, GPIO_DIR_IN, pullup);
     if (res < 0) {
         return res;
     }
@@ -528,7 +509,7 @@ void gpio_write(gpio_t dev, int value)
 void isr_gpioa(void)
 {
     int mis, bit;
-    gpio_state_t* state;
+    gpio_isr_ctx_t* state;
 
     /* Latch and clear the interrupt status early on: */
     mis = GPIO_A->MIS;
@@ -553,7 +534,7 @@ void isr_gpioa(void)
 void isr_gpiob(void)
 {
     int mis, bit;
-    gpio_state_t* state;
+    gpio_isr_ctx_t* state;
 
     /* Latch and clear the interrupt status early on: */
     mis = GPIO_B->MIS;
@@ -578,7 +559,7 @@ void isr_gpiob(void)
 void isr_gpioc(void)
 {
     int mis, bit;
-    gpio_state_t* state;
+    gpio_isr_ctx_t* state;
 
     /* Latch and clear the interrupt status early on: */
     mis = GPIO_C->MIS;
@@ -603,7 +584,7 @@ void isr_gpioc(void)
 void isr_gpiod(void)
 {
     int mis, bit;
-    gpio_state_t* state;
+    gpio_isr_ctx_t* state;
 
     /* Latch and clear the interrupt status early on: */
     mis = GPIO_D->MIS;
@@ -623,5 +604,3 @@ void isr_gpiod(void)
         thread_yield();
     }
 }
-
-#endif /* GPIO_NUMOF */

@@ -8,7 +8,7 @@
 
 /**
  * @defgroup    drivers_hdc1000 HDC1000 Humidity and Temperature Sensor
- * @ingroup     drivers
+ * @ingroup     drivers_sensors
  * @brief       Driver for the Texas Instruments HDC1000
  *              Humidity and Temperature Sensor.
  *              The driver will initialize the sensor for best
@@ -18,7 +18,10 @@
  *              be started by a write access to the address 0x00
  *              (HDC1000_TEMPERATURE). After completing the measurement
  *              the sensor will return to sleep mode. Typical
- *              Conversion Time by 14 bit resolution is 6.50ms.
+ *              Conversion Time by 14 bit resolution is 6.50ms
+ *              for humidity and 6.35ms for temperature.
+ *              HDC1000_CONVERSION_TIME is twice as large to prevent
+ *              the problems with timer resolution.
  *
  * @{
  *
@@ -41,11 +44,11 @@ extern "C"
 #endif
 
 #ifndef HDC1000_I2C_ADDRESS
-#define HDC1000_I2C_ADDRESS           0x41
+#define HDC1000_I2C_ADDRESS           0x43 /**< Default Device Address */
 #endif
 
 #ifndef HDC1000_CONVERSION_TIME
-#define HDC1000_CONVERSION_TIME       6500
+#define HDC1000_CONVERSION_TIME       26000 /**< Default Conversion Time */
 #endif
 
 /**
@@ -109,6 +112,8 @@ int hdc1000_startmeasure(hdc1000_t *dev);
  * @brief Read sensor's data.
  *
  * @param[in]  dev          device descriptor of sensor
+ * @param[out] rawtemp      raw temperature value
+ * @param[out] rawhum       raw humidity value
  *
  * @return                  0 on success
  * @return                  -1 on error

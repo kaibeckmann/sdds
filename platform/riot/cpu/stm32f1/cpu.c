@@ -11,7 +11,7 @@
  * @ingroup     cpu_stm32f1
  * @{
  *
- * @file        cpu.c
+ * @file
  * @brief       Implementation of the kernel cpu functions
  *
  * @author      Stefan Pfeiffer <stefan.pfeiffer@fu-berlin.de>
@@ -29,10 +29,8 @@ static void clk_init(void);
 
 void cpu_init(void)
 {
-    /* set PendSV priority to the lowest possible priority */
-    NVIC_SetPriority(PendSV_IRQn, 0xff);
-    /* configure the vector table location to internal flash */
-    SCB->VTOR = FLASH_BASE;
+    /* initialize the Cortex-M core */
+    cortexm_init();
     /* initialize system clocks */
     clk_init();
 }
@@ -62,7 +60,7 @@ static void clk_init(void)
     RCC->CR |= ((uint32_t)RCC_CR_HSEON);
     /* Wait till HSE is ready,
      * NOTE: the MCU will stay here forever if no HSE clock is connected */
-    while ((RCC->CR & RCC_CR_HSERDY) == 0);
+    while ((RCC->CR & RCC_CR_HSERDY) == 0) {}
     /* Enable Prefetch Buffer */
     FLASH->ACR |= FLASH_ACR_PRFTBE;
     /* Flash 2 wait state */
@@ -76,14 +74,14 @@ static void clk_init(void)
     RCC->CFGR |= (uint32_t)CLOCK_APB1_DIV;
     /*  PLL configuration: PLLCLK = HSE / HSE_DIV * HSE_MUL */
     RCC->CFGR &= ~((uint32_t)(RCC_CFGR_PLLSRC | RCC_CFGR_PLLXTPRE | RCC_CFGR_PLLMULL));
-    RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC_HSE | CLOCK_PLL_HSE_DIV | CLOCK_PLL_HSE_MUL);
+    RCC->CFGR |= (uint32_t)(RCC_CFGR_PLLSRC | CLOCK_PLL_HSE_DIV | CLOCK_PLL_HSE_MUL);
     /* Enable PLL */
     RCC->CR |= RCC_CR_PLLON;
     /* Wait till PLL is ready */
-    while ((RCC->CR & RCC_CR_PLLRDY) == 0);
+    while ((RCC->CR & RCC_CR_PLLRDY) == 0) {}
     /* Select PLL as system clock source */
     RCC->CFGR &= ~((uint32_t)(RCC_CFGR_SW));
     RCC->CFGR |= (uint32_t)RCC_CFGR_SW_PLL;
     /* Wait till PLL is used as system clock source */
-    while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL);
+    while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL) {}
 }

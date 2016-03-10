@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013 Milan Babel <babel@inf.fu-berlin.de>
+ *               2015 Freie Universität Berlin
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
@@ -21,10 +22,11 @@
  * @brief       Basic definitions for the Senslab WSN430 v1.3b board
  *
  * @author      Milan Babel <babel@inf.fu-berlin.de>
+ * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  */
 
-#ifndef _WSN_BOARD_H
-#define _WSN_BOARD_H
+#ifndef WSN_BOARD_H_
+#define WSN_BOARD_H_
 
 #include "board-conf.h"
 
@@ -36,6 +38,17 @@ extern "C" {
 #ifndef __MSP430F1611__
 #define __MSP430F1611__
 #endif
+
+/**
+ * @brief   Xtimer configuration
+ * @{
+ */
+#define XTIMER                      (0)
+#define XTIMER_CHAN                 (0)
+#define XTIMER_MASK                 (0xffff0000)
+#define XTIMER_SHIFT_ON_COMPARE     (4)
+#define XTIMER_BACKOFF              (40)
+/** @} */
 
 //MSB430 core
 #define MSP430_INITIAL_CPU_SPEED    800000uL
@@ -69,7 +82,5 @@ extern "C" {
 
 #include <msp430x16x.h>
 
-typedef uint8_t radio_packet_length_t;
-
 /** @} */
-#endif // _WSN_BOARD_H
+#endif /* WSN_BOARD_H_ */

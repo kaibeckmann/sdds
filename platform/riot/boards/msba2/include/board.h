@@ -18,8 +18,8 @@
  * @author      unknown
  */
 
-#ifndef __BOARD_H
-#define __BOARD_H
+#ifndef BOARD_H_
+#define BOARD_H_
 
 #include "msba2_common.h"
 #include "bitarithm.h"
@@ -28,6 +28,10 @@
 extern "C" {
 #endif
 
+/**
+ * @brief Board LED defines
+ * @{
+ */
 #define LED_RED_PIN (BIT25)
 #define LED_GREEN_PIN (BIT26)
 
@@ -38,14 +42,24 @@ extern "C" {
 #define LED_RED_OFF (FIO3SET = LED_RED_PIN)
 #define LED_RED_ON (FIO3CLR = LED_RED_PIN)
 #define LED_RED_TOGGLE (FIO3PIN ^= LED_RED_PIN)
+/** @} */
 
+/**
+ * @name xtimer tuning values
+ * @{
+ */
+#define XTIMER_OVERHEAD     7
+#define XTIMER_SHOOT_EARLY  3
+/** @} */
+
+/**
+ * @brief initialize the board's clock system
+ */
 void init_clks1(void);
-
-typedef uint8_t radio_packet_length_t;
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __BOARD_H */
+#endif /* BOARD_H_ */
 /** @} */

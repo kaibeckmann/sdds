@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2014 Freie Universität Berlin
+ * Copyright (C) 2015 Eistec AB
  *
  * This file is subject to the terms and conditions of the GNU Lesser General
  * Public License v2.1. See the file LICENSE in the top level directory for more
@@ -8,7 +9,7 @@
 
 /**
  * @defgroup    driver_servo Servo Motor Driver
- * @ingroup     drivers
+ * @ingroup     drivers_actuators
  * @brief       High-level driver for servo motors
  * @{
  *
@@ -16,10 +17,11 @@
  * @brief       High-level driver for easy handling of servo motors
  *
  * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
+ * @author      Joakim Nohlgård <joakim.nohlgard@eistec.se>
  */
 
-#ifndef __SERVO_H
-#define __SERVO_H
+#ifndef SERVO_H
+#define SERVO_H
 
 #include "periph/pwm.h"
 
@@ -31,10 +33,12 @@ extern "C" {
  * @brief Descriptor struct for a servo
  */
 typedef struct {
-    pwm_t device;       /**< the PWM device driving the servo */
-    int channel;        /**< the channel the servo is connected to */
-    unsigned int min;   /**< minimum pulse width, in us */
-    unsigned int max;   /**< maximum pulse width, in us */
+    pwm_t device;           /**< the PWM device driving the servo */
+    int channel;            /**< the channel the servo is connected to */
+    unsigned int min;       /**< minimum pulse width, in us */
+    unsigned int max;       /**< maximum pulse width, in us */
+    unsigned int scale_nom; /**< timing scale factor, to adjust for an inexact PWM frequency, nominator */
+    unsigned int scale_den; /**< timing scale factor, to adjust for an inexact PWM frequency, denominator */
 } servo_t;
 
 /**
@@ -78,16 +82,12 @@ int servo_init(servo_t *dev, pwm_t pwm, int pwm_channel, unsigned int min, unsig
  *
  * @param[in] dev           the servo to set
  * @param[in] pos           the position to set the servo in us
- *
- * @return                  0 on success
- * @return                  -1 on invalid configured channel
- * @return                  -2 on invalid position
  */
-int servo_set(servo_t *dev, unsigned int pos);
+void servo_set(servo_t *dev, unsigned int pos);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __SERVO_H */
+#endif /* SERVO_H */
 /** @} */

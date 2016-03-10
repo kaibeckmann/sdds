@@ -53,6 +53,8 @@ int adc_init(adc_t dev, adc_precision_t precision)
                                   (3 << ADC_0_CH4_PIN) | (3 << ADC_0_CH5_PIN));
             break;
 #endif
+        default:
+            return -1;
     }
 
     /* reset control registers */
@@ -79,7 +81,6 @@ int adc_init(adc_t dev, adc_precision_t precision)
         case ADC_RES_16BIT:
             adc_poweroff(dev);
             return -1;
-            break;
     }
 
     /* configure sampling time to 41.5 cycles */
@@ -123,12 +124,14 @@ int adc_sample(adc_t dev, int channel)
             }
             break;
 #endif
+        default:
+            return -1;
     }
 
     /* start single conversion */
     adc->CR |= ADC_CR_ADSTART;
     /* wait until conversion is complete */
-    while (!(adc->ISR & ADC_ISR_EOC));
+    while (!(adc->ISR & ADC_ISR_EOC)) {}
     /* read and return result */
     return (int)adc->DR;
 }
@@ -165,37 +168,11 @@ void adc_poweroff(adc_t dev)
     }
 }
 
-/**
- * @brief Helper function to map a converted value to the given integer range.
- *
- * This function is useful for converting sampled ADC values into their physical representation.
- *
- * The min value is asserted to be smaller than the max value.
- *
- * @param[in] dev           the ADC device to read the precision value from (as input interval)
- * @param[in] value         the value to map
- * @param[in] min           the lower bound of the target interval
- * @param[in] max           the upper bound of the target interval
- *
- * @return                  the mapped value
- */
 int adc_map(adc_t dev, int value, int min, int max)
 {
     return 0;
 }
 
-/**
- * @brief Helper function to map a converted value to the given float range
- *
- * @see adc_map
- *
- * @param[in] dev           the ADC device to read the precision value from (as input interval)
- * @param[in] value         the value to map
- * @param[in] min           the lower bound of the target interval
- * @param[in] max           the upper bound of the target interval
- *
- * @return                  the mapped value
- */
 float adc_mapf(adc_t dev, int value, float min, float max)
 {
     return 0.0;

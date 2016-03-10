@@ -7,7 +7,7 @@
  */
 
 /**
- * @defgroup    board_spark-core Spark-Core
+ * @defgroup    boards_spark-core Spark-Core
  * @ingroup     boards
  * @brief       Board specific files for the spark-core board.
  * @{
@@ -31,28 +31,14 @@
 #endif
 
 /**
- * @name Define the nominal CPU core clock in this board
- */
-#define F_CPU               CLOCK_CORECLOCK
-
-/**
  * @name Define the location of the RIOT image in flash
  */
 #define LOCATION_VTABLE     (0x08005000)
 
 /**
- * @name Define the UART to be used as stdio and its baudrate
- * @{
+ * @name Tell the xtimer that we use a 16-bit peripheral timer
  */
-#define STDIO               UART_0
-#define STDIO_BAUDRATE      (115200)
-#define STDIO_RX_BUFSIZE    (64U)
-/** @} */
-
-/**
- * @name Assign the hardware timer
- */
-#define HW_TIMER            TIMER_0
+#define XTIMER_MASK         (0xffff0000)
 
 /**
  * @name LED pin definitions
@@ -86,16 +72,16 @@
 /**
  * @name User button configuration
  */
-#define BUTTON1             GPIO_0
+#define BUTTON1             GPIO_PIN(PORT_B,2)
 
 /**
  * @name CC3000 pin configuration
  * @{
  */
 #define CC3000_SPI          SPI_0
-#define CC3000_CS           GPIO_12
-#define CC3000_WLAN_EN		GPIO_8
-#define CC3000_SPI_IRQ		GPIO_11
+#define CC3000_CS           GPIO_PIN(PORT_B,12)
+#define CC3000_EN           GPIO_PIN(PORT_B,8)
+#define CC3000_INT          GPIO_PIN(PORT_B,11)
 /** @} */
 
 /**
@@ -103,13 +89,8 @@
  * @{
  */
 #define EXTFLASH_SPI        SPI_0
-#define EXTFLASH            GPIO_4
+#define EXTFLASH            GPIO_PIN(PORT_B,9)
 /** @} */
-
-/**
- * Define the type for the radio packet length for the transceiver
- */
-typedef uint8_t radio_packet_length_t;
 
 /**
  * @brief Initialize board specific hardware, including clock, LEDs and std-IO

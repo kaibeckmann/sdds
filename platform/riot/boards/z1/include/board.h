@@ -1,17 +1,17 @@
 /*
- * board.h - Zolertia Z1 Board.
  * Copyright (C) 2014 INRIA
+ *               2015 Freie Universität Berlin
  *
  * This file is subject to the terms and conditions of the GNU Lesser
  * General Public License v2.1. See the file LICENSE in the top level
  * directory for more details.
  */
 
-#ifndef _Z1_BOARD_H
-#define _Z1_BOARD_H
+#ifndef Z1_BOARD_H_
+#define Z1_BOARD_H_
 
 /**
- * @defgroup    board_z1 Zolertia Z1
+ * @defgroup    boards_z1 Zolertia Z1
  * @ingroup     boards
  * @brief       Support for the Zolertia Z1 board.
  *
@@ -20,13 +20,12 @@
 \li CC2420
 
 * @{
-*/
-
-/**
+*
  * @file
  * @brief       Zolertia Z1 board configuration
  *
  * @author      Kévin Roussel <Kevin.Roussel@inria.fr>
+ * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  *
  */
 
@@ -40,7 +39,27 @@ extern "C" {
 #define __MSP430F2617__
 #endif
 
-// MSP430 core
+/**
+ * @brief   Xtimer configuration
+ * @{
+ */
+#define XTIMER                      (0)
+#define XTIMER_CHAN                 (0)
+#define XTIMER_MASK                 (0xffff0000)
+#define XTIMER_SHIFT_ON_COMPARE     (4)
+#define XTIMER_BACKOFF              (40)
+/** @} */
+
+/**
+ * @brief   Standard input/output device configuration
+ * @{
+ */
+#define STDIO                       (0)
+#define STDIO_BAUDRATE              (115200U)
+#define STDIO_RX_BUFSIZE            (64U)
+/** @} */
+
+/*  MSP430 core */
 #define MSP430_INITIAL_CPU_SPEED    8000000uL
 #ifndef F_CPU
 #define F_CPU                       MSP430_INITIAL_CPU_SPEED
@@ -49,7 +68,7 @@ extern "C" {
 #define MSP430_HAS_DCOR             0
 #define MSP430_HAS_EXTERNAL_CRYSTAL 1
 
-// LEDs ports
+/*  LEDs ports */
 #define LEDS_PxDIR P5DIR
 #define LEDS_PxOUT P5OUT
 #define LEDS_CONF_RED      0x10
@@ -69,18 +88,16 @@ extern "C" {
 #define LED_BLUE_TOGGLE    LEDS_PxOUT ^= LEDS_CONF_BLUE
 
 
-// User-button port
+/*  User-button port */
 #define USER_BTN_PxIN      P2IN
 #define USER_BTN_MASK      0x20
 
 #define USER_BTN_PRESSED   ((USER_BTN_PxIN & USER_BTN_MASK) == 0)
 #define USER_BTN_RELEASED  ((USER_BTN_PxIN & USER_BTN_MASK) != 0)
 
-typedef uint8_t radio_packet_length_t;
-
 #ifdef __cplusplus
 }
 #endif
 
 /** @} */
-#endif // _Z1_BOARD_H
+#endif /*  Z1_BOARD_H_ */
