@@ -1,7 +1,9 @@
 #!/bin/bash
 
-if (($# < 3)); then
-	echo "usage $0 <duration min> <subs> <step> [lbud] [budget] [com] [read]"
+help_str="usage $0 <duration min> <sub|pub> <opp_nodes> <step> [lbud] [budget] [com] [read]"
+
+if (($# < 4)); then
+    echo $help_str
 	exit
 fi
 
@@ -24,19 +26,38 @@ done
 mkdir eval_scalability
 test_dur=$1
 
-subs=$2
-step=$3
-pubs=${#host[@]- $subs}
-for (( i=$step; i<$pubs; i=$i+$step )); do
-	pis=$[$i+$subs]
-	if (($pis > ${#host[@]})); then
-		break
-	fi 
-	scalability/./test_scalability.sh $i 0 $subs $test_dur $4 $5 $6 $7
-	dur=$[60*($test_dur+1)]
-	file="eval_scalability/scalability_wireshark_"$i"_0_"$subs".pcapng"	
-	tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w $file
-done
+if [ "$2" = "pub" ]; then
+    subs=$3
+    step=$4
+    pubs=${#host[@]- $subs}
+    for (( i=$step; i<$pubs; i=$i+$step )); do
+        pis=$[$i+$subs]
+        if (($pis > ${#host[@]})); then
+            break
+        fi 
+        scalability/./test_scalability.sh $i 0 $subs $test_dur $5 $6 $7 $8
+        dur=$[60*($test_dur+1)]
+        file="eval_scalability/scalability_wireshark_"$i"_0_"$subs".pcapng"	
+        tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w $file
+    done
+elif [ "$2" = "sub" ]; then
+    pubs=$3
+    step=$4
+    subs=${#host[@]- $pubs}
+    for (( i=$step; i<$subs; i=$i+$step )); do
+        pis=$[$i+$pubs]
+        if (($pis > ${#host[@]})); then
+            break
+        fi 
+        scalability/./test_scalability.sh $pubs 0 $i $test_dur $5 $6 $7 $8
+        dur=$[60*($test_dur+1)]
+        file="eval_scalability/scalability_wireshark_"$i"_0_"$subs".pcapng"	
+        tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w $file
+    done
+else
+    echo $help_str
+	exit
+fi
 
 lbud=""
 if [ "$4" = "lbud" ]; then
