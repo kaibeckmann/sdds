@@ -20,6 +20,7 @@ echo "prepare throughput pub $duration $msg_size"
 
 echo "make throughput pub $duration $msg_size"
 make_log="make_"$duration"_"$msg_size".log"
+./generate.sh > /dev/null 2> $make_log
 make > /dev/null 2> $make_log
 
 echo "run throughput pub $duration $msg_size"

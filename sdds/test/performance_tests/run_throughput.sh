@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$#" -lt 4 ]; then
+if [ "$#" -lt 3 ]; then
     echo "usage $0 <duration (min)> <max_msg_size> <step_size> [iface]"
     exit
 fi
@@ -8,7 +8,11 @@ fi
 duration=$1
 max_size=$2
 step=$3
-iface=$4
+
+iface="eth0"
+if [ "$#" -gt 3 ]; then
+    iface=$4
+fi
 
 sub="pi01"
 sub_ip="fd29:144d:4196:94:fa66:f718:3c78:cf16"
@@ -30,7 +34,7 @@ if (( $step > 1 )); then
     throughput/./abort_throughput.sh "pub" $pub
 fi
 
-for (( size=$step; size<=$max_size; size=$i+$step )); do
+for (( size=$step; size<=$max_size; size=$size+$step )); do
     ssh $pub -l pi 'bash -s' < throughput/./test_throughput_pub.sh $duration $size $sub_ip $iface
     ssh $sub -l pi 'bash -s' < throughput/./test_throughput_sub.sh $duration $size $iface
     # piblisher is running forever, abort

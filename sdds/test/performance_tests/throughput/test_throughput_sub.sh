@@ -9,6 +9,7 @@ fi
 duration=$1
 msg_size=$2
 iface=$3
+sub_ip="unnecessary"
 
 echo "clean throughput sub $duration $msg_size"
 cd ~/sdds/sdds/test/performance_tests/throughput/linux_throughput_sub
@@ -20,6 +21,7 @@ echo "prepare throughput sub $duration $msg_size"
 
 echo "make throughput sub $duration $msg_size"
 make_log="make_"$duration"_"$msg_size".log"
+./generate.sh > /dev/null 2> $make_log
 make > /dev/null 2> $make_log
 
 echo "run throughput sub $duration $msg_size"
