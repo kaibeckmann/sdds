@@ -1,0 +1,1 @@
+../../scripts/prepare_throughput_test.sh

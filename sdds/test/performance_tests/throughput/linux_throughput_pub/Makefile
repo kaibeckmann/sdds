@@ -1,4 +1,4 @@
-APPLICATION_NAME = linux_latency_host
+APPLICATION_NAME = linux_throughput_pub
 
 export APPLICATION_NAME
 
