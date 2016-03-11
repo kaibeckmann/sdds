@@ -17,8 +17,8 @@ int main()
 
     static Throughput throughput_pub;
 
-    static uint64_t msg_size_bit = THROUGHPUT_MSG_SIZE * 8;
-    static uint64_t max_delay = ((SEC_USEC * msg_size_bit)  / (THROUGHPUT_MAX_MBIT * 1000000));
+    uint64_t msg_size_bit = THROUGHPUT_MSG_SIZE * 8;
+    uint64_t max_delay = ((SEC_USEC * msg_size_bit)  / (THROUGHPUT_MAX_MBIT * 1000000));
 
     for (;;) {
         ret = DDS_ThroughputDataWriter_write (g_Throughput_writer, &throughput_pub, NULL);
