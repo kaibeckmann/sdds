@@ -14,7 +14,6 @@ loc=$6
 
 echo "clean throughput pub $duration $msg_size"
 cd ~/sdds/sdds/test/performance_tests/throughput/linux_throughput_pub
-rm -f *.log
 make clean > /dev/null 2>&1
 
 echo "prepare throughput pub $duration $msg_size"

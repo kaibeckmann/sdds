@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include "linux_throughput_sub_sdds_impl.h"
 
+#define DURATION_SEC THROUGHPUT_DURATION * 60
 #define DURATION_USEC THROUGHPUT_DURATION * 60 * 1000000
 
 int main()
@@ -43,10 +44,14 @@ int main()
 
     FILE* log = fopen(THROUGHPUT_LOG, "w+");
 
-    double mbps = (double)((bytes_received * 8) / (double)(DURATION_USEC));
+    double bits_recv = bytes_received * 8.0;
+    double mbits_recv = bits_recv / 1000000.0;
+    double dur_sec = (double) DURATION_SEC;
+    
+    double mbps = mbits_recv / dur_sec;
 
-    printf("Bytes, Mbit/s\n%08lu, %.2lf", bytes_received, mbps);
-    fprintf(log, "Bytes, Mbit/s\n%08lu, %.2lf", bytes_received, mbps);
+    printf("Bytes, Mbit/s\n%016lu, %.2lf", bytes_received, mbps);
+    fprintf(log, "Bytes, Mbit/s\n%016lu, %.2lf", bytes_received, mbps);
 
     fclose(log);
     return 0;
