@@ -17,7 +17,6 @@ if [ "$#" -gt 6 ]; then
 fi
 
 cd ~/sdds/sdds/test/performance_tests/latency/linux_latency_host 
-rm -f *.log
 
 echo "clean latency host $count $size"
 make clean >/dev/null 2>&1

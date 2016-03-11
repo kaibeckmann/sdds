@@ -15,7 +15,6 @@ loc=$5
 
 echo "clean throughput sub $duration $msg_size"
 cd ~/sdds/sdds/test/performance_tests/throughput/linux_throughput_sub
-rm -f *.log
 make clean > /dev/null 2>&1
 
 echo "prepare throughput sub $duration $msg_size"

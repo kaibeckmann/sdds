@@ -1,13 +1,13 @@
 #!/bin/bash
 
 if [ "$#" -lt 4 ]; then
-    echo "usage $0 <duration (min)> <max_msg_size> <step_size> <max_mbit> [iface]"
+    echo "usage $0 <duration (min)> <max_msg_size> <start_size> <max_mbit> [iface]"
     exit
 fi
 
 duration=$1
 max_size=$2
-step=$3
+start_size=$3
 max_mbit=$4
 iface="eth0"
 if [ "$#" -gt 4 ]; then
@@ -26,15 +26,7 @@ throughput/./abort_throughput.sh "sub" $sub
 echo "cleaning up on $sub"
 ssh $sub -l pi 'rm -f ~/sdds/sdds/test/performance_tests/throughput_*.log' 'rm -f ~/sdds/sdds/test/performance_tests/throughput/*.log' 'rm -f  ~/sdds/sdds/test/performance_tests/throughput/linux_throughput_sub/*.log'
 
-# Always start with a message of 1 byte for better plot
-if (( $step > 1 )); then
-    ssh $pub -l pi 'bash -s' < throughput/./test_throughput_pub.sh $duration 1 $sub_ip $iface $max_mbit
-    ssh $sub -l pi 'bash -s' < throughput/./test_throughput_sub.sh $duration 1 $iface
-    # piblisher is running forever, abort
-    throughput/./abort_throughput.sh "pub" $pub
-fi
-
-for (( size=$step; size<=$max_size; size=$size+$step )); do
+for (( size=$start_size; size<=$max_size; size=$size*2 )); do
     ssh $pub -l pi 'bash -s' < throughput/./test_throughput_pub.sh $duration $size $sub_ip $iface $max_mbit
     ssh $sub -l pi 'bash -s' < throughput/./test_throughput_sub.sh $duration $size $iface
     # piblisher is running forever, abort

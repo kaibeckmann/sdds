@@ -63,9 +63,9 @@ eval_line = "size  \t"+str(sort_log[0]).strip('[]').replace(",", "\t\t")
 eval_file.write(eval_line+"\n")
 print eval_line
 
-eval_line = "Byte  \t"+str(sort_log[1]).strip('[]').replace(",", "\t\t")
-eval_file.write(eval_line+"\n")
-print eval_line
+#eval_line = "Byte  \t"+str(sort_log[1]).strip('[]').replace(",", "\t\t")
+#eval_file.write(eval_line+"\n")
+#print eval_line
 
 eval_line = "Mbit/s\t"+str(sort_log[2]).strip('[]').replace(",", "\t\t")
 eval_file.write(eval_line+"\n")
@@ -73,9 +73,9 @@ print eval_line
 
 #plt.plot(sort_log[0], sort_log[1], '-o')
 plt.plot(sort_log[0], sort_log[2], '-o')
-#plt.legend(["Byte", "Mbit/s"])
+#plt.legend(["Mbit/s"])
 
-title = "Throughput Test: %d min, %d Bytes" % (duration, sort_log[0][len(sort_log[0])-1])
+title = "Throughput Test: %d min, up to %d Bytes" % (duration, sort_log[0][len(sort_log[0])-1])
 
 plt.ylabel("Throughput in Mbit/s")
 plt.xlabel("Payload Data Size (Bytes)")
