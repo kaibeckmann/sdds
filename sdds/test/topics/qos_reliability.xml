@@ -23,22 +23,22 @@
     <topic name = "testQosReliabilityBasicReliableAck" domain = "1" id = "B">
         Test topic which sends some data for testing QoS RELIABILITY
         <attribute name = "number" type = "DDS_short">16-Bit signed</attribute>
-        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="100"/>
+        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="10000"/>
     </topic>
     <topic name = "testQosReliabilitySmallReliableAck" domain = "1" id = "A">
         Test topic which sends some data for testing QoS RELIABILITY
         <attribute name = "number" type = "DDS_short">16-Bit signed</attribute>
-        <config type="qos_reliability" reliabilitySeqnrSize="small" kind="reliable" confirmationtype="ack" max_blocking_time="200"/>
+        <config type="qos_reliability" reliabilitySeqnrSize="small" kind="reliable" confirmationtype="ack" max_blocking_time="100"/>
     </topic>
     <topic name = "testQosReliabilityBigReliableAck" domain = "1" id = "9">
         Test topic which sends some data for testing QoS RELIABILITY
         <attribute name = "number" type = "DDS_short">16-Bit signed</attribute>
-        <config type="qos_reliability" reliabilitySeqnrSize="big" kind="reliable" confirmationtype="ack" max_blocking_time="300"/>
+        <config type="qos_reliability" reliabilitySeqnrSize="big" kind="reliable" confirmationtype="ack" max_blocking_time="100"/>
     </topic>
     <topic name = "testQosReliabilityHugeReliableAck" domain = "1" id = "8">
         Test topic which sends some data for testing QoS RELIABILITY
         <attribute name = "number" type = "DDS_short">16-Bit signed</attribute>
-        <config type="qos_reliability" reliabilitySeqnrSize="huge" kind="reliable" confirmationtype="ack" max_blocking_time="400"/>
+        <config type="qos_reliability" reliabilitySeqnrSize="huge" kind="reliable" confirmationtype="ack" max_blocking_time="100"/>
     </topic>
     <topic name = "testQosReliabilityBasicReliableNack" domain = "1" id = "7">
         Test topic which sends some data for testing QoS RELIABILITY

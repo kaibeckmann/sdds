@@ -20,7 +20,7 @@
     <define name = "FEATURE_SDDS_DISCOVERY_ENABLED" />
     <define name = "SDDS_HAS_QOS_RELIABILITY" />
 
-    <define name = "SDDS_NET_MAX_BUF_SIZE" value = "8192"/>
+    <define name = "SDDS_NET_MAX_BUF_SIZE" value = "256"/>
     <define name = "SDDS_NET_MAX_LOCATOR_COUNT" value = "20"/>
     <define name = "SDDS_DISCOVERY_RECEIVE_TIMER" value = "1"/>
     <define name = "SDDS_DISCOVERY_PARTICIPANT_TIMER" value = "1"/>
@@ -35,10 +35,12 @@
 
     <role topic = "testQosReliabilityBasicReliableAck" type = "publisher"/>
     <role topic = "testQosReliabilityBasicReliableAck" type = "subscriber"/>
+<!--
     <role topic = "testQosReliabilitySmallReliableAck" type = "publisher"/>
     <role topic = "testQosReliabilitySmallReliableAck" type = "subscriber"/>
     <role topic = "testQosReliabilityBigReliableAck" type = "publisher"/>
     <role topic = "testQosReliabilityBigReliableAck" type = "subscriber"/>
     <role topic = "testQosReliabilityHugeReliableAck" type = "publisher"/>
     <role topic = "testQosReliabilityHugeReliableAck" type = "subscriber"/>
+-->
 </project>
