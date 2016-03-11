@@ -5,8 +5,6 @@
 #include "linux_throughput_pub_sdds_impl.h"
 
 #define SEC_USEC 1000000
-#define MSG_SIZE_BIT THROUGHPUT_MSG_SIZE * 8
-#define THROUGHPUT_MAX_DELAY ((SEC_USEC * MSG_SIZE_BIT)  / (THROUGHPUT_MAX_MBIT * 1000000))
 
 int main()
 {
@@ -19,10 +17,13 @@ int main()
 
     static Throughput throughput_pub;
 
+    static const uint64_t msg_size_bit = THROUGHPUT_MSG_SIZE * 8
+    static const uint64_t max_delay = ((SEC_USEC * msg_size_bit)  / (THROUGHPUT_MAX_MBIT * 1000000))
+
     for (;;) {
         ret = DDS_ThroughputDataWriter_write (g_Throughput_writer, &throughput_pub, NULL);
 
-        usleep(THROUGHPUT_MAX_DELAY);
+        usleep(max_delay);
     }
     
     return 0;

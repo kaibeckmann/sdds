@@ -26,10 +26,11 @@ throughput/./abort_throughput.sh "sub" $sub
 echo "cleaning up on $sub"
 ssh $sub -l pi 'rm -f ~/sdds/sdds/test/performance_tests/throughput_*.log' 'rm -f ~/sdds/sdds/test/performance_tests/throughput/*.log' 'rm -f  ~/sdds/sdds/test/performance_tests/throughput/linux_throughput_sub/*.log'
 
-# Always start with a message of 1 byte for better plot
-if (( $step > 1 )); then
-    ssh $pub -l pi 'bash -s' < throughput/./test_throughput_pub.sh $duration 1 $sub_ip $iface $max_mbit
-    ssh $sub -l pi 'bash -s' < throughput/./test_throughput_sub.sh $duration 1 $iface
+# Always start with a message of 32 byte for better plot
+min_size=32
+if (( $step > $min_size )); then
+    ssh $pub -l pi 'bash -s' < throughput/./test_throughput_pub.sh $duration $min_size $sub_ip $iface $max_mbit
+    ssh $sub -l pi 'bash -s' < throughput/./test_throughput_sub.sh $duration $min_size $iface
     # piblisher is running forever, abort
     throughput/./abort_throughput.sh "pub" $pub
 fi
