@@ -6,6 +6,8 @@
 #include <stdint.h>
 #include "linux_throughput_sub_sdds_impl.h"
 
+#define DURATION_USEC THROUGHPUT_DURATION * 60 * 1000000
+
 int main()
 {
 	DDS_ReturnCode_t ret;
@@ -22,14 +24,13 @@ int main()
     static long start_time;
     static long now_time;
     static long duration = 0;
-    static long end_time = THROUGHPUT_DURATION * 60 * 1000000;
 
     gettimeofday(&start, NULL);
     start_time = (start.tv_sec * 1000000 + start.tv_usec);
 
     static uint64_t bytes_received = 0;
 
-    while (duration < end_time) {
+    while (duration < DURATION_USEC) {
         ret = DDS_ThroughputDataReader_take_next_sample(g_Throughput_reader,
                 &throughput_sub_p, NULL);
         if (ret == DDS_RETCODE_OK) {
@@ -42,8 +43,10 @@ int main()
 
     FILE* log = fopen(THROUGHPUT_LOG, "w+");
 
-    printf("Bytes, Mbit/s\n%08lu, %.2lf", bytes_received, (double)(bytes_received/(double)(end_time/1024)));
-    fprintf(log, "Bytes, Mbit/s\n%08lu, %.2lf", bytes_received, (double)(bytes_received/(double)(end_time/1024)));
+    double mbps = (double)((bytes_received * 8) / (double)(DURATION_USEC))
+
+    printf("Bytes, Mbit/s\n%08lu, %.2lf", bytes_received, mbps);
+    fprintf(log, "Bytes, Mbit/s\n%08lu, %.2lf", bytes_received, mbps);
 
     fclose(log);
     return 0;

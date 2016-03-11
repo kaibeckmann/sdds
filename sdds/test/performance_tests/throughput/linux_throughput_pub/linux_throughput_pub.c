@@ -4,7 +4,9 @@
 #include <unistd.h>
 #include "linux_throughput_pub_sdds_impl.h"
 
-#define THROUGHPUT_MAX_DELAY ((1000 * THROUGHPUT_MSG_SIZE) / THROUGHPUT_MAX_MBIT)
+#define SEC_USEC 1000000
+#define MSG_SIZE_BIT THROUGHPUT_MSG_SIZE * 8
+#define THROUGHPUT_MAX_DELAY ((SEC_USEC * MSG_SIZE_BIT)  / (THROUGHPUT_MAX_MBIT * 1000000))
 
 int main()
 {
