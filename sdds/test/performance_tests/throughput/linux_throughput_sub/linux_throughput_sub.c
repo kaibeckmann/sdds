@@ -43,7 +43,7 @@ int main()
 
     FILE* log = fopen(THROUGHPUT_LOG, "w+");
 
-    double mbps = (double)((bytes_received * 8) / (double)(DURATION_USEC))
+    double mbps = (double)((bytes_received * 8) / (double)(DURATION_USEC));
 
     printf("Bytes, Mbit/s\n%08lu, %.2lf", bytes_received, mbps);
     fprintf(log, "Bytes, Mbit/s\n%08lu, %.2lf", bytes_received, mbps);
