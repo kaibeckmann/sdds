@@ -42,9 +42,8 @@ int main()
 
     FILE* log = fopen(THROUGHPUT_LOG, "w+");
 
-    printf("%lu Bytes\n%.2lf Mbit/s\n", bytes_received, (double)(bytes_received/(double)(end_time/1024)));
-    fprintf(log, "%lu Bytes\n%.2lf Mbit/s\n", bytes_received, (double)(bytes_received/(double)(end_time/1024)));
-
+    printf("Bytes, Mbit/s\n%08lu, %.2lf", bytes_received, (double)(bytes_received/(double)(end_time/1024)));
+    fprintf(log, "Bytes, Mbit/s\n%08lu, %.2lf", bytes_received, (double)(bytes_received/(double)(end_time/1024)));
 
     fclose(log);
     return 0;
