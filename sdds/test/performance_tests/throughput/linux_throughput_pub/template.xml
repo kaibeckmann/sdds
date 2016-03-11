@@ -15,7 +15,7 @@
     <define name = "SDDS_QOS_HISTORY_DEPTH" value = "5"/>
     <define name = "SDDS_NET_MAX_LOCATOR_COUNT" value = "10"/>
 
-    <define name = "THROUGHPUT_DURATION" value = "{duration}"/>
+    <define name = "THROUGHPUT_MAX_MBIT" value = "{max_mbit}"/>
     <define name = "THROUGHPUT_MSG_SIZE" value = "{msg_size}"/>
     <define name = "TEST_THROUGHPUT"/>
     <define name = "THROUGHPUT_LOG" value="&quot;../../throughput_pub_{duration}_{msg_size}.log&quot;"/>
