@@ -10,18 +10,19 @@ sub_ip=$3
 dev=$4
 max_mbit=$5
 
-inet="inet6"
-prot="AF_INET6"
-if [ "$6" == "ipv4" ]; then
-    inet="inet"
-    prot="AF_INET"
-fi
-
 pre="fd"
 iface=""
 if [ "$7" == "local" ]; then
     pre="fe"
     iface=$dev
+fi
+
+inet="inet6"
+prot="AF_INET6"
+if [ "$6" == "ipv4" ]; then
+    inet="inet"
+    prot="AF_INET"
+    pre=""
 fi
 
 ip=$(ip addr show dev $dev | sed -e's/^.*'$inet' \('$pre'[^ ]*\)\/.*$/\1/;t;d')
