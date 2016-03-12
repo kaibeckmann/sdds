@@ -18,7 +18,7 @@
     <define name = "THROUGHPUT_DURATION" value = "{duration}"/>
     <define name = "THROUGHPUT_MSG_SIZE" value = "{msg_size}"/>
     <define name = "TEST_THROUGHPUT"/>
-    <define name = "THROUGHPUT_LOG" value="&quot;../../throughput_sub_{duration}_{msg_size}.log&quot;"/>
+    <define name = "THROUGHPUT_LOG" value="&quot;../../throughput_sub_{prot}_{duration}_{msg_size}.log&quot;"/>
 
     <topic name = "throughput" domain = "1" id = "6">
 	    Topic for measuring throughput

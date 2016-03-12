@@ -31,7 +31,7 @@ echo "cleaning up on $sub"
 ssh $sub -l pi 'rm -f ~/sdds/sdds/test/performance_tests/throughput_*.log' 'rm -f ~/sdds/sdds/test/performance_tests/throughput/*.log' 'rm -f  ~/sdds/sdds/test/performance_tests/throughput/linux_throughput_sub/*.log'
 
 for (( size=$start_size; size<=$max_size; size=$size*2 )); do
-    ssh $pub -l pi 'bash -s' < throughput/./test_throughput_pub.sh $duration $size $sub_ip $iface $inet $max_mbit
+    ssh $pub -l pi 'bash -s' < throughput/./test_throughput_pub.sh $duration $size $sub_ip $iface $max_mbit $inet
     ssh $sub -l pi 'bash -s' < throughput/./test_throughput_sub.sh $duration $size $iface $max_mbit $inet
     # piblisher is running forever, abort
     throughput/./abort_throughput.sh "pub" $pub
