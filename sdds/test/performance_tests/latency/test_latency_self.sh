@@ -1,14 +1,14 @@
 #!/bin/bash
 
-if [ "$#" -lt 6 ]; then
-    echo "test_latency_self usage: $0 <msg_count> <max_msg_size> <start_size> <sub_ip> <iface> <ipv4|ipv6> [local]"
+if [ "$#" -lt 5 ]; then
+    echo "test_latency_self usage: $0 <msg_count> <max_msg_size> <start_size> <iface> <ipv4|ipv6> [local]"
     exit
 fi
 
 count=$1
 max_size=$2
 start_size=$3
-sub_ip=$4
+sub_ip="unnecessary"
 iface=$5
 inet=$6
 loc=$7

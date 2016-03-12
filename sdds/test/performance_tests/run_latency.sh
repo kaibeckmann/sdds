@@ -29,7 +29,7 @@ if [ "$4" = "self"  ]; then
     latency/./abort_latency.sh "self" $host
     echo "cleaning up on $host"
 	ssh $host -l pi 'rm -f ~/sdds/sdds/test/performance_tests/latency_*.log' 'rm -f ~/sdds/sdds/test/performance_tests/latency/*.log' 'rm -f  ~/sdds/sdds/test/performance_tests/latency/linux_latency_self/*.log'
-    ssh $host -l pi 'bash -s' < latency/./test_latency_self.sh $msg_count $max_size $start_size $echo_ip $iface $inet 
+    ssh $host -l pi 'bash -s' < latency/./test_latency_self.sh $msg_count $max_size $start_size $iface $inet 
 elif [ "$4" = "echo" ]; then
     latency/./abort_latency.sh "host" $host
     echo "cleaning up on $host"

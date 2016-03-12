@@ -27,7 +27,7 @@
     </topic>
 
     <role topic = "latency" type = "publisher">
-	    <subscriber ip = "{sub_ip}" />	
+	    <subscriber ip = "{ip}" />	
     </role>
     <role topic = "latency" type = "subscriber" />
 </project>
