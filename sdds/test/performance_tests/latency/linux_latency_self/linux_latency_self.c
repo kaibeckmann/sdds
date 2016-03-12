@@ -56,7 +56,7 @@ int main()
         duration = end_time - start_time;
 
         // make sure it is the right message
-        if (!skip && (start_time == latencyEcho_sub_p->time)) {
+        if (!skip && (start_time == latency_sub_p->time)) {
 			if (msg_count != 0) {
 				fprintf(log, "%ld\n", duration);
 			}
