@@ -1,0 +1,9 @@
+struct latencyEcho {
+   long time;
+   string<32> data;
+}; //@top-level true
+
+struct latency {
+   long time;
+   string<32> data;
+}; //@top-level ture
