@@ -7,7 +7,7 @@
     device = "{dev}"
     ip = "{ip}"
     port = "23234"
-    protocol = "AF_INET6"
+    protocol = "{prot}"
     >
     Point to Point throughput test
 
