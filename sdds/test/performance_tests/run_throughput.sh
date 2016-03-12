@@ -18,7 +18,7 @@ fi
 sub="pi01"
 sub_ip="fd29:144d:4196:94:fa66:f718:3c78:cf16"
 if [[ "$inet" = "ipv4" ]]; then
-sub_ip="10.18.48.200"
+   sub_ip="10.18.48.200"
 fi
 pub="pi02"
 
@@ -37,6 +37,6 @@ for (( size=$start_size; size<=$max_size; size=$size*2 )); do
     throughput/./abort_throughput.sh "pub" $pub
 done
 
-throughput/./eval_throughput.sh $sub $duration"min_"$max_size"B_"$max_mbit"mbits"
+throughput/./eval_throughput.sh $sub $inet"_"$duration"min_"$max_size"B_"$max_mbit"mbits"
 
 exit

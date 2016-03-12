@@ -3,11 +3,11 @@
     script = "sdds.gsl"
     endian = "little"
     os = "linux"
-    iface = ""
-    device = "{iface}"
+    iface = "{iface}"
+    device = "{dev}"
     ip = "{ip}"
     port = "23234"
-    protocol = "AF_INET6"
+    protocol = "{prot}"
     >
     Latency test with echo server
 

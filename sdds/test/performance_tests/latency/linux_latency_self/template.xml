@@ -3,11 +3,11 @@
     script = "sdds.gsl"
     endian = "little"
     os = "linux"
-    iface = ""
-    device = "{iface}"
+    iface = "{iface}"
+    device = "{dev}"
     ip = "{ip}"
     port = "23234"
-    protocol = "AF_INET6"
+    protocol = "{prot}"
     >
     Latency test with self communication
 
@@ -18,7 +18,7 @@
     <define name = "LATENCY_MSG_COUNT" value = "{msg_count}"/>
     <define name = "LATENCY_MSG_SIZE" value = "{msg_size}"/>
     <define name = "TEST_LATENCY"/>
-    <define name = "LATENCY_LOG" value="&quot;../../latency_self_{msg_count}_{msg_size}.log&quot;"/>
+    <define name = "LATENCY_LOG" value="&quot;../../latency_self_{prot}_{msg_count}_{msg_size}.log&quot;"/>
 
     <topic name = "latency" domain = "1" id = "6">
 	    Topic for measuring latency
