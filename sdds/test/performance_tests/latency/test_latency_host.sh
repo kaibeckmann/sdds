@@ -6,7 +6,7 @@ if [ "$#" -lt 5 ]; then
 fi
 
 count=$1
-max_size=$2
+size=$2
 sub_ip=$3
 iface=$4
 prot=$5

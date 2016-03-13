@@ -79,6 +79,7 @@ title = "Throughput Test: %d min, up to %d Bytes" % (duration, sort_log[0][len(s
 
 plt.ylabel("Throughput in Mbit/s")
 plt.xlabel("Payload Data Size (Bytes)")
+plt.xscale('log', basex=2)
 plt.title(title)
 plt.grid(True)
 plt.show()
