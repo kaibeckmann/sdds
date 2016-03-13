@@ -168,7 +168,7 @@ latencyEchoPluginSupport_print_data(
     }
 
 
-    RTICdrType_printLong(
+    RTICdrType_printLongLong(
         &sample->time, "time", indent_level + 1);
             
 
@@ -349,14 +349,14 @@ latencyEchoPlugin_serialize(
 
     if(serialize_sample) {
     
-    if (!RTICdrStream_serializeLong(
+    if (!RTICdrStream_serializeLongLong(
         stream, &sample->time)) {
         return RTI_FALSE;
     }
             
 
     if (!RTICdrStream_serializeString(
-        stream, sample->data, (32) + 1)) {
+        stream, sample->data, (8192) + 1)) {
         return RTI_FALSE;
     }
             
@@ -404,13 +404,13 @@ latencyEchoPlugin_deserialize_sample(
     if(deserialize_sample) {
         latencyEcho_initialize_ex(sample, RTI_FALSE, RTI_FALSE);
     
-    if (!RTICdrStream_deserializeLong(
+    if (!RTICdrStream_deserializeLongLong(
         stream, &sample->time)) {
         goto fin;
     }
 
     if (!RTICdrStream_deserializeString(
-        stream, sample->data, (32) + 1)) {
+        stream, sample->data, (8192) + 1)) {
         goto fin;
     }
             
@@ -497,12 +497,12 @@ RTIBool latencyEchoPlugin_skip(
 
     if (skip_sample) {
 
-    if (!RTICdrStream_skipLong(stream)) {
+    if (!RTICdrStream_skipLongLong(stream)) {
         goto fin;
     }
             
 
-    if (!RTICdrStream_skipString(stream, (32) + 1)) {
+    if (!RTICdrStream_skipString(stream, (8192) + 1)) {
         goto fin;
     }
             
@@ -557,12 +557,12 @@ latencyEchoPlugin_get_serialized_sample_max_size(
     }
 
 
-    current_alignment +=  RTICdrType_getLongMaxSizeSerialized(
+    current_alignment +=  RTICdrType_getLongLongMaxSizeSerialized(
         current_alignment);
             
 
     current_alignment +=  RTICdrType_getStringMaxSizeSerialized(
-        current_alignment, (32) + 1);
+        current_alignment, (8192) + 1);
             
 
     if (include_encapsulation) {
@@ -602,7 +602,7 @@ latencyEchoPlugin_get_serialized_sample_min_size(
     }
 
 
-    current_alignment +=  RTICdrType_getLongMaxSizeSerialized(
+    current_alignment +=  RTICdrType_getLongLongMaxSizeSerialized(
         current_alignment);
             
 
@@ -655,7 +655,7 @@ latencyEchoPlugin_get_serialized_sample_size(
     }
 
 
-    current_alignment += RTICdrType_getLongMaxSizeSerialized(
+    current_alignment += RTICdrType_getLongLongMaxSizeSerialized(
         current_alignment);
             
 
@@ -1133,7 +1133,7 @@ latencyPluginSupport_print_data(
     }
 
 
-    RTICdrType_printLong(
+    RTICdrType_printLongLong(
         &sample->time, "time", indent_level + 1);
             
 
@@ -1314,14 +1314,14 @@ latencyPlugin_serialize(
 
     if(serialize_sample) {
     
-    if (!RTICdrStream_serializeLong(
+    if (!RTICdrStream_serializeLongLong(
         stream, &sample->time)) {
         return RTI_FALSE;
     }
             
 
     if (!RTICdrStream_serializeString(
-        stream, sample->data, (32) + 1)) {
+        stream, sample->data, (8192) + 1)) {
         return RTI_FALSE;
     }
             
@@ -1369,13 +1369,13 @@ latencyPlugin_deserialize_sample(
     if(deserialize_sample) {
         latency_initialize_ex(sample, RTI_FALSE, RTI_FALSE);
     
-    if (!RTICdrStream_deserializeLong(
+    if (!RTICdrStream_deserializeLongLong(
         stream, &sample->time)) {
         goto fin;
     }
 
     if (!RTICdrStream_deserializeString(
-        stream, sample->data, (32) + 1)) {
+        stream, sample->data, (8192) + 1)) {
         goto fin;
     }
             
@@ -1462,12 +1462,12 @@ RTIBool latencyPlugin_skip(
 
     if (skip_sample) {
 
-    if (!RTICdrStream_skipLong(stream)) {
+    if (!RTICdrStream_skipLongLong(stream)) {
         goto fin;
     }
             
 
-    if (!RTICdrStream_skipString(stream, (32) + 1)) {
+    if (!RTICdrStream_skipString(stream, (8192) + 1)) {
         goto fin;
     }
             
@@ -1522,12 +1522,12 @@ latencyPlugin_get_serialized_sample_max_size(
     }
 
 
-    current_alignment +=  RTICdrType_getLongMaxSizeSerialized(
+    current_alignment +=  RTICdrType_getLongLongMaxSizeSerialized(
         current_alignment);
             
 
     current_alignment +=  RTICdrType_getStringMaxSizeSerialized(
-        current_alignment, (32) + 1);
+        current_alignment, (8192) + 1);
             
 
     if (include_encapsulation) {
@@ -1567,7 +1567,7 @@ latencyPlugin_get_serialized_sample_min_size(
     }
 
 
-    current_alignment +=  RTICdrType_getLongMaxSizeSerialized(
+    current_alignment +=  RTICdrType_getLongLongMaxSizeSerialized(
         current_alignment);
             
 
@@ -1620,7 +1620,7 @@ latencyPlugin_get_serialized_sample_size(
     }
 
 
-    current_alignment += RTICdrType_getLongMaxSizeSerialized(
+    current_alignment += RTICdrType_getLongLongMaxSizeSerialized(
         current_alignment);
             
 

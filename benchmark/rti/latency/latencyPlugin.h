@@ -8,8 +8,8 @@
   or consult the RTI Connext manual.
 */
 
-#ifndef latencyPlugin_171631316_h
-#define latencyPlugin_171631316_h
+#ifndef latencyPlugin_171631328_h
+#define latencyPlugin_171631328_h
 
 #include "latency.h"
 
@@ -484,4 +484,4 @@ latencyPlugin_delete(struct PRESTypePlugin *);
 #define NDDSUSERDllExport
 #endif        
 
-#endif /* latencyPlugin_171631316_h */
+#endif /* latencyPlugin_171631328_h */

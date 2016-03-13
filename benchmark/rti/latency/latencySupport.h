@@ -8,8 +8,8 @@
   or consult the RTI Connext manual.
 */
 
-#ifndef latencySupport_171631316_h
-#define latencySupport_171631316_h
+#ifndef latencySupport_171631328_h
+#define latencySupport_171631328_h
 
 /* Uses */
 #include "latency.h"
@@ -112,4 +112,4 @@ DDS_DATAREADER_C(latencyDataReader, latencySeq, latency);
 
 
 
-#endif  /* latencySupport_171631316_h */
+#endif  /* latencySupport_171631328_h */

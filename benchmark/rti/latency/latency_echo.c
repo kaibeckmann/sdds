@@ -13,10 +13,10 @@
    (1) Compile this file and the example publication.
 
    (2) Start the subscription with the command
-       objs/<arch>/latency_subscriber <domain_id> <sample_count>
+       objs/<arch>/latency_subscriber 
 
    (3) Start the publication with the command
-       objs/<arch>/latency_publisher <domain_id> <sample_count>
+       objs/<arch>/latency_publisher
 
    (4) [Optional] Specify the list of discovery initial peers and 
        multicast receive addresses via an environment variable or a file 
@@ -51,8 +51,8 @@ modification history
 #include "latency.h"
 #include "latencySupport.h"
 
-int count = 0;
-latency *instance_latencyEcho = NULL;
+latencyEcho *instance_latencyEcho = NULL;
+latencyEchoDataWriter *latencyEcho_writer = NULL;
 
 void latencyListener_on_requested_deadline_missed(
     void* listener_data,
@@ -103,6 +103,7 @@ void latencyListener_on_data_available(
     latencyDataReader *latency_reader = NULL;
     struct latencySeq data_seq = DDS_SEQUENCE_INITIALIZER;
     struct DDS_SampleInfoSeq info_seq = DDS_SEQUENCE_INITIALIZER;
+    DDS_InstanceHandle_t instance_handle = DDS_HANDLE_NIL;
     DDS_ReturnCode_t retcode;
     int i;
 
@@ -125,10 +126,9 @@ void latencyListener_on_data_available(
 
     for (i = 0; i < latencySeq_get_length(&data_seq); ++i) {
         if (DDS_SampleInfoSeq_get_reference(&info_seq, i)->valid_data) {
-	    count = latencySeq_get_reference(&data_seq, i)->time;
-	    printf("time: %d\n", count);
-            //latencyTypeSupport_print_data(latencySeq_get_reference(&data_seq, i));
-            instance_latencyEcho->time = count;
+	        latency* inst = latencySeq_get_reference(&data_seq, i);
+            instance_latencyEcho->time = inst->time;
+	        instance_latencyEcho->data = inst->data;
 
             /* Write data */
             retcode = latencyEchoDataWriter_write(
@@ -184,7 +184,7 @@ static int echo_shutdown(
     return status;
 }
 
-static int echo_main(int domainId, int sample_count)
+static int echo_main(int domainId)
 {
     DDS_DomainParticipant *participant = NULL;
 
@@ -195,7 +195,6 @@ static int echo_main(int domainId, int sample_count)
     DDS_Topic *topic_latencyEcho = NULL;
 
     DDS_DataWriter *writer = NULL;
-    latencyEchoDataWriter *latencyEcho_writer = NULL;
 
     struct DDS_DataReaderListener reader_listener = DDS_DataReaderListener_INITIALIZER;
     DDS_DataReader *reader = NULL;
@@ -206,7 +205,7 @@ static int echo_main(int domainId, int sample_count)
     const char *type_name_latency = NULL;
     const char *type_name_latencyEcho = NULL;
 
-    struct DDS_Duration_t poll_period = {1,0};
+    struct DDS_Duration_t poll_period = {0,0};
 
     /* To customize participant QoS, use 
        the configuration file USER_QOS_PROFILES.xml */
@@ -262,11 +261,11 @@ static int echo_main(int domainId, int sample_count)
     /* To customize topic QoS, use 
        the configuration file USER_QOS_PROFILES.xml */
     topic_latency = DDS_DomainParticipant_create_topic(
-        participant, "Example latency",
+        participant, "latency",
         type_name_latency, &DDS_TOPIC_QOS_DEFAULT, NULL /* listener */,
         DDS_STATUS_MASK_NONE);
     if (topic_latency == NULL) {
-        printf("create_topic error\n");
+        printf("latency create_topic error\n");
         echo_shutdown(participant);
         return -1;
     }
@@ -274,11 +273,11 @@ static int echo_main(int domainId, int sample_count)
     /* To customize topic QoS, use 
        the configuration file USER_QOS_PROFILES.xml */
     topic_latencyEcho = DDS_DomainParticipant_create_topic(
-        participant, "Example latency",
+        participant, "latencyEcho",
         type_name_latencyEcho, &DDS_TOPIC_QOS_DEFAULT, NULL /* listener */,
         DDS_STATUS_MASK_NONE);
     if (topic_latencyEcho == NULL) {
-        printf("create_topic error\n");
+        printf("latencyEcho create_topic error\n");
         echo_shutdown(participant);
         return -1;
     }
@@ -338,7 +337,7 @@ static int echo_main(int domainId, int sample_count)
     }
 
     /* Main loop */
-    while (count < sample_count) {
+    while (1) {
         //printf("latency subscriber sleeping for %d sec...\n", poll_period.sec);
         NDDS_Utility_sleep(&poll_period);
     }
@@ -350,11 +349,6 @@ static int echo_main(int domainId, int sample_count)
 int main(int argc, char *argv[])
 {
     int domainId = 0;
-    int sample_count = 3; /* infinite loop */
-
-    if (argc >= 2) {
-        sample_count = atoi(argv[1]);
-    }
 
     /* Uncomment this to turn on additional logging
     NDDS_Config_Logger_set_verbosity_by_category(
@@ -363,6 +357,6 @@ int main(int argc, char *argv[])
         NDDS_CONFIG_LOG_VERBOSITY_STATUS_ALL);
     */
     
-    return echo_main(domainId, sample_count);
+    return echo_main(domainId);
 }
 

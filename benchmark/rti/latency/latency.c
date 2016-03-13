@@ -45,7 +45,7 @@ DDS_TypeCode* latencyEcho_get_typecode()
 {
     static RTIBool is_initialized = RTI_FALSE;
 
-    static DDS_TypeCode latencyEcho_g_tc_data_string = DDS_INITIALIZE_STRING_TYPECODE(32);
+    static DDS_TypeCode latencyEcho_g_tc_data_string = DDS_INITIALIZE_STRING_TYPECODE(8192);
 
     static DDS_TypeCode_Member latencyEcho_g_tc_members[2]=
     {
@@ -105,7 +105,7 @@ DDS_TypeCode* latencyEcho_get_typecode()
     }
 
 
-    latencyEcho_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
+    latencyEcho_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_longlong;
     latencyEcho_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&latencyEcho_g_tc_data_string;
 
     is_initialized = RTI_TRUE;
@@ -141,13 +141,13 @@ RTIBool latencyEcho_initialize_w_params(
     if (allocParams) {} /* To avoid warnings */
         
 
-    if (!RTICdrType_initLong(&sample->time)) {
+    if (!RTICdrType_initLongLong(&sample->time)) {
         return RTI_FALSE;
     }                
             
 
     if (allocParams->allocate_memory) {
-        sample->data = DDS_String_alloc((32));
+        sample->data = DDS_String_alloc((8192));
         if (sample->data == NULL) {
             return RTI_FALSE;
         }
@@ -224,14 +224,14 @@ RTIBool latencyEcho_copy(
     const latencyEcho* src)
 {
 
-    if (!RTICdrType_copyLong(
+    if (!RTICdrType_copyLongLong(
         &dst->time, &src->time)) {
         return RTI_FALSE;
     }
             
 
     if (!RTICdrType_copyString(
-        dst->data, src->data, (32) + 1)) {
+        dst->data, src->data, (8192) + 1)) {
         return RTI_FALSE;
     }
             
@@ -279,7 +279,7 @@ DDS_TypeCode* latency_get_typecode()
 {
     static RTIBool is_initialized = RTI_FALSE;
 
-    static DDS_TypeCode latency_g_tc_data_string = DDS_INITIALIZE_STRING_TYPECODE(32);
+    static DDS_TypeCode latency_g_tc_data_string = DDS_INITIALIZE_STRING_TYPECODE(8192);
 
     static DDS_TypeCode_Member latency_g_tc_members[2]=
     {
@@ -339,7 +339,7 @@ DDS_TypeCode* latency_get_typecode()
     }
 
 
-    latency_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_long;
+    latency_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_longlong;
     latency_g_tc_members[1]._representation._typeCode = (RTICdrTypeCode *)&latency_g_tc_data_string;
 
     is_initialized = RTI_TRUE;
@@ -375,13 +375,13 @@ RTIBool latency_initialize_w_params(
     if (allocParams) {} /* To avoid warnings */
         
 
-    if (!RTICdrType_initLong(&sample->time)) {
+    if (!RTICdrType_initLongLong(&sample->time)) {
         return RTI_FALSE;
     }                
             
 
     if (allocParams->allocate_memory) {
-        sample->data = DDS_String_alloc((32));
+        sample->data = DDS_String_alloc((8192));
         if (sample->data == NULL) {
             return RTI_FALSE;
         }
@@ -458,14 +458,14 @@ RTIBool latency_copy(
     const latency* src)
 {
 
-    if (!RTICdrType_copyLong(
+    if (!RTICdrType_copyLongLong(
         &dst->time, &src->time)) {
         return RTI_FALSE;
     }
             
 
     if (!RTICdrType_copyString(
-        dst->data, src->data, (32) + 1)) {
+        dst->data, src->data, (8192) + 1)) {
         return RTI_FALSE;
     }
             
