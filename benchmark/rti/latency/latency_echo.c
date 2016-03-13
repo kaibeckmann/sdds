@@ -205,7 +205,7 @@ static int echo_main(int domainId)
     const char *type_name_latency = NULL;
     const char *type_name_latencyEcho = NULL;
 
-    struct DDS_Duration_t poll_period = {0,0};
+    struct DDS_Duration_t poll_period = {0,1};
 
     /* To customize participant QoS, use 
        the configuration file USER_QOS_PROFILES.xml */

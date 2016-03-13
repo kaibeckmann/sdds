@@ -45,7 +45,7 @@ DDS_TypeCode* latencyEcho_get_typecode()
 {
     static RTIBool is_initialized = RTI_FALSE;
 
-    static DDS_TypeCode latencyEcho_g_tc_data_string = DDS_INITIALIZE_STRING_TYPECODE(8192);
+    static DDS_TypeCode latencyEcho_g_tc_data_string = DDS_INITIALIZE_STRING_TYPECODE(65536);
 
     static DDS_TypeCode_Member latencyEcho_g_tc_members[2]=
     {
@@ -147,7 +147,7 @@ RTIBool latencyEcho_initialize_w_params(
             
 
     if (allocParams->allocate_memory) {
-        sample->data = DDS_String_alloc((8192));
+        sample->data = DDS_String_alloc((65536));
         if (sample->data == NULL) {
             return RTI_FALSE;
         }
@@ -231,7 +231,7 @@ RTIBool latencyEcho_copy(
             
 
     if (!RTICdrType_copyString(
-        dst->data, src->data, (8192) + 1)) {
+        dst->data, src->data, (65536) + 1)) {
         return RTI_FALSE;
     }
             
@@ -279,7 +279,7 @@ DDS_TypeCode* latency_get_typecode()
 {
     static RTIBool is_initialized = RTI_FALSE;
 
-    static DDS_TypeCode latency_g_tc_data_string = DDS_INITIALIZE_STRING_TYPECODE(8192);
+    static DDS_TypeCode latency_g_tc_data_string = DDS_INITIALIZE_STRING_TYPECODE(65536);
 
     static DDS_TypeCode_Member latency_g_tc_members[2]=
     {
@@ -381,7 +381,7 @@ RTIBool latency_initialize_w_params(
             
 
     if (allocParams->allocate_memory) {
-        sample->data = DDS_String_alloc((8192));
+        sample->data = DDS_String_alloc((65536));
         if (sample->data == NULL) {
             return RTI_FALSE;
         }
@@ -465,7 +465,7 @@ RTIBool latency_copy(
             
 
     if (!RTICdrType_copyString(
-        dst->data, src->data, (8192) + 1)) {
+        dst->data, src->data, (65536) + 1)) {
         return RTI_FALSE;
     }
             

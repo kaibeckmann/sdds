@@ -8,8 +8,8 @@
   or consult the RTI Connext manual.
 */
 
-#ifndef latency_171631328_h
-#define latency_171631328_h
+#ifndef latency_171631330_h
+#define latency_171631330_h
 
 #ifndef NDDS_STANDALONE_TYPE
     #ifdef __cplusplus
@@ -57,7 +57,7 @@ extern const char *latencyEchoTYPENAME;
 
     DDS_LongLong  time;
 
-    char*  data; /* maximum length = (8192) */
+    char*  data; /* maximum length = (65536) */
 
             
 } latencyEcho;                        
@@ -151,7 +151,7 @@ extern const char *latencyTYPENAME;
 
     DDS_LongLong  time;
 
-    char*  data; /* maximum length = (8192) */
+    char*  data; /* maximum length = (65536) */
 
             
 } latency;                        
@@ -215,4 +215,4 @@ RTIBool latency_copy(
 
 
 
-#endif /* latency_171631328_h */
+#endif /* latency_171631330_h */

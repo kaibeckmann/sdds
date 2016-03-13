@@ -55,6 +55,30 @@ modification history
 
 static int count = 0;
 static FILE* log = NULL;
+static latency *instance_latency = NULL;
+static latencyDataWriter *latency_writer = NULL;
+static DDS_InstanceHandle_t instance_handle;
+
+DDS_ReturnCode_t send_sample(latency* instance_latency, latencyDataWriter* latency_writer, DDS_InstanceHandle_t instance_handle) {
+    DDS_ReturnCode_t retcode;
+    /* Modify the data to be written here */
+    memset(instance_latency->data, 'x', 32);
+
+    static struct timeval start;
+    gettimeofday(&start, NULL);
+    long long start_time = (start.tv_sec * 1000000 + start.tv_usec);
+
+    instance_latency->time = start_time;
+
+    /* Write data */
+    retcode = latencyDataWriter_write(
+        latency_writer, instance_latency, &instance_handle);
+    if (retcode != DDS_RETCODE_OK) {
+        printf("write error %d\n", retcode);
+    }
+
+    return retcode;
+}
 
 /* LatencyEcho Listener */
 void latencyEchoListener_on_requested_deadline_missed(
@@ -133,8 +157,10 @@ void latencyEchoListener_on_data_available(
 	            gettimeofday(&end, NULL);
                 long long end_time = end.tv_sec * 1000000 + end.tv_usec;
                 latencyEcho* inst = latencyEchoSeq_get_reference(&data_seq, i);
-	            long duration = ((end_time - inst->time) / 2);
-	            fprintf(log, "%ld\n", duration);
+	            long long duration = ((end_time - inst->time) / 2);
+	            fprintf(log, "%lld\n", duration);
+
+                retcode = send_sample(instance_latency, latency_writer, instance_handle);
             }
 	        count++;
         }
@@ -196,21 +222,18 @@ static int host_main(int domainId, int msg_count)
     DDS_Topic *topic_latencyEcho = NULL;
 
     DDS_DataWriter *writer = NULL;
-    latencyDataWriter *latency_writer = NULL;
 
     struct DDS_DataReaderListener reader_listener = DDS_DataReaderListener_INITIALIZER;
     DDS_DataReader *reader = NULL;
 
-    latency *instance_latency = NULL;
-
     DDS_ReturnCode_t retcode;
 
-    DDS_InstanceHandle_t instance_handle = DDS_HANDLE_NIL;
+    instance_handle = DDS_HANDLE_NIL;
 
     const char *type_name_latency = NULL;
     const char *type_name_latencyEcho = NULL;
 
-    struct DDS_Duration_t send_period = {0,10};
+    struct DDS_Duration_t send_period = {0,1000};
 
     /* To customize participant QoS, use 
        the configuration file USER_QOS_PROFILES.xml */
@@ -350,25 +373,12 @@ static int host_main(int domainId, int msg_count)
         latency_writer, instance_latency);
 */
 
+
     /* Main loop */
     while (count < msg_count+1) {
-
-        /* Modify the data to be written here */
-	    memset(instance_latency->data, 'x', 32);
-
-	    static struct timeval start;
-	    gettimeofday(&start, NULL);
-	    long long start_time = (start.tv_sec * 1000000 + start.tv_usec);
-
-        instance_latency->time = start_time;
-
-        /* Write data */
-        retcode = latencyDataWriter_write(
-            latency_writer, instance_latency, &instance_handle);
-        if (retcode != DDS_RETCODE_OK) {
-            printf("write error %d\n", retcode);
+        if (count == 0) {
+            retcode = send_sample(instance_latency, latency_writer, instance_handle);
         }
-
         NDDS_Utility_sleep(&send_period);
     }
     

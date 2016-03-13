@@ -356,7 +356,7 @@ latencyEchoPlugin_serialize(
             
 
     if (!RTICdrStream_serializeString(
-        stream, sample->data, (8192) + 1)) {
+        stream, sample->data, (65536) + 1)) {
         return RTI_FALSE;
     }
             
@@ -410,7 +410,7 @@ latencyEchoPlugin_deserialize_sample(
     }
 
     if (!RTICdrStream_deserializeString(
-        stream, sample->data, (8192) + 1)) {
+        stream, sample->data, (65536) + 1)) {
         goto fin;
     }
             
@@ -502,7 +502,7 @@ RTIBool latencyEchoPlugin_skip(
     }
             
 
-    if (!RTICdrStream_skipString(stream, (8192) + 1)) {
+    if (!RTICdrStream_skipString(stream, (65536) + 1)) {
         goto fin;
     }
             
@@ -562,7 +562,7 @@ latencyEchoPlugin_get_serialized_sample_max_size(
             
 
     current_alignment +=  RTICdrType_getStringMaxSizeSerialized(
-        current_alignment, (8192) + 1);
+        current_alignment, (65536) + 1);
             
 
     if (include_encapsulation) {
@@ -1321,7 +1321,7 @@ latencyPlugin_serialize(
             
 
     if (!RTICdrStream_serializeString(
-        stream, sample->data, (8192) + 1)) {
+        stream, sample->data, (65536) + 1)) {
         return RTI_FALSE;
     }
             
@@ -1375,7 +1375,7 @@ latencyPlugin_deserialize_sample(
     }
 
     if (!RTICdrStream_deserializeString(
-        stream, sample->data, (8192) + 1)) {
+        stream, sample->data, (65536) + 1)) {
         goto fin;
     }
             
@@ -1467,7 +1467,7 @@ RTIBool latencyPlugin_skip(
     }
             
 
-    if (!RTICdrStream_skipString(stream, (8192) + 1)) {
+    if (!RTICdrStream_skipString(stream, (65536) + 1)) {
         goto fin;
     }
             
@@ -1527,7 +1527,7 @@ latencyPlugin_get_serialized_sample_max_size(
             
 
     current_alignment +=  RTICdrType_getStringMaxSizeSerialized(
-        current_alignment, (8192) + 1);
+        current_alignment, (65536) + 1);
             
 
     if (include_encapsulation) {

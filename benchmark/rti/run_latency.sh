@@ -38,7 +38,7 @@ for (( size=$start_size; size<=$max_msg_size; size=$size*2 )); do
 done
 
 cd ../
-eval_dir="eval_latency_"$msg_count"_"$max_msg_size"_"$(date +%s)
+eval_dir="eval_rti_latency_"$msg_count"_"$max_msg_size"_"$(date +%s)
 echo "mkdir $eval_dir"
 mkdir $eval_dir
 scp pi@$host:~/rti_latency_*.log $eval_dir
