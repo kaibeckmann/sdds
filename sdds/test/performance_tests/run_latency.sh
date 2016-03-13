@@ -17,12 +17,12 @@ fi
 host="pi01"
 host_ip="fd29:144d:4196:94:fa66:f718:3c78:cf16"
 if [[ "$inet" = "ipv4" ]]; then
-   sub_ip="10.18.48.200"
+   host_ip="10.18.48.200"
 fi
 echo="pi02"
 echo_ip="fd29:144d:4196:94:eaa3:66fb:72af:fcf7"
 if [[ "$inet" = "ipv4" ]]; then
-   sub_ip="10.18.48.201"
+   echo_ip="10.18.48.201"
 fi
 
 if [ "$4" = "self"  ]; then

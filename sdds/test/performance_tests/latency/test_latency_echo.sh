@@ -6,17 +6,17 @@ if [ "$#" -lt 5 ]; then
 fi
 
 count=$1
-max_size=$2
+size=$2
 sub_ip=$3
 iface=$4
-prot=$5
+inet=$5
 loc=$6
 
 cd ~/sdds/sdds/test/performance_tests/latency/linux_latency_echo
 
 echo "clean latency echo $count $size"
 make clean >/dev/null 2>&1
-./prepare_test.sh $count $size $sub_ip $iface $prot $loc
+./prepare_test.sh $count $size $sub_ip $iface $inet $loc
 ./generate.sh > /dev/null 2>&1
 make_log="make_"$count"_"$size".log"
 echo "make latency echo $count $size"
