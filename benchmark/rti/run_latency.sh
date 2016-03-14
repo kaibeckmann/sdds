@@ -32,7 +32,7 @@ for (( size=$start_size; size<=$max_msg_size; size=$size*2 )); do
 
     log="rti_latency_"$msg_count"_"$size".log"
     ssh $echo -l pi './latency_echo > rti_print_echo_'$msg_count'_'$size'.log' & 
-    ssh $host -l pi './latency_host '$msg_count' '$log' > rti_print_host_'$msg_count'_'$size'.log'  
+    ssh $host -l pi './latency_host '$msg_count' '$size' '$log' > rti_print_host_'$msg_count'_'$size'.log'  
 
     ssh $echo -l pi 'killall latency_echo'
 done
