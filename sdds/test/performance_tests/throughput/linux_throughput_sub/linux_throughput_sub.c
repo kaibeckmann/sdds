@@ -22,9 +22,9 @@ int main()
     Throughput *throughput_sub_p = &throughput_sub;
 
     static struct timeval start, now;
-    static long start_time;
-    static long now_time;
-    static long duration = 0;
+    static long long start_time;
+    static long long now_time;
+    static long long duration = 0;
 
     gettimeofday(&start, NULL);
     start_time = (start.tv_sec * 1000000 + start.tv_usec);
@@ -50,8 +50,8 @@ int main()
     
     double mbps = mbits_recv / dur_sec;
 
-    printf("Bytes, Mbit/s\n%016lu, %.2lf", bytes_received, mbps);
-    fprintf(log, "Bytes, Mbit/s\n%016lu, %.2lf", bytes_received, mbps);
+    printf("Bytes, Mbit/s\n%016llu, %.2lf", bytes_received, mbps);
+    fprintf(log, "Bytes, Mbit/s\n%016llu, %.2lf", bytes_received, mbps);
 
     fclose(log);
     return 0;

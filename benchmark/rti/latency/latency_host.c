@@ -58,11 +58,12 @@ static FILE* log = NULL;
 static latency *instance_latency = NULL;
 static latencyDataWriter *latency_writer = NULL;
 static DDS_InstanceHandle_t instance_handle;
+static int msg_size = 0;
 
-DDS_ReturnCode_t send_sample(latency* instance_latency, latencyDataWriter* latency_writer, DDS_InstanceHandle_t instance_handle) {
+DDS_ReturnCode_t send_sample(latency* instance_latency, latencyDataWriter* latency_writer, DDS_InstanceHandle_t instance_handlei, int size) {
     DDS_ReturnCode_t retcode;
     /* Modify the data to be written here */
-    memset(instance_latency->data, 'x', 32);
+    memset(instance_latency->data, 'x', size);
 
     static struct timeval start;
     gettimeofday(&start, NULL);
@@ -160,7 +161,7 @@ void latencyEchoListener_on_data_available(
 	            long long duration = ((end_time - inst->time) / 2);
 	            fprintf(log, "%lld\n", duration);
 
-                retcode = send_sample(instance_latency, latency_writer, instance_handle);
+                retcode = send_sample(instance_latency, latency_writer, instance_handle, msg_size);
             }
 	        count++;
         }
@@ -377,7 +378,7 @@ static int host_main(int domainId, int msg_count)
     /* Main loop */
     while (count < msg_count+1) {
         if (count == 0) {
-            retcode = send_sample(instance_latency, latency_writer, instance_handle);
+            retcode = send_sample(instance_latency, latency_writer, instance_handle, msg_size);
         }
         NDDS_Utility_sleep(&send_period);
     }
@@ -406,13 +407,14 @@ int main(int argc, char *argv[])
     int msg_count = 0; 
     char *latency_log = NULL;
 
-    if (argc < 3) {
-        printf("usage: %s <msg_count> <log_file>\n", argv[0]);
+    if (argc < 4) {
+        printf("usage: %s <msg_count> <msg_size> <log_file>\n", argv[0]);
         return -1;
     }
 
     msg_count = atoi(argv[1]);
-    latency_log = argv[2];
+    msg_size = atoi(argv[2]);
+    latency_log = argv[3];
     log = fopen(latency_log, "w+");
     if (log == NULL) {
         printf("fopen: %s\n", strerror(errno));
