@@ -1,0 +1,9 @@
+struct latencyEcho {
+   longlong time;
+   string<{msg_size}> data;
+}; //@top-level true
+
+struct latency {
+   longlong time;
+   string<{msg_size}> data;
+}; //@top-level ture

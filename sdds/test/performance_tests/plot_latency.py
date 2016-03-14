@@ -94,6 +94,7 @@ title = "Latency Test: %d Messages, %d - %d Bytes" % (msg_count, sort_size[0], s
 
 plt.ylabel("Latency in usec")
 plt.xlabel("Payload Data Size (Bytes)")
+plt.xscale('log', basex=2)
 plt.title(title)
 plt.grid(True)
 plt.show()
