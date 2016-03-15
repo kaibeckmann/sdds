@@ -21,12 +21,8 @@
 
     <define name = "SDDS_HAS_QOS_RELIABILITY" />
 
-    <define name = "SDDS_NET_MAX_BUF_SIZE" value = "512"/>
-    <define name = "SDDS_NET_MAX_LOCATOR_COUNT" value = "20"/>
-    <define name = "SDDS_DISCOVERY_RECEIVE_TIMER" value = "1"/>
-    <define name = "SDDS_DISCOVERY_PARTICIPANT_TIMER" value = "2"/>
-    <define name = "SDDS_DISCOVERY_PUBLICATION_TIMER" value = "2"/>
-    <define name = "SDDS_DISCOVERY_TOPIC_TIMER" value = "0"/>
+    <define name = "SDDS_NET_MAX_BUF_SIZE" value = "256"/>
+    <define name = "SDDS_NET_MAX_LOCATOR_COUNT" value = "25"/>
     <define name = "SDDS_QOS_HISTORY_DEPTH" value = "5"/>
     <define name = "SDDS_QOS_RELIABILITY_MAX_TOPIC_PARTICIPANTS" value = "1"/>
     <define name = "SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE" value = "4"/>
@@ -37,27 +33,28 @@
     <include filename = "../topics/basic.xml" />
     <include filename = "../topics/qos_reliability.xml" />
 
-    <role topic = "strings" type = "publisher"/>
-    <role topic = "strings" type = "subscriber"/>
 
+    <role topic = "strings" type = "publisher">
+        <subscriber ip = "fe80::c0ef:62ff:fed4:d26a" port = "23234"/>
+    </role>
     <role topic = "testQosReliabilityBasicReliableAck" type = "publisher">
         <subscriber ip = "fe80::c0ef:62ff:fed4:d26a" port = "23234"/>
     </role>
-    <role topic = "testQosReliabilityBasicReliableAck" type = "subscriber"/>
-
     <role topic = "testQosReliabilitySmallReliableAck" type = "publisher">
         <subscriber ip = "fe80::c0ef:62ff:fed4:d26a" port = "23234"/>
     </role>
-    <role topic = "testQosReliabilitySmallReliableAck" type = "subscriber"/>
-
     <role topic = "testQosReliabilityBigReliableAck" type = "publisher">
         <subscriber ip = "fe80::c0ef:62ff:fed4:d26a" port = "23234"/>
     </role>
-    <role topic = "testQosReliabilityBigReliableAck" type = "subscriber"/>
-
     <role topic = "testQosReliabilityHugeReliableAck" type = "publisher">
         <subscriber ip = "fe80::c0ef:62ff:fed4:d26a" port = "23234"/>
     </role>
+
+
+    <role topic = "strings" type = "subscriber"/>
+    <role topic = "testQosReliabilityBasicReliableAck" type = "subscriber"/>
+    <role topic = "testQosReliabilitySmallReliableAck" type = "subscriber"/>
+    <role topic = "testQosReliabilityBigReliableAck" type = "subscriber"/>
     <role topic = "testQosReliabilityHugeReliableAck" type = "subscriber"/>
 
 
