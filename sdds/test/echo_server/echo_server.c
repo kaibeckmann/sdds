@@ -11,6 +11,7 @@
 
 void
 print_ip () {
+
    struct ifaddrs *ifaddr, *ifa;
    int family, s, n;
    char host[NI_MAXHOST];
@@ -36,11 +37,13 @@ print_ip () {
                printf("getnameinfo() failed: %s\n", gai_strerror(s));
                exit(EXIT_FAILURE);
            }
+
            printf("%s\t\taddress: <%s>\n",ifa->ifa_name, host);
 
-       }
-   }
+        }
+    }
    freeifaddrs(ifaddr);
+
 }
 
 
