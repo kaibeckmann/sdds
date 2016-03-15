@@ -15,6 +15,8 @@
         part of the XML tree
     -->
 
+    <define name = "TEST_HAS_MULTICAST" />
+
     <define name = "FEATURE_SDDS_MULTICAST_ENABLED" />
     <define name = "FEATURE_SDDS_BUILTIN_TOPICS_ENABLED" />
     <define name = "FEATURE_SDDS_DISCOVERY_ENABLED" />
