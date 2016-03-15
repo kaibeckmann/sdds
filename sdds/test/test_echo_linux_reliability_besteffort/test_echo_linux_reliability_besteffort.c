@@ -54,7 +54,7 @@ int main()
         allSubsFound = (retBasic == SDDS_RT_OK) && (retSmall == SDDS_RT_OK) && (retBig == SDDS_RT_OK) && (retHuge == SDDS_RT_OK);
 
         gettimeofday (&tmp, NULL);
-        if (tmp.tv_sec > (start.tv_sec + 20)){
+        if (tmp.tv_sec > (start.tv_sec + 25)){
             printf("ERROR: Not all subscriptions could be found until timeout!\n");
             return SDDS_RT_FAIL;
         }
