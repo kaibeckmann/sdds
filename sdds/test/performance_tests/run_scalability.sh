@@ -10,7 +10,6 @@ fi
 host=(
     pi20
     pi19
-    pi18
     pi17
     pi16
     pi15
@@ -65,7 +64,7 @@ elif [ "$2" = "sub" ]; then
         fi 
         scalability/./test_scalability.sh $pubs 0 $i $test_dur $5 $6 $7 $8
         dur=$[60*($test_dur+1)]
-        file="eval_scalability/scalability_wireshark_"$i"_0_"$subs".pcapng"	
+        file="eval_scalability/scalability_wireshark_"$pubs"_0_"$i".pcapng"	
         tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w $file
     done
 else
@@ -79,7 +78,8 @@ if [ "$4" = "lbud" ]; then
 fi
 scalability/./eval_scalability.sh
 timestamp=$(date +%s)
-echo "cp -r eval_scalability eval_scalability_$timestamp$lbud"
-cp -r eval_scalability eval_scalability_$timestamp$lbud
+eval_dir="eval_scalability_"$2"_"$pubs"_0_"$subs"_"$timestamp$lbud
+echo cp -r eval_scalability $eval_dir
+cp -r eval_scalability $eval_dir
 
 exit
