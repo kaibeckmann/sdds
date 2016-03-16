@@ -291,8 +291,8 @@ gettimeofday (&start, NULL);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-            assert( writer_basic_p->samplesToAcknowledge[i].seqNr == 0 );
-            assert( writer_basic_p->samplesToAcknowledge[i].isUsed == 0 );
+        assert( writer_basic_p->samplesToAcknowledge[i].seqNr == 0 );
+        assert( writer_basic_p->samplesToAcknowledge[i].isUsed == 0 );
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
