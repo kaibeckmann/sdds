@@ -34,6 +34,7 @@
     <include filename = "../topics/basic.xml" />
     <include filename = "../topics/qos_reliability.xml" />
 
+
     <role topic = "testQosReliabilityBasicReliableNack" type = "publisher"/>
     <role topic = "testQosReliabilityBasicReliableNack" type = "subscriber"/>
     <role topic = "testQosReliabilitySmallReliableNack" type = "publisher"/>
