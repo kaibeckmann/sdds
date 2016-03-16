@@ -29,11 +29,6 @@ AUTOSTART_PROCESSES(&contiki_tracepoint_pub);
 
 PROCESS_THREAD(contiki_tracepoint_pub, ev, data)
 {
-    DDRE |= (1 << PE4);
-    DDRE |= (1 << PE5);
-    DDRE |= (1 << PE7);
-    DDRF |= (1 << PF0);
-
 	static struct etimer g_wait_timer;
 
 	PROCESS_BEGIN();
@@ -64,18 +59,6 @@ PROCESS_THREAD(contiki_tracepoint_pub, ev, data)
                    "}\n"
                    , tracepoint_sub_p->data);
         }
-
-        PORTE |= (1 << PE4); 
-        PORTE |= (1 << PE5); 
-        PORTE |= (1 << PE7); 
-        PORTF |= (1 << PF0); 
-
-        _delay_ms(500); 
-
-        PORTE &= 0x00;
-        PORTF &= 0x00;
-
-        _delay_ms(500); 
 
 		etimer_set(&g_wait_timer, 1 * CLOCK_SECOND);
 		PROCESS_YIELD_UNTIL(etimer_expired(&g_wait_timer));

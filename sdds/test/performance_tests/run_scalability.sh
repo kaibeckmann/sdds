@@ -10,6 +10,7 @@ fi
 host=(
     pi20
     pi19
+    pi18
     pi17
     pi16
     pi15
