@@ -37,24 +37,24 @@ DataReader_t* reader_small_p;
 DataReader_t* reader_big_p;
 DataReader_t* reader_huge_p;
 
-void clean_DataWriter_SamplesToAcknowledge() {
+void clean_DataWriter_samplesToKeep() {
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-        writer_basic_p->samplesToAcknowledge[i].data = NULL;
-        writer_basic_p->samplesToAcknowledge[i].seqNr = 0;
-        writer_basic_p->samplesToAcknowledge[i].timeStamp = 0;
-        writer_basic_p->samplesToAcknowledge[i].isUsed = 0;
-        writer_small_p->samplesToAcknowledge[i].data = NULL;
-        writer_small_p->samplesToAcknowledge[i].seqNr = 0;
-        writer_small_p->samplesToAcknowledge[i].timeStamp = 0;
-        writer_small_p->samplesToAcknowledge[i].isUsed = 0;
-        writer_big_p->samplesToAcknowledge[i].data = NULL;
-        writer_big_p->samplesToAcknowledge[i].seqNr = 0;
-        writer_big_p->samplesToAcknowledge[i].timeStamp = 0;
-        writer_big_p->samplesToAcknowledge[i].isUsed = 0;
-        writer_huge_p->samplesToAcknowledge[i].data = NULL;
-        writer_huge_p->samplesToAcknowledge[i].seqNr = 0;
-        writer_huge_p->samplesToAcknowledge[i].timeStamp = 0;
-        writer_huge_p->samplesToAcknowledge[i].isUsed = 0;
+        writer_basic_p->samplesToKeep[i].data = NULL;
+        writer_basic_p->samplesToKeep[i].seqNr = 0;
+        writer_basic_p->samplesToKeep[i].timeStamp = 0;
+        writer_basic_p->samplesToKeep[i].isUsed = 0;
+        writer_small_p->samplesToKeep[i].data = NULL;
+        writer_small_p->samplesToKeep[i].seqNr = 0;
+        writer_small_p->samplesToKeep[i].timeStamp = 0;
+        writer_small_p->samplesToKeep[i].isUsed = 0;
+        writer_big_p->samplesToKeep[i].data = NULL;
+        writer_big_p->samplesToKeep[i].seqNr = 0;
+        writer_big_p->samplesToKeep[i].timeStamp = 0;
+        writer_big_p->samplesToKeep[i].isUsed = 0;
+        writer_huge_p->samplesToKeep[i].data = NULL;
+        writer_huge_p->samplesToKeep[i].seqNr = 0;
+        writer_huge_p->samplesToKeep[i].timeStamp = 0;
+        writer_huge_p->samplesToKeep[i].isUsed = 0;
     }
 }
 
@@ -205,7 +205,7 @@ gettimeofday (&start, NULL);
     assert (testQosReliabilityHugeReliableAck_sub_p->number == 4);
 
 
-    clean_DataWriter_SamplesToAcknowledge();
+    clean_DataWriter_samplesToKeep();
     clean_DataWriter_SeqNrs();
     clean_DataReader_History();
 
@@ -218,15 +218,15 @@ gettimeofday (&start, NULL);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++ ){
-        assert( writer_basic_p->samplesToAcknowledge[i].seqNr == i );
-        assert( writer_small_p->samplesToAcknowledge[i].seqNr == i );
-        assert( writer_big_p->samplesToAcknowledge[i].seqNr == i );
-        assert( writer_huge_p->samplesToAcknowledge[i].seqNr == i );
+        assert( writer_basic_p->samplesToKeep[i].seqNr == i );
+        assert( writer_small_p->samplesToKeep[i].seqNr == i );
+        assert( writer_big_p->samplesToKeep[i].seqNr == i );
+        assert( writer_huge_p->samplesToKeep[i].seqNr == i );
 
-        assert( writer_basic_p->samplesToAcknowledge[i].isUsed != 0 );
-        assert( writer_small_p->samplesToAcknowledge[i].isUsed != 0 );
-        assert( writer_big_p->samplesToAcknowledge[i].isUsed != 0 );
-        assert( writer_huge_p->samplesToAcknowledge[i].isUsed != 0 );
+        assert( writer_basic_p->samplesToKeep[i].isUsed != 0 );
+        assert( writer_small_p->samplesToKeep[i].isUsed != 0 );
+        assert( writer_big_p->samplesToKeep[i].isUsed != 0 );
+        assert( writer_huge_p->samplesToKeep[i].isUsed != 0 );
     }
 
 
@@ -239,15 +239,15 @@ gettimeofday (&start, NULL);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-        assert( writer_basic_p->samplesToAcknowledge[i].seqNr == i );
-        assert( writer_small_p->samplesToAcknowledge[i].seqNr == i );
-        assert( writer_big_p->samplesToAcknowledge[i].seqNr == i );
-        assert( writer_huge_p->samplesToAcknowledge[i].seqNr == i );
+        assert( writer_basic_p->samplesToKeep[i].seqNr == i );
+        assert( writer_small_p->samplesToKeep[i].seqNr == i );
+        assert( writer_big_p->samplesToKeep[i].seqNr == i );
+        assert( writer_huge_p->samplesToKeep[i].seqNr == i );
 
-        assert( writer_basic_p->samplesToAcknowledge[i].isUsed != 0 );
-        assert( writer_small_p->samplesToAcknowledge[i].isUsed != 0 );
-        assert( writer_big_p->samplesToAcknowledge[i].isUsed != 0 );
-        assert( writer_huge_p->samplesToAcknowledge[i].isUsed != 0 );
+        assert( writer_basic_p->samplesToKeep[i].isUsed != 0 );
+        assert( writer_small_p->samplesToKeep[i].isUsed != 0 );
+        assert( writer_big_p->samplesToKeep[i].isUsed != 0 );
+        assert( writer_huge_p->samplesToKeep[i].isUsed != 0 );
     }
 
 
@@ -267,20 +267,20 @@ gettimeofday (&start, NULL);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-        assert( writer_basic_p->samplesToAcknowledge[i].seqNr == i+5 );
-        assert( writer_small_p->samplesToAcknowledge[i].seqNr == i+5 );
-        assert( writer_big_p->samplesToAcknowledge[i].seqNr == i+5 );
-        assert( writer_huge_p->samplesToAcknowledge[i].seqNr == i+5 );
+        assert( writer_basic_p->samplesToKeep[i].seqNr == i+5 );
+        assert( writer_small_p->samplesToKeep[i].seqNr == i+5 );
+        assert( writer_big_p->samplesToKeep[i].seqNr == i+5 );
+        assert( writer_huge_p->samplesToKeep[i].seqNr == i+5 );
 
-        assert( writer_basic_p->samplesToAcknowledge[i].isUsed != 0 );
-        assert( writer_small_p->samplesToAcknowledge[i].isUsed != 0 );
-        assert( writer_big_p->samplesToAcknowledge[i].isUsed != 0 );
-        assert( writer_huge_p->samplesToAcknowledge[i].isUsed != 0 );
+        assert( writer_basic_p->samplesToKeep[i].isUsed != 0 );
+        assert( writer_small_p->samplesToKeep[i].isUsed != 0 );
+        assert( writer_big_p->samplesToKeep[i].isUsed != 0 );
+        assert( writer_huge_p->samplesToKeep[i].isUsed != 0 );
     }
 
 
     // dequeing from acknowledgement-queue after acknowledgement of samples
-    clean_DataWriter_SamplesToAcknowledge();
+    clean_DataWriter_samplesToKeep();
     clean_DataWriter_SeqNrs();
     clean_DataReader_History();
 
@@ -291,8 +291,8 @@ gettimeofday (&start, NULL);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-            assert( writer_basic_p->samplesToAcknowledge[i].seqNr == 0 );
-            assert( writer_basic_p->samplesToAcknowledge[i].isUsed == 0 );
+        assert( writer_basic_p->samplesToKeep[i].seqNr == 0 );
+        assert( writer_basic_p->samplesToKeep[i].isUsed == 0 );
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
@@ -301,8 +301,8 @@ gettimeofday (&start, NULL);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-            assert( writer_small_p->samplesToAcknowledge[i].seqNr == 0 );
-            assert( writer_small_p->samplesToAcknowledge[i].isUsed == 0 );
+            assert( writer_small_p->samplesToKeep[i].seqNr == 0 );
+            assert( writer_small_p->samplesToKeep[i].isUsed == 0 );
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
@@ -311,8 +311,8 @@ gettimeofday (&start, NULL);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-            assert( writer_big_p->samplesToAcknowledge[i].seqNr == 0 );
-            assert( writer_big_p->samplesToAcknowledge[i].isUsed == 0 );
+            assert( writer_big_p->samplesToKeep[i].seqNr == 0 );
+            assert( writer_big_p->samplesToKeep[i].isUsed == 0 );
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
@@ -321,8 +321,8 @@ gettimeofday (&start, NULL);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-            assert( writer_huge_p->samplesToAcknowledge[i].seqNr == 0 );
-            assert( writer_huge_p->samplesToAcknowledge[i].isUsed == 0 );
+            assert( writer_huge_p->samplesToKeep[i].seqNr == 0 );
+            assert( writer_huge_p->samplesToKeep[i].isUsed == 0 );
     }
 
 
