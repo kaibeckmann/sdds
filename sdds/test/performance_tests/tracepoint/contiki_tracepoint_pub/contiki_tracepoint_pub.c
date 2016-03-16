@@ -17,8 +17,8 @@ void write_MACAddr() {
     eeprom_write_byte((uint8_t*)myAddr+4, 0xFF);
     eeprom_write_byte((uint8_t*)myAddr+3, 0xFF);
     eeprom_write_byte((uint8_t*)myAddr+2, 0x00);
-    eeprom_write_byte((uint8_t*)myAddr+1, 0x22);
-    eeprom_write_byte((uint8_t*)myAddr+0, 0xE3);
+    eeprom_write_byte((uint8_t*)myAddr+1, 0x12);
+    eeprom_write_byte((uint8_t*)myAddr+0, 0x10);
 }
 #endif
 
@@ -27,7 +27,6 @@ AUTOSTART_PROCESSES(&contiki_tracepoint_pub);
 
 PROCESS_THREAD(contiki_tracepoint_pub, ev, data)
 {
-    //Trace_init();
 	static struct etimer g_wait_timer;
 
 	PROCESS_BEGIN();
@@ -44,24 +43,15 @@ PROCESS_THREAD(contiki_tracepoint_pub, ev, data)
 	Log_setLvl(5);
 
     static Tracepoint tracepoint_pub;
-    static Tracepoint tracepoint_sub;
-    Tracepoint *tracepoint_sub_p = &tracepoint_sub;
-
     tracepoint_pub.data = 5;
     
-    static uint8_t t = 0;
-
     for (;;) {
         ret = DDS_TracepointDataWriter_write (g_Tracepoint_writer, &tracepoint_pub, NULL);
-        if (ret != DDS_RETCODE_OK)
-            printf ("Failed to send topic tracepoint\n");
-
-        t++;
-        t = (t%16);
-
-        Trace_point(t);
-        
-		etimer_set(&g_wait_timer, 1 * CLOCK_SECOND);
+#ifdef FEATURE_SDDS_TRACING_ENABLED
+        Trace_point(SDDS_TRACE_EVENT_DUMMY_1);
+        Trace_point(SDDS_TRACE_EVENT_STOP);
+#endif
+		etimer_set(&g_wait_timer, 1);
 		PROCESS_YIELD_UNTIL(etimer_expired(&g_wait_timer));
     }
 

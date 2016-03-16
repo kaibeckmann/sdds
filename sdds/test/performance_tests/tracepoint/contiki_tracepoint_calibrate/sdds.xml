@@ -1,5 +1,5 @@
 <project
-    name = "contiki_tracepoint_pub"
+    name = "contiki_tracepoint_calibtrate"
     script = "sdds.gsl"
     endian = "little"
     os = "contiki"
@@ -18,12 +18,5 @@
     </topic>
 
     <define name = "FEATURE_SDDS_TRACING_ENABLED"/>
-    <define name = "FEATURE_SDDS_TRACING_SEND_NORMAL"/>
-    <define name = "FEATURE_SDDS_TRACING_CALL_WRITE"/>
-    <define name = "FEATURE_SDDS_TRACING_PREPARE_SNPS"/>
-    <define name = "FEATURE_SDDS_TRACING_SEND_PAKET"/>
 
-    <role topic = "tracepoint" type = "publisher">
-        <subscriber ip = "fe80::221:2eff:ff00:22b9"/>
-    </role>
 </project>
