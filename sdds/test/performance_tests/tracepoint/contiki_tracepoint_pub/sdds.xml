@@ -17,6 +17,8 @@
         <attribute name = "data" type = "DDS_short">playload</attribute>
     </topic>
 
+    <define name = "FEATURE_SDDS_TRACING_ENABLED"/>
+
     <role topic = "tracepoint" type = "publisher">
         <subscriber ip = "fe80::221:2eff:ff00:22b9"/>
     </role>
