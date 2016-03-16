@@ -1,0 +1,28 @@
+<project
+    name = "test_unit_history_reliable"
+    script = "sdds.gsl"
+    endian = "little"
+    os = "linux"
+    iface = "tap0"
+    protocol = "AF_INET6"
+    ip = "fe80::c0ef:62ff:fed4:d26a"
+    port = "23234"
+    >
+    Linux basic publisher example
+
+    <!--
+        Includes are processed first, so XML in included files will be
+        part of the XML tree
+    -->
+
+    <define name = "UTILS_DEBUG" />
+    <define name = "SDDS_SELFTEST" />
+    <define name = "SDDS_HAS_QOS_RELIABILITY" />
+    <define name = "SDDS_HAS_QOS_RELIABILITY_KIND_RELIABLE_BESTEFFORT" />
+    <define name = "SDDS_QOS_RELIABILITY_MAX_TOPIC_PARTICIPANTS" value = "1"/>
+
+    <include filename = "../topics/basic.xml" />
+    <include filename = "../topics/qos_reliability.xml" />
+
+    <role topic = "strings" type = "subscriber" />
+</project>
