@@ -134,11 +134,9 @@ int main() {
 	sDDS_init ();
 
     // active testing until all subscibers have been found
-    // timeout = 20 secs
     struct timeval start;
     struct timeval tmp;
     bool allSubsFound = false;
-    rc_t retStrings = SDDS_RT_NODATA;
     rc_t retBasic = SDDS_RT_NODATA;
     rc_t retSmall = SDDS_RT_NODATA;
     rc_t retBig = SDDS_RT_NODATA;
@@ -287,7 +285,7 @@ gettimeofday (&start, NULL);
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
         DDS_TestQosReliabilityBasicReliableAckDataWriter_write (g_TestQosReliabilityBasicReliableAck_writer, &testQosReliabilityBasicReliableAck_pub, NULL);
-        usleep(300000);
+        usleep(400000);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
@@ -297,7 +295,7 @@ gettimeofday (&start, NULL);
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
         DDS_TestQosReliabilitySmallReliableAckDataWriter_write (g_TestQosReliabilitySmallReliableAck_writer, &testQosReliabilitySmallReliableAck_pub, NULL);
-        usleep(300000);
+        usleep(400000);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
@@ -307,7 +305,7 @@ gettimeofday (&start, NULL);
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
         DDS_TestQosReliabilityBigReliableAckDataWriter_write (g_TestQosReliabilityBigReliableAck_writer, &testQosReliabilityBigReliableAck_pub, NULL);
-        usleep(300000);
+        usleep(400000);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
@@ -317,7 +315,7 @@ gettimeofday (&start, NULL);
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
         DDS_TestQosReliabilityHugeReliableAckDataWriter_write (g_TestQosReliabilityHugeReliableAck_writer, &testQosReliabilityHugeReliableAck_pub, NULL);
-        usleep(300000);
+        usleep(400000);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){

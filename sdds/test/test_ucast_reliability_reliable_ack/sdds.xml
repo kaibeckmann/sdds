@@ -34,9 +34,6 @@
     <include filename = "../topics/qos_reliability.xml" />
 
 
-    <role topic = "strings" type = "publisher">
-        <subscriber ip = "fe80::c0ef:62ff:fed4:d26a" port = "23234"/>
-    </role>
     <role topic = "testQosReliabilityBasicReliableAck" type = "publisher">
         <subscriber ip = "fe80::c0ef:62ff:fed4:d26a" port = "23234"/>
     </role>
@@ -51,7 +48,6 @@
     </role>
 
 
-    <role topic = "strings" type = "subscriber"/>
     <role topic = "testQosReliabilityBasicReliableAck" type = "subscriber"/>
     <role topic = "testQosReliabilitySmallReliableAck" type = "subscriber"/>
     <role topic = "testQosReliabilityBigReliableAck" type = "subscriber"/>
