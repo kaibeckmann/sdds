@@ -30,10 +30,6 @@
     <include filename = "../topics/qos_reliability.xml" />
 
 
-    <role topic = "strings" type = "publisher">
-        <subscriber ip = "fe80::c0ef:62ff:fed4:d26a" port = "23234"/>
-    </role>
-
     <role topic = "testQosReliabilityBasicReliableNack" type = "publisher">
         <subscriber ip = "fe80::c0ef:62ff:fed4:d26a" port = "23234"/>
     </role>
@@ -50,9 +46,8 @@
         <subscriber ip = "fe80::c0ef:62ff:fed4:d26a" port = "23234"/>
     </role>
 
-    <role topic = "strings" type = "subscriber"/>
     <role topic = "testQosReliabilityBasicReliableNack" type = "subscriber"/>
-    <role topic = "testQosReliabilitySmallReliableNAck" type = "subscriber"/>
+    <role topic = "testQosReliabilitySmallReliableNack" type = "subscriber"/>
     <role topic = "testQosReliabilityBigReliableNack" type = "subscriber"/>
     <role topic = "testQosReliabilityHugeReliableNack" type = "subscriber"/>
 

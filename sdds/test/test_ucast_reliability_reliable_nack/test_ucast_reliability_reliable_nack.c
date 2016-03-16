@@ -26,11 +26,100 @@ TestQosReliabilityHugeReliableNack testQosReliabilityHugeReliableNack_pub;
 TestQosReliabilityHugeReliableNack testQosReliabilityHugeReliableNack_sub;
 TestQosReliabilityHugeReliableNack* testQosReliabilityHugeReliableNack_sub_p = &testQosReliabilityHugeReliableNack_sub;
 
+Reliable_DataWriter_t* writer_basic_p;
+Reliable_DataWriter_t* writer_small_p;
+Reliable_DataWriter_t* writer_big_p;
+Reliable_DataWriter_t* writer_huge_p;
+DataReader_t* reader_basic_p;
+DataReader_t* reader_small_p;
+DataReader_t* reader_big_p;
+DataReader_t* reader_huge_p;
 
-rc_t retBasic = SDDS_RT_NODATA;
-rc_t retSmall = SDDS_RT_NODATA;
-rc_t retBig = SDDS_RT_NODATA;
-rc_t retHuge = SDDS_RT_NODATA;
+
+void clean_DataWriter_samplesToKeep() {
+    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
+        writer_basic_p->samplesToKeep[i].data = NULL;
+        writer_basic_p->samplesToKeep[i].seqNr = 0;
+        writer_basic_p->samplesToKeep[i].timeStamp = 0;
+        writer_basic_p->samplesToKeep[i].isUsed = 0;
+        writer_small_p->samplesToKeep[i].data = NULL;
+        writer_small_p->samplesToKeep[i].seqNr = 0;
+        writer_small_p->samplesToKeep[i].timeStamp = 0;
+        writer_small_p->samplesToKeep[i].isUsed = 0;
+        writer_big_p->samplesToKeep[i].data = NULL;
+        writer_big_p->samplesToKeep[i].seqNr = 0;
+        writer_big_p->samplesToKeep[i].timeStamp = 0;
+        writer_big_p->samplesToKeep[i].isUsed = 0;
+        writer_huge_p->samplesToKeep[i].data = NULL;
+        writer_huge_p->samplesToKeep[i].seqNr = 0;
+        writer_huge_p->samplesToKeep[i].timeStamp = 0;
+        writer_huge_p->samplesToKeep[i].isUsed = 0;
+    }
+}
+
+void clean_DataWriter_SeqNrs() {
+    writer_basic_p->seqNr = 0;
+    writer_small_p->seqNr = 0;
+    writer_big_p->seqNr = 0;
+    writer_huge_p->seqNr = 0;
+}
+
+void clean_DataReader_History() {
+    int depth = reader_basic_p->history.depth;
+
+    reader_basic_p->history.in_needle = 0;
+    reader_basic_p->history.out_needle = depth;
+    reader_small_p->history.in_needle = 0;
+    reader_small_p->history.out_needle = depth;
+    reader_big_p->history.in_needle = 0;
+    reader_big_p->history.out_needle = depth;
+    reader_huge_p->history.in_needle = 0;
+    reader_huge_p->history.out_needle = depth;
+
+    for (int i=0; i<SDDS_QOS_HISTORY_DEPTH; i++) {
+        reader_basic_p->history.samples[i].instance = NULL;
+        reader_basic_p->history.samples[i].seqNr = 0;
+        reader_small_p->history.samples[i].instance = NULL;
+        reader_small_p->history.samples[i].seqNr = 0;
+        reader_big_p->history.samples[i].instance = NULL;
+        reader_big_p->history.samples[i].seqNr = 0;
+        reader_huge_p->history.samples[i].instance = NULL;
+        reader_huge_p->history.samples[i].seqNr = 0;
+    }
+}
+void clean_DataReader_History_MissingSamplesQueue_Locators() {
+    for (int i=0; i<SDDS_QOS_RELIABILITY_MAX_TOPIC_PARTICIPANTS; i++) {
+        reader_basic_p->history.qos_locator[i] = 0;
+        reader_small_p->history.qos_locator[i] = 0;
+        reader_big_p->history.qos_locator[i] = 0;
+        reader_huge_p->history.qos_locator[i] = 0;
+    }
+}
+
+void clean_DataReader_History_MissingSamplesQueue_HighestSeqNrbyLoc() {
+    for (int i=0; i<SDDS_QOS_RELIABILITY_MAX_TOPIC_PARTICIPANTS; i++) {
+        reader_basic_p->history.highestSeqNrbyLoc[i] = 0;
+        reader_small_p->history.highestSeqNrbyLoc[i] = 0;
+        reader_big_p->history.highestSeqNrbyLoc[i] = 0;
+        reader_huge_p->history.highestSeqNrbyLoc[i] = 0;
+    }
+}
+
+void clean_DataReader_History_MissingSamplesQueue_missingSeqNrsByLoc() {
+    for (int i=0; i<SDDS_QOS_RELIABILITY_MAX_TOPIC_PARTICIPANTS; i++) {
+        for (int j=0; j<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; j++) {
+            reader_basic_p->history.missingSeqNrsByLoc[i][j] = 0;
+            reader_small_p->history.missingSeqNrsByLoc[i][j] = 0;
+            reader_big_p->history.missingSeqNrsByLoc[i][j] = 0;
+            reader_huge_p->history.missingSeqNrsByLoc[i][j] = 0;
+            reader_basic_p->history.missingSeqNrSlotIsUsed[i][j] = 0;
+            reader_small_p->history.missingSeqNrSlotIsUsed[i][j] = 0;
+            reader_big_p->history.missingSeqNrSlotIsUsed[i][j] = 0;
+            reader_huge_p->history.missingSeqNrSlotIsUsed[i][j] = 0;
+        }
+    }
+}
+
 
 int main()
 {
@@ -43,24 +132,42 @@ int main()
 	Log_setLvl (5);
 	sDDS_init ();
 
+    // active testing until all subscibers have been found
+    struct timeval start;
+    struct timeval tmp;
+    bool allSubsFound = false;
 
-/*
+    writer_basic_p = (Reliable_DataWriter_t*)g_TestQosReliabilityBasicReliableNack_writer;
+    writer_small_p = (Reliable_DataWriter_t*)g_TestQosReliabilitySmallReliableNack_writer;
+    writer_big_p = (Reliable_DataWriter_t*)g_TestQosReliabilityBigReliableNack_writer;
+    writer_huge_p = (Reliable_DataWriter_t*)g_TestQosReliabilityHugeReliableNack_writer;
+    reader_basic_p = (DataReader_t*)g_TestQosReliabilityBasicReliableNack_reader;
+    reader_small_p = (DataReader_t*)g_TestQosReliabilitySmallReliableNack_reader;
+    reader_big_p = (DataReader_t*)g_TestQosReliabilityBigReliableNack_reader;
+    reader_huge_p = (DataReader_t*)g_TestQosReliabilityHugeReliableNack_reader;
+
+    rc_t retBasic = SDDS_RT_NODATA;
+    rc_t retSmall = SDDS_RT_NODATA;
+    rc_t retBig = SDDS_RT_NODATA;
+    rc_t retHuge = SDDS_RT_NODATA;
+
+
 #ifdef TEST_HAS_MULTICAST
 gettimeofday (&start, NULL);
     while (!allSubsFound){
-        DDS_TestQosReliabilityBasicReliableAckDataWriter_write (g_TestQosReliabilityBasicReliableAck_writer, &testQosReliabilityBasicReliableAck_pub, NULL);
-        DDS_TestQosReliabilitySmallReliableAckDataWriter_write (g_TestQosReliabilitySmallReliableAck_writer, &testQosReliabilitySmallReliableAck_pub, NULL);
-        DDS_TestQosReliabilityBigReliableAckDataWriter_write (g_TestQosReliabilityBigReliableAck_writer, &testQosReliabilityBigReliableAck_pub, NULL);
-        DDS_TestQosReliabilityHugeReliableAckDataWriter_write (g_TestQosReliabilityHugeReliableAck_writer, &testQosReliabilityHugeReliableAck_pub, NULL);
+        DDS_TestQosReliabilityBasicReliableNackDataWriter_write (g_TestQosReliabilityBasicReliableNack_writer, &testQosReliabilityBasicReliableNack_pub, NULL);
+        DDS_TestQosReliabilitySmallReliableNackDataWriter_write (g_TestQosReliabilitySmallReliableNack_writer, &testQosReliabilitySmallReliableNack_pub, NULL);
+        DDS_TestQosReliabilityBigReliableNackDataWriter_write (g_TestQosReliabilityBigReliableNack_writer, &testQosReliabilityBigReliableNack_pub, NULL);
+        DDS_TestQosReliabilityHugeReliableNackDataWriter_write (g_TestQosReliabilityHugeReliableNack_writer, &testQosReliabilityHugeReliableNack_pub, NULL);
 
         if (retBasic != SDDS_RT_OK)
-            retBasic = DDS_TestQosReliabilityBasicReliableAckDataReader_take_next_sample (g_TestQosReliabilityBasicReliableAck_reader, &testQosReliabilityBasicReliableAck_sub_p, NULL);
+            retBasic = DDS_TestQosReliabilityBasicReliableNackDataReader_take_next_sample (g_TestQosReliabilityBasicReliableNack_reader, &testQosReliabilityBasicReliableNack_sub_p, NULL);
         if (retSmall != SDDS_RT_OK)
-            retSmall = DDS_TestQosReliabilitySmallReliableAckDataReader_take_next_sample (g_TestQosReliabilitySmallReliableAck_reader, &testQosReliabilitySmallReliableAck_sub_p, NULL);
+            retSmall = DDS_TestQosReliabilitySmallReliableNackDataReader_take_next_sample (g_TestQosReliabilitySmallReliableNack_reader, &testQosReliabilitySmallReliableNack_sub_p, NULL);
         if (retBig != SDDS_RT_OK)
-            retBig = DDS_TestQosReliabilityBigReliableAckDataReader_take_next_sample (g_TestQosReliabilityBigReliableAck_reader, &testQosReliabilityBigReliableAck_sub_p, NULL);
+            retBig = DDS_TestQosReliabilityBigReliableNackDataReader_take_next_sample (g_TestQosReliabilityBigReliableNack_reader, &testQosReliabilityBigReliableNack_sub_p, NULL);
         if (retHuge != SDDS_RT_OK)
-            retHuge = DDS_TestQosReliabilityHugeReliableAckDataReader_take_next_sample (g_TestQosReliabilityHugeReliableAck_reader, &testQosReliabilityHugeReliableAck_sub_p, NULL);
+            retHuge = DDS_TestQosReliabilityHugeReliableNackDataReader_take_next_sample (g_TestQosReliabilityHugeReliableNack_reader, &testQosReliabilityHugeReliableNack_sub_p, NULL);
 
         allSubsFound = (retBasic == SDDS_RT_OK) && (retSmall == SDDS_RT_OK) && (retBig == SDDS_RT_OK) && (retHuge == SDDS_RT_OK);
 
@@ -74,11 +181,13 @@ gettimeofday (&start, NULL);
     }
 #endif
 
-*/
 
 
+    DDS_TestQosReliabilityBasicReliableNackDataWriter_write (g_TestQosReliabilityBasicReliableNack_writer, &testQosReliabilityBasicReliableNack_pub, NULL);
 
+    sleep(1);
 
+    retBasic = DDS_TestQosReliabilityBasicReliableNackDataReader_take_next_sample (g_TestQosReliabilityBasicReliableNack_reader, &testQosReliabilityBasicReliableNack_sub_p, NULL);
 
     //
     printf ("OK\n");

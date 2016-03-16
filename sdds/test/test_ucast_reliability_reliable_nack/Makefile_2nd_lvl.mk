@@ -15,7 +15,6 @@ SDDS_CONSTANTS_FILE := ./gen_constants.h
 
 include $(SDDS_TOPDIR)/sdds.mk
 
-DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/strings-ds.o
 DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/testqosreliabilityhugereliablenack-ds.o
 DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/testqosreliabilitybigreliablenack-ds.o
 DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/testqosreliabilitysmallreliablenack-ds.o
