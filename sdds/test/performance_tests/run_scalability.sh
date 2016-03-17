@@ -58,6 +58,7 @@ if [ "$2" = "pub" ]; then
         dur=$[60*($test_dur+1)]
         file="eval_scalability/scalability_wireshark_"$i"_0_"$subs".pcapng"	
         tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w $file
+        sleep 10
     done
 elif [ "$2" = "sub" ]; then
     pubs=$3
@@ -78,6 +79,7 @@ elif [ "$2" = "sub" ]; then
         dur=$[60*($test_dur+1)]
         file="eval_scalability/scalability_wireshark_"$pubs"_0_"$i".pcapng"	
         tshark -i eth1 -f "port 23234 || port 23254" -a duration:$dur -w $file
+        sleep 10
     done
 else
     echo $help_str

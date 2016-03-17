@@ -1,0 +1,20 @@
+Event: 1 (write) to Event: 2 (marshalling)
+Samples:14562
+AVG: 229.787238703 us
+STD: 0.0223893274816 us
+MIN: 229.69 us
+MAX: 229.87 us
+
+Event: 2 (marshalling) to Event: 3 (send)
+Samples:14562
+AVG: 98.7773526988 us
+STD: 0.0275523082432 us
+MIN: 98.74 us
+MAX: 101.84 us
+
+Event: 3 (send) to Event: 4 (END)
+Samples:14562
+AVG: 2814.43306414 us
+STD: 0.584335596569 us
+MIN: 2813.4 us
+MAX: 2877.16 us
