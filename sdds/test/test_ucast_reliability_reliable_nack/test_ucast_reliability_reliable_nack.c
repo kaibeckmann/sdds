@@ -151,7 +151,7 @@ int main()
     rc_t retBig = SDDS_RT_NODATA;
     rc_t retHuge = SDDS_RT_NODATA;
 
-
+/*
 #ifdef TEST_HAS_MULTICAST
 gettimeofday (&start, NULL);
     while (!allSubsFound){
@@ -180,8 +180,7 @@ gettimeofday (&start, NULL);
         usleep (500000);
     }
 #endif
-
-
+*/
 
     DDS_TestQosReliabilityBasicReliableNackDataWriter_write (g_TestQosReliabilityBasicReliableNack_writer, &testQosReliabilityBasicReliableNack_pub, NULL);
 
