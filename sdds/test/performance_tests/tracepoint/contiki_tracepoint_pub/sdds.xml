@@ -3,7 +3,7 @@
     script = "sdds.gsl"
     endian = "little"
     os = "contiki"
-    ip = "fe80::221:2eff:ff00:22e3"
+    ip = "fe80::221:2eff:ff00:1210"
     port = "23234"
     >
 	Publisher for trace point maesuring
