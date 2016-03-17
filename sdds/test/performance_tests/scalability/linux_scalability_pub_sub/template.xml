@@ -17,7 +17,8 @@
 
     <define name = "SDDS_NET_MAX_BUF_SIZE" value = "128"/>
     <define name = "SDDS_QOS_HISTORY_DEPTH" value = "3"/>
-    <define name = "SDDS_NET_MAX_LOCATOR_COUNT" value = "10"/>
+    <define name = "SDDS_NET_MAX_LOCATOR_COUNT" value = "50"/>
+    <define name = "SDDS_DISCOVERY_MAX_PARTICIPANTS" value = "50"/>
 
     <define name = "SDDS_DISCOVERY_RECEIVE_TIMER" value = "1"/>
     <define name = "SDDS_DISCOVERY_PARTICIPANT_TIMER" value = "30"/>

@@ -20,7 +20,7 @@ void write_MACAddr() {
     eeprom_write_byte((uint8_t*)myAddr+3, 0xFF);
     eeprom_write_byte((uint8_t*)myAddr+2, 0x00);
     eeprom_write_byte((uint8_t*)myAddr+1, 0x22);
-    eeprom_write_byte((uint8_t*)myAddr+0, 0xB9);
+    eeprom_write_byte((uint8_t*)myAddr+0, 0xBA);
 }
 #endif
 
