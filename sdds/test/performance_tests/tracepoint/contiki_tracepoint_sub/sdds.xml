@@ -17,5 +17,12 @@
         <attribute name = "data" type = "DDS_short">playload</attribute>
     </topic>
 
+    <define name = "FEATURE_SDDS_TRACING_ENABLED"/>
+    <define name = "FEATURE_SDDS_TRACING_RECV_NORMAL"/>
+    <define name = "FEATURE_SDDS_TRACING_RECV_PAKET"/>
+    <define name = "FEATURE_SDDS_TRACING_PROCESS_FRAME"/>
+    <define name = "FEATURE_SDDS_TRACING_HISTORY_ENQUEUE"/>
+    <define name = "FEATURE_SDDS_TRACING_CALL_LISTNER"/>
+
     <role topic = "tracepoint" type = "subscriber"/>
 </project>

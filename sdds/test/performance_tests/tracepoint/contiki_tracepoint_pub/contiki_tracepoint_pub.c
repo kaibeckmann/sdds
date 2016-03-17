@@ -48,7 +48,10 @@ PROCESS_THREAD(contiki_tracepoint_pub, ev, data)
     for (;;) {
         ret = DDS_TracepointDataWriter_write (g_Tracepoint_writer, &tracepoint_pub, NULL);
 #ifdef FEATURE_SDDS_TRACING_ENABLED
+        Trace_point(SDDS_TRACE_EVENT_DUMMY_3);
+        Trace_point(SDDS_TRACE_EVENT_DUMMY_4);
         Trace_point(SDDS_TRACE_EVENT_DUMMY_1);
+        Trace_point(SDDS_TRACE_EVENT_DUMMY_2);
         Trace_point(SDDS_TRACE_EVENT_STOP);
 #endif
 		etimer_set(&g_wait_timer, 1);

@@ -108,7 +108,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 		ps = ps_fix[i]
 		s = s_fix[i]
 		eval_line = eval_line+"(%d,"%p+"%d,"%ps+"%d)\t"%s
-		x.append(i)
+		x.append(max(p,s))
 
 	#print eval_line
 	eval_file.write(eval_line+"\n")
@@ -407,7 +407,7 @@ if sys.argv[2] == "sub":
 	title = title+"(%d"%p+", %d"%ps+", x) "
 if sys.argv[2] == "fix":
 	typ = 3
-	plt.xlabel('Subscriber')
+	plt.xlabel('nodes')
 if argc > 6 and sys.argv[6] == 'lbud':
 	lbud = "with latency budget"
 
