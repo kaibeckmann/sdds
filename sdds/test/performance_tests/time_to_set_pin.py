@@ -21,4 +21,4 @@ with open(name, 'rb') as csvfile:
             samples += 1
 
 avr_time = time / samples
-print "%d us"%avr_time 
+print "%d ns"%avr_time 
