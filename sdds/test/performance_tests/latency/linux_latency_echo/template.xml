@@ -14,7 +14,7 @@
     <define name = "FEATURE_SDDS_MULTICAST_ENABLED"/>
     <define name = "FEATURE_SDDS_BUILTIN_TOPICS_ENABLED"/>
     <define name = "FEATURE_SDDS_DISCOVERY_ENABLED"/>
-    <define name = "SDDS_BUILTIN_MULTICAST_ADDRESS" value = "&quot;{ip}&quot;"/>
+    <define name = "DISCOVERY_UNICAST_SUBSCRIPTION"/>
 
     <!--<define name = "SDDS_NET_MAX_BUF_SIZE" value = "128+{msg_size}"/> -->
     <define name = "SDDS_NET_MAX_BUF_SIZE" value = "65536000"/> 
