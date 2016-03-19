@@ -25,5 +25,10 @@
         <attribute name = "data" type = "DDS_string" size = "{msg_size}">playload in bytes</attribute>
     </topic>
 
+    <define name = "SDDS_QOS_LATENCYBUDGET"/>
+    <define name = "SDDS_QOS_DW_LATBUD" value = "10000"/>
+    <define name = "SDDS_QOS_DW_COMM" value = "1000"/>
+    <define name = "SDDS_QOS_DW_READ" value = "1000"/>
+
     <role topic = "throughput" type = "subscriber"/>
 </project>
