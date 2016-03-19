@@ -24,20 +24,20 @@
 	    Topic for measuring latency
         <attribute name = "time" type = "DDS_long_long">timestamp set by the application</attribute>
         <attribute name = "data" type = "DDS_string" size = "{msg_size}">playload in bytes</attribute>
-        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="150"/>
+<!--        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="150"/> -->
     </topic>
     <topic name = "latency_echo" domain = "1" id = "7">
 	    Echo Topic for measuring latency
         <attribute name = "time" type = "DDS_long_long">timestamp set by the application</attribute>
         <attribute name = "data" type = "DDS_string" size = "{msg_size}">playload in bytes</attribute>
-        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="150"/>
+<!--        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="150"/> -->
     </topic>
-
+<!--
     <define name = "SDDS_HAS_QOS_RELIABILITY" />
     <define name = "SDDS_QOS_RELIABILITY_MAX_TOPIC_PARTICIPANTS" value = "1"/>
     <define name = "SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE" value = "1"/>
     <define name = "SDDS_QOS_RELIABILITY_RELIABLE_SUBS_WITHOUT_PUBS" value = "1"/>
-
+-->
 <!--
     <define name = "SDDS_QOS_LATENCYBUDGET"/>
     <define name = "SDDS_QOS_DW_LATBUD" value = "10000"/>
