@@ -33,7 +33,7 @@
 
     <define name = "SDDS_QOS_LATENCYBUDGET"/>
     <define name = "SDDS_QOS_DW_LATBUD" value = "10000"/>
-    <define name = "SDDS_QOS_DW_COMM" value = "1000"/>
+    <define name = "SDDS_QOS_DW_COMM" value = "2000"/>
     <define name = "SDDS_QOS_DW_READ" value = "1000"/>
 
     <role topic = "latency" type = "publisher">
