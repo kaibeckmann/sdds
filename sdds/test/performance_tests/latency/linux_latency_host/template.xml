@@ -15,7 +15,7 @@
     <define name = "FEATURE_SDDS_BUILTIN_TOPICS_ENABLED"/>
     <define name = "FEATURE_SDDS_DISCOVERY_ENABLED"/>
     <define name = "DISCOVERY_UNICAST_SUBSCRIPTION"/>
-    <define name = "SDDS_DISCOVERY_RECEIVE_TIMER" value = "30"/>
+    <define name = "SDDS_DISCOVERY_RECEIVE_TIMER" value = "1"/>
     <define name = "SDDS_DISCOVERY_PARTICIPANT_TIMER" value = "30"/>
     <define name = "SDDS_DISCOVERY_PUBLICATION_TIMER" value = "60"/>
 
@@ -46,8 +46,6 @@
     <define name = "SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE" value = "1"/>
     <define name = "SDDS_QOS_RELIABILITY_RELIABLE_SUBS_WITHOUT_PUBS" value = "1"/>
 -->
-    <role topic = "latency" type = "publisher">
-	    <subscriber ip = "{sub_ip}" />	
-    </role>
+    <role topic = "latency" type = "publisher"/>
     <role topic = "latency_echo" type = "subscriber" />
 </project>
