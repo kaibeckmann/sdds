@@ -36,7 +36,7 @@ int main()
         if (ret != DDS_RETCODE_OK) {
             continue;
         }
-        else (ret == DDS_RETCODE_OK) {
+        else {
             if (!subscribed) {
                 subscribed = true;    
 

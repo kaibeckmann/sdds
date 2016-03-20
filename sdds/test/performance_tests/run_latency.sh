@@ -44,6 +44,7 @@ elif [ "$4" = "echo" ]; then
         ssh $host -l pi 'bash -s' < latency/./test_latency_host.sh $msg_count $size $echo_ip $iface $inet
         # echo server is runnung forever, abort
         latency/./abort_latency.sh "echo" $echo
+        latency/./abort_latency.sh "host" $host
     done
 fi
 
