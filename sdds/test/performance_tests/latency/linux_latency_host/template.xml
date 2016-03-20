@@ -32,13 +32,19 @@
 	    Topic for measuring latency
         <attribute name = "time" type = "DDS_long_long">timestamp set by the application</attribute>
         <attribute name = "data" type = "DDS_string" size = "{msg_size}">playload in bytes</attribute>
-<!--        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="150"/> -->
+<!--    
+        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="besteffort"/>
+        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="150"/> 
+-->
     </topic>
     <topic name = "latency_echo" domain = "1" id = "7">
 	    Echo Topic for measuring latency
         <attribute name = "time" type = "DDS_long_long">timestamp set by the application</attribute>
         <attribute name = "data" type = "DDS_string" size = "{msg_size}">playload in bytes</attribute>
-<!--        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="150"/> -->
+<!--    
+        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="besteffort"/>
+        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="150"/> 
+-->
     </topic>
 <!--
     <define name = "SDDS_HAS_QOS_RELIABILITY" />
