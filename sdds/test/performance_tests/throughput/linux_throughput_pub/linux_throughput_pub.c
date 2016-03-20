@@ -20,8 +20,13 @@ int main()
     uint64_t msg_size_bit = THROUGHPUT_MSG_SIZE * 8;
     uint64_t max_delay = ((SEC_USEC * msg_size_bit)  / (THROUGHPUT_MAX_MBIT * 1000000));
 
+    memset(&throughput_pub, 'x', THROUGHPUT_MSG_SIZE);
+
     for (;;) {
         ret = DDS_ThroughputDataWriter_write (g_Throughput_writer, &throughput_pub, NULL);
+        if (ret != DDS_RETCODE_OK) {
+                printf("send error\n");
+        }
 
         usleep(max_delay);
     }
