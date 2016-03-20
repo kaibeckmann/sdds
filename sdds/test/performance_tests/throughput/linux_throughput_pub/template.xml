@@ -31,7 +31,10 @@
     <topic name = "throughput" domain = "1" id = "6">
 	    Topic for measuring throughput
         <attribute name = "data" type = "DDS_string" size = "{msg_size}">playload in bytes</attribute>
-<!--        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="150"/> -->
+<!--
+        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="besteffort"/> 
+    <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="150"/> 
+-->
     </topic>
 <!--
     <define name = "SDDS_HAS_QOS_RELIABILITY" />
