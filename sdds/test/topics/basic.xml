@@ -6,7 +6,6 @@
         <attribute name = "m_string" type = "DDS_string" size = "2">2 chars</attribute>
         <attribute name = "l_string" type = "DDS_string" size = "25">25 chars</attribute>
         <attribute name = "xl_string" type = "DDS_string" size = "50">50 chars</attribute>
-        <config type = "qos_history" depth = "5" />
     </topic>
 
     <topic name = "stringsEcho" domain = "1" id = "7">
