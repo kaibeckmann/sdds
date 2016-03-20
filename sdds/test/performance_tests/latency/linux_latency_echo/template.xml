@@ -15,7 +15,7 @@
     <define name = "FEATURE_SDDS_BUILTIN_TOPICS_ENABLED"/>
     <define name = "FEATURE_SDDS_DISCOVERY_ENABLED"/>
     <define name = "DISCOVERY_UNICAST_SUBSCRIPTION"/>
-    <define name = "SDDS_DISCOVERY_RECEIVE_TIMER" value = "1"/>
+    <define name = "SDDS_DISCOVERY_RECEIVE_TIMER" value = "30"/>
     <define name = "SDDS_DISCOVERY_PARTICIPANT_TIMER" value = "30"/>
     <define name = "SDDS_DISCOVERY_PUBLICATION_TIMER" value = "60"/>
     <define name = "SDDS_DISCOVERY_TOPIC_TIMER" value = "0"/>
