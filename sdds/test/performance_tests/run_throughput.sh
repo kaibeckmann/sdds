@@ -11,8 +11,13 @@ start_size=$3
 max_mbit=$4
 inet=$5
 iface="eth0"
+lbud=""
 if [ "$#" -gt 5 ]; then
-    iface=$6
+    if [[ "$6" = "lbud" ]]; then
+        lbud=$6
+    else
+        iface=$6
+    fi
 fi
 
 sub="pi01"
@@ -34,8 +39,8 @@ for (( size=$start_size; size<=$max_size; size=$size*2 )); do
     if [[ "$size" -ge "65536" ]]; then
         size=65500
     fi
-    ssh $pub -l pi 'bash -s' < throughput/./test_throughput_pub.sh $duration $size $sub_ip $iface $max_mbit $inet
-    ssh $sub -l pi 'bash -s' < throughput/./test_throughput_sub.sh $duration $size $iface $max_mbit $inet
+    ssh $pub -l pi 'bash -s' < throughput/./test_throughput_pub.sh $duration $size $sub_ip $iface $max_mbit $inet $lbud
+    ssh $sub -l pi 'bash -s' < throughput/./test_throughput_sub.sh $duration $size $iface $max_mbit $inet $lbud
     # piblisher is running forever, abort
     throughput/./abort_throughput.sh "pub" $pub
 done

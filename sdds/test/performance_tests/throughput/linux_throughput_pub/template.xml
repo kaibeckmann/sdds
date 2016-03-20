@@ -41,10 +41,12 @@
     <define name = "SDDS_QOS_RELIABILITY_MAX_TOPIC_PARTICIPANTS" value = "1"/>
     <define name = "SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE" value = "1"/>
     <define name = "SDDS_QOS_RELIABILITY_RELIABLE_SUBS_WITHOUT_PUBS" value = "1"/>
+-->
+<!--lbud
     <define name = "SDDS_QOS_LATENCYBUDGET"/>
     <define name = "SDDS_QOS_DW_LATBUD" value = "10000"/>
     <define name = "SDDS_QOS_DW_COMM" value = "1000"/>
     <define name = "SDDS_QOS_DW_READ" value = "1000"/>
--->
+lbud-->
     <role topic = "throughput" type = "publisher"/>
 </project>
