@@ -40,5 +40,4 @@
     <define name = "SDDS_QOS_RELIABILITY_RELIABLE_SUBS_WITHOUT_PUBS" value = "1"/>
 -->
     <role topic = "throughput" type = "publisher"/>
-    </role>
 </project>
