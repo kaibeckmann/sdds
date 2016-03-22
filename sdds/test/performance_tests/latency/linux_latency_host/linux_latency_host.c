@@ -24,6 +24,7 @@ int main()
     static long duration;
     static int msg_count = 0;
     FILE* log = fopen(LATENCY_LOG, "w+");
+    fclose(log);
 
     sleep(5);
 
@@ -47,6 +48,7 @@ int main()
             end_time = end.tv_sec * 1000000 + end.tv_usec;
             // if it takes more then 10 sec skip the message
             if ( (end_time - start_time) >= 60000000) {
+                printf("skip sample\n");
                 skip = true;
                 break;
             }
@@ -59,12 +61,13 @@ int main()
 
                 // skip first sample
                 if (msg_count != 0) {
+                    log = fopen(LATENCY_LOG, "a");
                     fprintf(log, "%ld\n", duration); 
+                    fclose(log);
                 }
                 msg_count++;
         }
     }
 
-    fclose(log);
     return 0;
 }

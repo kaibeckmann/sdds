@@ -125,7 +125,7 @@ void throughputListener_on_data_available(
     for (i = 0; i < throughputSeq_get_length(&data_seq); ++i) {
         if (DDS_SampleInfoSeq_get_reference(&info_seq, i)->valid_data) {
             throughput* inst = throughputSeq_get_reference(&data_seq, i);
-            printf("recv: %llu\n", strlen(inst->data));
+            //printf("recv: %llu\n", strlen(inst->data));
             bytes_received += strlen(inst->data);
         }
     }
@@ -294,6 +294,7 @@ int main(int argc, char *argv[])
     log_file = argv[2];
 
     DDS_ReturnCode_t retcode = subscriber_main(domainId, duration);
+    printf("subscriber_main: %d\n", retcode);
 
     FILE* log = fopen(log_file, "w+");
 

@@ -20,6 +20,9 @@ ssh $echo -l pi ' rm -f *.log latency_echo'
 cd latency
 
 for (( size=$start_size; size<=$max_msg_size; size=$size*2 )); do
+    if [[ "$size" -ge "65536" ]]; then
+        size=63000
+    fi
     echo "build project"
     sed s/{msg_size}/$size/ latency.template > latency.idl
     make clean all

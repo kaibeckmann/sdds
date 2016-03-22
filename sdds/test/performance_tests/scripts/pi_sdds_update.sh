@@ -24,6 +24,6 @@ host=(
 
 for pi in ${host[@]}; do
 	echo "connect to $pi"
-	ssh $pi -l pi "cd ~/sdds; git clean -fd; git pull upstream master;" 
+	ssh $pi -l pi "cd ~/sdds; git stash; git stash drop; git clean -fd; git pull upstream master;" 
 done
 exit
