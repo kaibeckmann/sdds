@@ -25,6 +25,7 @@ error.log
 
 # Generated files
 gen_constants.h
+local_constants.h
 *-ds.h
 *-ds.c
 *_sdds_impl.h

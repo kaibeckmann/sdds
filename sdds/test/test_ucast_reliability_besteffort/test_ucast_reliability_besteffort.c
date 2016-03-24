@@ -12,6 +12,55 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+
+Reliable_DataWriter_t* writer_basic_p;
+Reliable_DataWriter_t* writer_small_p;
+Reliable_DataWriter_t* writer_big_p;
+Reliable_DataWriter_t* writer_huge_p;
+DataReader_t* reader_basic_p;
+DataReader_t* reader_small_p;
+DataReader_t* reader_big_p;
+DataReader_t* reader_huge_p;
+
+
+void clean_DataWriter_SeqNrs() {
+    writer_basic_p->seqNr = 0;
+    writer_small_p->seqNr = 0;
+    writer_big_p->seqNr = 0;
+    writer_huge_p->seqNr = 0;
+}
+
+void clean_DataReader_History() {
+    while (sdds_History_dequeue (&reader_basic_p->history));
+    while (sdds_History_dequeue (&reader_small_p->history));
+    while (sdds_History_dequeue (&reader_big_p->history));
+    while (sdds_History_dequeue (&reader_huge_p->history));
+
+    for (int i=0; i<SDDS_QOS_HISTORY_DEPTH; i++) {
+        reader_basic_p->history.samples[i].instance = NULL;
+        reader_basic_p->history.samples[i].seqNr = 0;
+        reader_small_p->history.samples[i].instance = NULL;
+        reader_small_p->history.samples[i].seqNr = 0;
+        reader_big_p->history.samples[i].instance = NULL;
+        reader_big_p->history.samples[i].seqNr = 0;
+        reader_huge_p->history.samples[i].instance = NULL;
+        reader_huge_p->history.samples[i].seqNr = 0;
+    }
+}
+
+void clean_DataReader_History_MissingSamplesQueue_Locators() {
+    for (int i=0; i<SDDS_QOS_RELIABILITY_MAX_TOPIC_PARTICIPANTS; i++) {
+        reader_basic_p->history.qos_locator[i] = 0;
+        reader_small_p->history.qos_locator[i] = 0;
+        reader_big_p->history.qos_locator[i] = 0;
+        reader_huge_p->history.qos_locator[i] = 0;
+    }
+}
+
+
+
+
+
 int main()
 {
 #ifdef TEST_HAS_MULTICAST
@@ -38,7 +87,6 @@ int main()
     TestQosReliabilityHugeBesteffort* testqosreliabilityhuge_sub_p = &testqosreliabilityhuge_sub;
 
     // active testing until all subscibers have been found
-    // timeout = 20 secs
     struct timeval start;
     struct timeval tmp;
     bool allSubsFound = false;
@@ -46,6 +94,16 @@ int main()
     rc_t retSmall = SDDS_RT_NODATA;
     rc_t retBig = SDDS_RT_NODATA;
     rc_t retHuge = SDDS_RT_NODATA;
+
+    writer_basic_p = (Reliable_DataWriter_t*)g_TestQosReliabilityBasicBesteffort_writer;
+    writer_small_p = (Reliable_DataWriter_t*)g_TestQosReliabilitySmallBesteffort_writer;
+    writer_big_p = (Reliable_DataWriter_t*)g_TestQosReliabilityBigBesteffort_writer;
+    writer_huge_p = (Reliable_DataWriter_t*)g_TestQosReliabilityHugeBesteffort_writer;
+    reader_basic_p = (DataReader_t*)g_TestQosReliabilityBasicBesteffort_reader;
+    reader_small_p = (DataReader_t*)g_TestQosReliabilitySmallBesteffort_reader;
+    reader_big_p = (DataReader_t*)g_TestQosReliabilityBigBesteffort_reader;
+    reader_huge_p = (DataReader_t*)g_TestQosReliabilityHugeBesteffort_reader;
+
 
 #ifdef TEST_HAS_MULTICAST
     gettimeofday (&start, NULL);
@@ -76,39 +134,31 @@ int main()
     }
 #endif
 
-    // TEST1: Proper upcount & overflow behavior of all seqSizes
-    ((Reliable_DataWriter_t*)g_TestQosReliabilityBasicBesteffort_writer)->seqNr = 13;
-    ((Reliable_DataWriter_t*)g_TestQosReliabilitySmallBesteffort_writer)->seqNr = 253;
-    ((Reliable_DataWriter_t*)g_TestQosReliabilityBigBesteffort_writer)->seqNr = 65533;
-    ((Reliable_DataWriter_t*)g_TestQosReliabilityHugeBesteffort_writer)->seqNr = 4294967293;
+    // TEST 1: Proper upcount & overflow behavior of all seqSizes
+    writer_basic_p->seqNr = 13;
+    writer_small_p->seqNr = 253;
+    writer_big_p->seqNr = 65533;
+    writer_huge_p->seqNr = 4294967293;
+
+
     for (int i=0; i<5; i++){
         DDS_TestQosReliabilityBasicBesteffortDataWriter_write (g_TestQosReliabilityBasicBesteffort_writer, &testqosreliabilitybasic_pub, NULL);
         DDS_TestQosReliabilitySmallBesteffortDataWriter_write (g_TestQosReliabilitySmallBesteffort_writer, &testqosreliabilitysmall_pub, NULL);
         DDS_TestQosReliabilityBigBesteffortDataWriter_write (g_TestQosReliabilityBigBesteffort_writer, &testqosreliabilitybig_pub, NULL);
         DDS_TestQosReliabilityHugeBesteffortDataWriter_write (g_TestQosReliabilityHugeBesteffort_writer, &testqosreliabilityhuge_pub, NULL);
-        usleep (5);
-
-        DDS_TestQosReliabilityBasicBesteffortDataReader_take_next_sample (g_TestQosReliabilityBasicBesteffort_reader, &testqosreliabilitybasic_sub_p, NULL);
-        DDS_TestQosReliabilitySmallBesteffortDataReader_take_next_sample (g_TestQosReliabilitySmallBesteffort_reader, &testqosreliabilitysmall_sub_p, NULL);
-        DDS_TestQosReliabilityBigBesteffortDataReader_take_next_sample (g_TestQosReliabilityBigBesteffort_reader, &testqosreliabilitybig_sub_p, NULL);
-        DDS_TestQosReliabilityHugeBesteffortDataReader_take_next_sample (g_TestQosReliabilityHugeBesteffort_reader, &testqosreliabilityhuge_sub_p, NULL);
+        usleep (10);
     }
 
-    assert((((Reliable_DataWriter_t*)g_TestQosReliabilityBasicBesteffort_writer)->seqNr & 0x0f) == 2);
-    assert( (uint8_t) ((Reliable_DataWriter_t*)g_TestQosReliabilitySmallBesteffort_writer)->seqNr == 2);
-    assert( (uint16_t) ((Reliable_DataWriter_t*)g_TestQosReliabilityBigBesteffort_writer)->seqNr == 2);
-    assert( (uint32_t) ((Reliable_DataWriter_t*)g_TestQosReliabilityHugeBesteffort_writer)->seqNr == 2);
+    assert(  writer_basic_p->seqNr == 2 );
+    assert(  writer_small_p->seqNr == 2 );
+    assert(  writer_big_p->seqNr == 2 );
+    assert(  writer_huge_p->seqNr == 2 );
 
-    // TEST2: Proper discarding of older messages
-    ((Reliable_DataWriter_t*)g_TestQosReliabilityBasicBesteffort_writer)->seqNr = 8;
-    ((Reliable_DataWriter_t*)g_TestQosReliabilitySmallBesteffort_writer)->seqNr = 8;
-    ((Reliable_DataWriter_t*)g_TestQosReliabilityBigBesteffort_writer)->seqNr = 8;
-    ((Reliable_DataWriter_t*)g_TestQosReliabilityHugeBesteffort_writer)->seqNr = 8;
 
-    // clearing of history
-    // TODO
+    
 
-    //
+
+
     printf ("OK\n");
     return 0;
 }

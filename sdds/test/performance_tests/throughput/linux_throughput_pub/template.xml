@@ -11,7 +11,15 @@
     >
     Point to Point throughput test
 
-    <define name = "SDDS_NET_MAX_BUF_SIZE" value = "128+{msg_size}"/>
+    <define name = "FEATURE_SDDS_MULTICAST_ENABLED"/>
+    <define name = "FEATURE_SDDS_BUILTIN_TOPICS_ENABLED"/>
+    <define name = "FEATURE_SDDS_DISCOVERY_ENABLED"/>
+    <define name = "DISCOVERY_UNICAST_SUBSCRIPTION"/>
+    <define name = "SDDS_DISCOVERY_RECEIVE_TIMER" value = "1"/>
+    <define name = "SDDS_DISCOVERY_PARTICIPANT_TIMER" value = "10"/>
+    <define name = "SDDS_DISCOVERY_PUBLICATION_TIMER" value = "10"/>
+
+    <define name = "SDDS_NET_MAX_BUF_SIZE" value = "65536"/>
     <define name = "SDDS_QOS_HISTORY_DEPTH" value = "5"/>
     <define name = "SDDS_NET_MAX_LOCATOR_COUNT" value = "10"/>
 
@@ -23,9 +31,22 @@
     <topic name = "throughput" domain = "1" id = "6">
 	    Topic for measuring throughput
         <attribute name = "data" type = "DDS_string" size = "{msg_size}">playload in bytes</attribute>
+<!--
+        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="besteffort"/> 
+        <config type="qos_reliability" reliabilitySeqnrSize="basic" kind="reliable" confirmationtype="ack" max_blocking_time="150"/> 
+-->
     </topic>
-
-    <role topic = "throughput" type = "publisher">
-	    <subscriber ip = "{sub_ip}" />	
-    </role>
+<!--
+    <define name = "SDDS_HAS_QOS_RELIABILITY" />
+    <define name = "SDDS_QOS_RELIABILITY_MAX_TOPIC_PARTICIPANTS" value = "1"/>
+    <define name = "SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE" value = "1"/>
+    <define name = "SDDS_QOS_RELIABILITY_RELIABLE_SUBS_WITHOUT_PUBS" value = "1"/>
+-->
+<!--lbud
+    <define name = "SDDS_QOS_LATENCYBUDGET"/>
+    <define name = "SDDS_QOS_DW_LATBUD" value = "10000"/>
+    <define name = "SDDS_QOS_DW_COMM" value = "1000"/>
+    <define name = "SDDS_QOS_DW_READ" value = "1000"/>
+lbud-->
+    <role topic = "throughput" type = "publisher"/>
 </project>

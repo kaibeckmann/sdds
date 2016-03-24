@@ -146,7 +146,7 @@ def plot_fix(p_fix, ps_fix, s_fix, scal_eval):
 	eval_line = "UDP\t"+str(y).strip('[]').replace(",", "\t")
 	#print eval_line
 	eval_file.write(eval_line+"\n")
-	plot_ws = plt.plot(x, y, '-o')
+	plot_ws = plt.plot(x, y, '->')
 
 	y = []
 	for i in range(0, len(p_fix)):
@@ -261,7 +261,7 @@ def plot_iterate(typ, p, ps, s, scal_eval):
 
 
 	os.chdir(prev_dir)
-	plot_ws = plt.plot(x, y, '-o')
+	plot_ws = plt.plot(x, y, '->')
 	eval_line = "UDP\t"+str(y).strip('[]').replace(",", "\t")
 	#print eval_line
 	eval_file.write(eval_line+"\n")

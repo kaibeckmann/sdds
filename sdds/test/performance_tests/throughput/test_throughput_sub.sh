@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$#" -lt 5 ]; then
-    echo "usage $0 <duration (min)> <msg_size> <iface> <max_mbit> <ipv4|ipv6> [local]"
+    echo "usage $0 <duration (min)> <msg_size> <iface> <max_mbit> <ipv4|ipv6> [local|lbud]"
     exit
 fi
 

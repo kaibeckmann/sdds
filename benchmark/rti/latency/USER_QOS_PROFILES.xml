@@ -81,7 +81,7 @@ RTI Connext user manual.
 
              A QoS profile groups a set of related QoS.
         -->
-        <qos_profile name="latency_Profile" base_name="BuiltinQosLibExp::Generic.StrictReliable" is_default_qos="true">
+        <qos_profile name="latency_Profile" is_default_qos="true">
             <!-- QoS used to configure the data writer created in the example code -->                
             <datawriter_qos>
                 <publication_name>
@@ -108,6 +108,31 @@ RTI Connext user manual.
                 </participant_name>
 
             </participant_qos>
+
+            <topic name="latency">
+                <consumer_defaults>
+                    <transport_selection>
+                        <enabled_transports>
+                            <element>
+                                builtin.udpv6
+                            </element>
+                        </enabled_transports>
+                    </transport_selection>
+                </consumer_defaults>
+            </topic>
+
+            <topic name="latencyEcho">
+                <consumer_defaults>
+                    <transport_selection>
+                        <enabled_transports>
+                            <element>
+                                builtin.udpv6
+                            </element>
+                        </enabled_transports>
+                    </transport_selection>
+                </consumer_defaults>
+            </topic>
+
         </qos_profile>
 
     </qos_library>

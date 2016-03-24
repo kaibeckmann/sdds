@@ -26,16 +26,24 @@ int main()
     static long long now_time;
     static long long duration = 0;
 
-    gettimeofday(&start, NULL);
-    start_time = (start.tv_sec * 1000000 + start.tv_usec);
-
     static uint64_t bytes_received = 0;
+
+    bool_t subscribed = false; 
 
     while (duration < DURATION_USEC) {
         ret = DDS_ThroughputDataReader_take_next_sample(g_Throughput_reader,
                 &throughput_sub_p, NULL);
-        if (ret == DDS_RETCODE_OK) {
-        		bytes_received += THROUGHPUT_MSG_SIZE;
+        if (ret != DDS_RETCODE_OK) {
+            continue;
+        }
+        else {
+            if (!subscribed) {
+                subscribed = true;    
+
+                gettimeofday(&start, NULL);
+                start_time = (start.tv_sec * 1000000 + start.tv_usec);
+            }
+            bytes_received += THROUGHPUT_MSG_SIZE;
         }
         gettimeofday(&now, NULL);
         now_time = (now.tv_sec * 1000000 + now.tv_usec);
