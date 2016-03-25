@@ -142,8 +142,7 @@ int _gnrc_rpl_trickle_start(char *arg1)
 
 int _gnrc_rpl_send_dis(void)
 {
-    ipv6_addr_t all_RPL_nodes = GNRC_RPL_ALL_NODES_ADDR;
-    gnrc_rpl_send_DIS(NULL, &all_RPL_nodes);
+    gnrc_rpl_send_DIS(NULL, (ipv6_addr_t *) &ipv6_addr_all_rpl_nodes);
 
     puts("success: send a DIS\n");
     return 0;
@@ -186,11 +185,13 @@ int _gnrc_rpl_dodag_show(void)
         if (gnrc_rpl_instances[i].state == 0) {
             continue;
         }
-        printf("instance [%d | mop: %d | ocp: %d | mhri: %d | mri %d]\n", gnrc_rpl_instances[i].id,
-                gnrc_rpl_instances[i].mop, gnrc_rpl_instances[i].of->ocp,
-                gnrc_rpl_instances[i].min_hop_rank_inc, gnrc_rpl_instances[i].max_rank_inc);
 
         dodag = &gnrc_rpl_instances[i].dodag;
+
+        printf("instance [%d | Iface: %" PRIkernel_pid " | mop: %d | ocp: %d | mhri: %d | mri %d]\n",
+                gnrc_rpl_instances[i].id, dodag->iface,
+                gnrc_rpl_instances[i].mop, gnrc_rpl_instances[i].of->ocp,
+                gnrc_rpl_instances[i].min_hop_rank_inc, gnrc_rpl_instances[i].max_rank_inc);
 
         tc = (((uint64_t) dodag->trickle.msg_callback_timer.long_target << 32)
                 | dodag->trickle.msg_callback_timer.target) - xnow;
