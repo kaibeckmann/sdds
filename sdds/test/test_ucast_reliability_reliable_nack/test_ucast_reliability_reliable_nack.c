@@ -38,19 +38,15 @@ DataReader_t* reader_huge_p;
 
 void clean_DataWriter_samplesToKeep() {
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-        writer_basic_p->samplesToKeep[i].data = NULL;
         writer_basic_p->samplesToKeep[i].seqNr = 0;
         writer_basic_p->samplesToKeep[i].timeStamp = 0;
         writer_basic_p->samplesToKeep[i].isUsed = 0;
-        writer_small_p->samplesToKeep[i].data = NULL;
         writer_small_p->samplesToKeep[i].seqNr = 0;
         writer_small_p->samplesToKeep[i].timeStamp = 0;
         writer_small_p->samplesToKeep[i].isUsed = 0;
-        writer_big_p->samplesToKeep[i].data = NULL;
         writer_big_p->samplesToKeep[i].seqNr = 0;
         writer_big_p->samplesToKeep[i].timeStamp = 0;
         writer_big_p->samplesToKeep[i].isUsed = 0;
-        writer_huge_p->samplesToKeep[i].data = NULL;
         writer_huge_p->samplesToKeep[i].seqNr = 0;
         writer_huge_p->samplesToKeep[i].timeStamp = 0;
         writer_huge_p->samplesToKeep[i].isUsed = 0;
