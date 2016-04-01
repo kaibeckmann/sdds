@@ -75,12 +75,16 @@ ifneq (,$(filter gnrc_zep,$(USEMODULE)))
   USEMODULE += ieee802154
   USEMODULE += gnrc_udp
   USEMODULE += random
-  USEMODULE += vtimer
+  USEMODULE += xtimer
 endif
 
 ifneq (,$(filter gnrc_tftp,$(USEMODULE)))
   USEMODULE += gnrc_udp
   USEMODULE += xtimer
+endif
+
+ifneq (,$(filter gnrc_rpl_p2p,$(USEMODULE)))
+  USEMODULE += gnrc_rpl
 endif
 
 ifneq (,$(filter gnrc_rpl,$(USEMODULE)))
@@ -354,10 +358,6 @@ ifneq (,$(filter sema,$(USEMODULE)))
   USEMODULE += xtimer
 endif
 
-ifneq (,$(filter vtimer,$(USEMODULE)))
-  USEMODULE += xtimer
-  USEMODULE += timex
-endif
 
 ifneq (,$(filter libfixmath-unittests,$(USEMODULE)))
   USEPKG += libfixmath
@@ -429,7 +429,6 @@ endif
 
 ifneq (,$(filter pthread,$(USEMODULE)))
     USEMODULE += xtimer
-    USEMODULE += vtimer
     USEMODULE += timex
 endif
 
