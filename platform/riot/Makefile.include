@@ -83,7 +83,7 @@ endif
 ifeq ($(OS),Darwin)
 	RANDOM ?= 0x$(shell jot -r -w%08x 1 0 0xffffffff)
 else
-	RANDOM ?= 0x$(shell </dev/urandom tr -dc 0-9a-f | dd bs=8 count=1 status=none)
+	RANDOM ?= 0x$(shell </dev/urandom tr -dc 0-9a-f | dd bs=8 count=1 status=noxfer)
 endif
 export RANDOM
 
