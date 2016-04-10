@@ -78,6 +78,7 @@ void clean_DataReader_History() {
         reader_huge_p->history.samples[i].seqNr = 0;
     }
 }
+
 void clean_DataReader_History_MissingSamplesQueue_Locators() {
     for (int i=0; i<SDDS_QOS_RELIABILITY_MAX_TOPIC_PARTICIPANTS; i++) {
         reader_basic_p->history.qos_locator[i] = 0;
@@ -141,13 +142,9 @@ int main() {
     reader_big_p = (DataReader_t*)g_TestQosReliabilityBigReliableAck_reader;
     reader_huge_p = (DataReader_t*)g_TestQosReliabilityHugeReliableAck_reader;
 
-    testQosReliabilityBasicReliableAck_pub.number = 100;
-    testQosReliabilitySmallReliableAck_pub.number = 200;
-    testQosReliabilityBigReliableAck_pub.number = 300;
-    testQosReliabilityHugeReliableAck_pub.number = 400;
 
 #ifdef TEST_HAS_MULTICAST
-gettimeofday (&start, NULL);
+    gettimeofday (&start, NULL);
     while (!allSubsFound){
         DDS_TestQosReliabilityBasicReliableAckDataWriter_write (g_TestQosReliabilityBasicReliableAck_writer, &testQosReliabilityBasicReliableAck_pub, NULL);
         DDS_TestQosReliabilitySmallReliableAckDataWriter_write (g_TestQosReliabilitySmallReliableAck_writer, &testQosReliabilitySmallReliableAck_pub, NULL);
@@ -171,126 +168,21 @@ gettimeofday (&start, NULL);
             return SDDS_RT_FAIL;
         }
 
-        usleep (500000);
-    }
-#else
-    DDS_TestQosReliabilityBasicReliableAckDataWriter_write (g_TestQosReliabilityBasicReliableAck_writer, &testQosReliabilityBasicReliableAck_pub, NULL);
-    DDS_TestQosReliabilitySmallReliableAckDataWriter_write (g_TestQosReliabilitySmallReliableAck_writer, &testQosReliabilitySmallReliableAck_pub, NULL);
-    DDS_TestQosReliabilityBigReliableAckDataWriter_write (g_TestQosReliabilityBigReliableAck_writer, &testQosReliabilityBigReliableAck_pub, NULL);
-    DDS_TestQosReliabilityHugeReliableAckDataWriter_write (g_TestQosReliabilityHugeReliableAck_writer, &testQosReliabilityHugeReliableAck_pub, NULL);
-    usleep(100);
-
-
-    retBasic = DDS_TestQosReliabilityBasicReliableAckDataReader_take_next_sample (g_TestQosReliabilityBasicReliableAck_reader, &testQosReliabilityBasicReliableAck_sub_p, NULL);
-    retSmall = DDS_TestQosReliabilitySmallReliableAckDataReader_take_next_sample (g_TestQosReliabilitySmallReliableAck_reader, &testQosReliabilitySmallReliableAck_sub_p, NULL);
-    retBig = DDS_TestQosReliabilityBigReliableAckDataReader_take_next_sample (g_TestQosReliabilityBigReliableAck_reader, &testQosReliabilityBigReliableAck_sub_p, NULL);
-    retHuge = DDS_TestQosReliabilityHugeReliableAckDataReader_take_next_sample (g_TestQosReliabilityHugeReliableAck_reader, &testQosReliabilityHugeReliableAck_sub_p, NULL);
-#endif
-
-    assert (testQosReliabilityBasicReliableAck_sub_p->number == 100);
-    assert (testQosReliabilitySmallReliableAck_sub_p->number == 200);
-    assert (testQosReliabilityBigReliableAck_sub_p->number == 300);
-    assert (testQosReliabilityHugeReliableAck_sub_p->number == 400);
-
-
-    clean_DataWriter_samplesToKeep();
-    clean_DataWriter_SeqNrs();
-    clean_DataReader_History();
-
-    // insert new samples until queue is full
-    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-        DDS_TestQosReliabilityBasicReliableAckDataWriter_write (g_TestQosReliabilityBasicReliableAck_writer, &testQosReliabilityBasicReliableAck_pub, NULL);
+        usleep (100000);
     }
 
-    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++ ){
-        assert( writer_basic_p->samplesToKeep[i].seqNr == i );
-        assert( writer_basic_p->samplesToKeep[i].isUsed != 0 );
-    }
-
-    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-        DDS_TestQosReliabilitySmallReliableAckDataWriter_write (g_TestQosReliabilitySmallReliableAck_writer, &testQosReliabilitySmallReliableAck_pub, NULL);
-    }
-    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++ ){
-        assert( writer_small_p->samplesToKeep[i].seqNr == i );
-        assert( writer_small_p->samplesToKeep[i].isUsed != 0 );
-    }
-
-    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-        DDS_TestQosReliabilityBigReliableAckDataWriter_write (g_TestQosReliabilityBigReliableAck_writer, &testQosReliabilityBigReliableAck_pub, NULL);
-    }
-    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++ ){
-        assert( writer_big_p->samplesToKeep[i].seqNr == i );
-        assert( writer_big_p->samplesToKeep[i].isUsed != 0 );
-    }
-
-    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-        DDS_TestQosReliabilityHugeReliableAckDataWriter_write (g_TestQosReliabilityHugeReliableAck_writer, &testQosReliabilityHugeReliableAck_pub, NULL);
-    }
-    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++ ){
-        assert( writer_huge_p->samplesToKeep[i].seqNr == i );
-        assert( writer_huge_p->samplesToKeep[i].isUsed != 0 );
-    }
-
-
-
-    // try to insert more samples, which should be discarded
-    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-        DDS_TestQosReliabilityBasicReliableAckDataWriter_write (g_TestQosReliabilityBasicReliableAck_writer, &testQosReliabilityBasicReliableAck_pub, NULL);
-        DDS_TestQosReliabilitySmallReliableAckDataWriter_write (g_TestQosReliabilitySmallReliableAck_writer, &testQosReliabilitySmallReliableAck_pub, NULL);
-        DDS_TestQosReliabilityBigReliableAckDataWriter_write (g_TestQosReliabilityBigReliableAck_writer, &testQosReliabilityBigReliableAck_pub, NULL);
-        DDS_TestQosReliabilityHugeReliableAckDataWriter_write (g_TestQosReliabilityHugeReliableAck_writer, &testQosReliabilityHugeReliableAck_pub, NULL);
-    }
-
-    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-        assert( writer_basic_p->samplesToKeep[i].seqNr == i );
-        assert( writer_small_p->samplesToKeep[i].seqNr == i );
-        assert( writer_big_p->samplesToKeep[i].seqNr == i );
-        assert( writer_huge_p->samplesToKeep[i].seqNr == i );
-
-        assert( writer_basic_p->samplesToKeep[i].isUsed != 0 );
-        assert( writer_small_p->samplesToKeep[i].isUsed != 0 );
-        assert( writer_big_p->samplesToKeep[i].isUsed != 0 );
-        assert( writer_huge_p->samplesToKeep[i].isUsed != 0 );
-    }
-    sleep(1);
-
-    // replacement of samples after max_blocking_time
-    writer_basic_p->seqNr = 5;
-    writer_small_p->seqNr = 5;
-    writer_big_p->seqNr = 5;
-    writer_huge_p->seqNr = 5;
-    // wait 110ms
-    usleep (160000);
-
-    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-        DDS_TestQosReliabilityBasicReliableAckDataWriter_write (g_TestQosReliabilityBasicReliableAck_writer, &testQosReliabilityBasicReliableAck_pub, NULL);
-        DDS_TestQosReliabilitySmallReliableAckDataWriter_write (g_TestQosReliabilitySmallReliableAck_writer, &testQosReliabilitySmallReliableAck_pub, NULL);
-        DDS_TestQosReliabilityBigReliableAckDataWriter_write (g_TestQosReliabilityBigReliableAck_writer, &testQosReliabilityBigReliableAck_pub, NULL);
-        DDS_TestQosReliabilityHugeReliableAckDataWriter_write (g_TestQosReliabilityHugeReliableAck_writer, &testQosReliabilityHugeReliableAck_pub, NULL);
-    }
-    usleep(10);
-
-    for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
-        assert( writer_basic_p->samplesToKeep[i].seqNr == i+5 );
-        assert( writer_small_p->samplesToKeep[i].seqNr == i+5 );
-        assert( writer_big_p->samplesToKeep[i].seqNr == i+5 );
-        assert( writer_huge_p->samplesToKeep[i].seqNr == i+5 );
-
-        assert( writer_basic_p->samplesToKeep[i].isUsed != 0 );
-        assert( writer_small_p->samplesToKeep[i].isUsed != 0 );
-        assert( writer_big_p->samplesToKeep[i].isUsed != 0 );
-        assert( writer_huge_p->samplesToKeep[i].isUsed != 0 );
-    }
-
-    // dequeing from acknowledgement-queue after acknowledgement of samples
     sleep(3);  // wait until history is in the desired state
     clean_DataWriter_samplesToKeep();
-    clean_DataWriter_SeqNrs();
     clean_DataReader_History();
+    clean_DataReader_History_MissingSamplesQueue_missingSeqNrsByLoc();
+    clean_DataReader_History_MissingSamplesQueue_HighestSeqNrbyLoc();
+#endif
 
+
+    // dequeing from acknowledgement-queue after acknowledgement of samples
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
         DDS_TestQosReliabilityBasicReliableAckDataWriter_write (g_TestQosReliabilityBasicReliableAck_writer, &testQosReliabilityBasicReliableAck_pub, NULL);
-        usleep(500000);
+        usleep(300000);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
@@ -300,7 +192,7 @@ gettimeofday (&start, NULL);
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
         DDS_TestQosReliabilitySmallReliableAckDataWriter_write (g_TestQosReliabilitySmallReliableAck_writer, &testQosReliabilitySmallReliableAck_pub, NULL);
-        usleep(500000);
+        usleep(300000);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
@@ -310,7 +202,7 @@ gettimeofday (&start, NULL);
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
         DDS_TestQosReliabilityBigReliableAckDataWriter_write (g_TestQosReliabilityBigReliableAck_writer, &testQosReliabilityBigReliableAck_pub, NULL);
-        usleep(500000);
+        usleep(300000);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
@@ -320,12 +212,48 @@ gettimeofday (&start, NULL);
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
         DDS_TestQosReliabilityHugeReliableAckDataWriter_write (g_TestQosReliabilityHugeReliableAck_writer, &testQosReliabilityHugeReliableAck_pub, NULL);
-        usleep(500000);
+        usleep(300000);
     }
 
     for (int i=0; i<SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; i++){
             assert( writer_huge_p->samplesToKeep[i].seqNr == 0 );
             assert( writer_huge_p->samplesToKeep[i].isUsed == 0 );
+    }
+
+
+    // sending of proper data
+    sleep(1);  // wait until history is in the desired state
+    clean_DataWriter_samplesToKeep();
+    clean_DataReader_History();
+    clean_DataReader_History_MissingSamplesQueue_missingSeqNrsByLoc();
+    clean_DataReader_History_MissingSamplesQueue_HighestSeqNrbyLoc();
+
+
+    for (int i=0; i<5; i++){
+        testQosReliabilityBasicReliableAck_pub.number = i;
+        DDS_TestQosReliabilityBasicReliableAckDataWriter_write (g_TestQosReliabilityBasicReliableAck_writer, &testQosReliabilityBasicReliableAck_pub, NULL);
+        usleep(100000);
+        retBasic = DDS_TestQosReliabilityBasicReliableAckDataReader_take_next_sample (g_TestQosReliabilityBasicReliableAck_reader, &testQosReliabilityBasicReliableAck_sub_p, NULL);
+
+        testQosReliabilitySmallReliableAck_pub.number = 10+i;
+        DDS_TestQosReliabilitySmallReliableAckDataWriter_write (g_TestQosReliabilitySmallReliableAck_writer, &testQosReliabilitySmallReliableAck_pub, NULL);
+        usleep(100000);
+        retSmall = DDS_TestQosReliabilitySmallReliableAckDataReader_take_next_sample (g_TestQosReliabilitySmallReliableAck_reader, &testQosReliabilitySmallReliableAck_sub_p, NULL);
+
+        testQosReliabilityBigReliableAck_pub.number = 20+i;
+        DDS_TestQosReliabilityBigReliableAckDataWriter_write (g_TestQosReliabilityBigReliableAck_writer, &testQosReliabilityBigReliableAck_pub, NULL);
+        usleep(100000);
+        retBig = DDS_TestQosReliabilityBigReliableAckDataReader_take_next_sample (g_TestQosReliabilityBigReliableAck_reader, &testQosReliabilityBigReliableAck_sub_p, NULL);
+
+        testQosReliabilityHugeReliableAck_pub.number = 30+i;
+        DDS_TestQosReliabilityHugeReliableAckDataWriter_write (g_TestQosReliabilityHugeReliableAck_writer, &testQosReliabilityHugeReliableAck_pub, NULL);
+        usleep(100000);
+        retHuge = DDS_TestQosReliabilityHugeReliableAckDataReader_take_next_sample (g_TestQosReliabilityHugeReliableAck_reader, &testQosReliabilityHugeReliableAck_sub_p, NULL);
+
+        assert( testQosReliabilityBasicReliableAck_sub_p->number == i);
+        assert( testQosReliabilitySmallReliableAck_sub_p->number == 10+i );
+        assert( testQosReliabilityBigReliableAck_sub_p->number == 20+i );
+        assert( testQosReliabilityHugeReliableAck_sub_p->number == 30+i );
     }
 
 

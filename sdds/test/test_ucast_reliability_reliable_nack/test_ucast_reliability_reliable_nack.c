@@ -72,6 +72,7 @@ void clean_DataReader_History() {
     reader_huge_p->history.in_needle = 0;
     reader_huge_p->history.out_needle = depth;
 
+
     for (int i=0; i<SDDS_QOS_HISTORY_DEPTH; i++) {
         reader_basic_p->history.samples[i].instance = NULL;
         reader_basic_p->history.samples[i].seqNr = 0;
@@ -147,7 +148,7 @@ int main()
     rc_t retBig = SDDS_RT_NODATA;
     rc_t retHuge = SDDS_RT_NODATA;
 
-/*
+
 #ifdef TEST_HAS_MULTICAST
 gettimeofday (&start, NULL);
     while (!allSubsFound){
@@ -173,16 +174,39 @@ gettimeofday (&start, NULL);
             return SDDS_RT_FAIL;
         }
 
-        usleep (500000);
+        usleep (100000);
     }
 #endif
-*/
+
+
+    // TEST 1: Proper detection of missing Samples
+    clean_DataWriter_samplesToKeep();
+    clean_DataWriter_SeqNrs();
+    clean_DataReader_History();
+    clean_DataReader_History_MissingSamplesQueue_HighestSeqNrbyLoc();
+    clean_DataReader_History_MissingSamplesQueue_missingSeqNrsByLoc();
+
 
     DDS_TestQosReliabilityBasicReliableNackDataWriter_write (g_TestQosReliabilityBasicReliableNack_writer, &testQosReliabilityBasicReliableNack_pub, NULL);
 
-    sleep(1);
+    writer_basic_p->seqNr = 4;
+    DDS_TestQosReliabilityBasicReliableNackDataWriter_write (g_TestQosReliabilityBasicReliableNack_writer, &testQosReliabilityBasicReliableNack_pub, NULL);
+    usleep(100000);
 
-    retBasic = DDS_TestQosReliabilityBasicReliableNackDataReader_take_next_sample (g_TestQosReliabilityBasicReliableNack_reader, &testQosReliabilityBasicReliableNack_sub_p, NULL);
+
+    for (int index = 0; index < SDDS_QOS_RELIABILITY_RELIABLE_SAMPLES_SIZE; index++){
+        if (reader_basic_p->history.missingSeqNrSlotIsUsed[0][index] == 1){
+            assert( reader_basic_p->history.missingSeqNrsByLoc[0][index] == 3 - index );
+        }
+    }
+
+
+    // TEST 2: Proper resending of missing samples
+
+
+
+    // TEST 3: Proper data delivery
+
 
     //
     printf ("OK\n");
