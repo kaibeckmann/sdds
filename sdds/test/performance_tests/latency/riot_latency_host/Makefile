@@ -105,8 +105,9 @@ endif
 include ../../../../sdds.mk
 
 # depended/ generated objects
-DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/thermostat-ds.o
-IMPL_DEPEND_OBJS = $(SDDS_OBJDIR)/riot_6lowpan_coord_sdds_impl.o
+DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/latency-ds.o
+DATA_DEPEND_OBJS += $(SDDS_OBJDIR)/latency_echo-ds.o
+IMPL_DEPEND_OBJS = $(SDDS_OBJDIR)/riot_latency_host_sdds_impl.o
 
 # driver
 # DRIVER_DEPEND_OBJS += $(SDDS_OBJDIR)/sdds-driver-$(SDDS_ARCH)-LED.o
@@ -134,6 +135,7 @@ $(SDDS_OBJDIR):
 	mkdir $(SDDS_OBJDIR)
 
 clean2:
+	rm -f $(DATA_DEPEND_SRCS)
 	rm -f $(IMPL_DEPEND_SRCS)
 	rm -f $(SDDS_CONSTANTS_FILE)
 	rm -f $(LOCAL_CONSTANTS)

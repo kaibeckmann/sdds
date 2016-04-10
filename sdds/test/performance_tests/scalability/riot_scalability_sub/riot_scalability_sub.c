@@ -5,11 +5,12 @@
 int main()
 {
     DDS_ReturnCode_t ret;
+    Log_info("Subscriber started\n");
+    Log_setLvl(5);
 
     if (sDDS_init() == SDDS_RT_FAIL) {
     	return 1;
     }
-    Log_setLvl(5);
 
     static Thermostat thermostat_sub;
     Thermostat *thermostat_sub_p = &thermostat_sub;

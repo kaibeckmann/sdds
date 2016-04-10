@@ -5,6 +5,7 @@
 int main()
 {
     DDS_ReturnCode_t ret;
+    Log_info("Publisher started\n");
     Log_setLvl(5);
 
     if (sDDS_init() == SDDS_RT_FAIL) {
