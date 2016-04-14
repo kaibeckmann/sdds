@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <xtimer.h>
+#include <thread.h>
 #include "riot_throughput_sub_sdds_impl.h"
 
 #define DURATION_SEC THROUGHPUT_DURATION * 60
@@ -44,16 +45,19 @@ int main()
         }
         now_time = xtimer_now64();
         duration = now_time - start_time;
+		thread_yield();
     }
 
 
     double bits_recv = bytes_received * 8.0;
-    double mbits_recv = bits_recv / 1000000.0;
+	//double mbits_recv = bits_recv / 1000000.0;
+	// change to Kbits for 6LoWPAN
+    double mbits_recv = bits_recv / 1000.0;
     double dur_sec = (double) DURATION_SEC;
     
     double mbps = mbits_recv / dur_sec;
 
-    fprintf(stderr, "Bytes, Mbit/s\n%016llu, %.2lf", bytes_received, mbps);
+    fprintf(stderr, "Bytes, Kbit/s\n%016llu, %.2lf", bytes_received, mbps);
     fprintf(stderr, "END\n");
 
     return 0;

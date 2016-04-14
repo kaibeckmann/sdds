@@ -14,7 +14,7 @@
 <!--
     <define name = "DISCOVERY_UNICAST_SUBSCRIPTION"/>
 -->
-    <define name = "SDDS_6LOWPAN_CHANNEL" value = "26"/>
+    <define name = "SDDS_6LOWPAN_CHANNEL" value = "20"/>
     <define name = "SDDS_6LOWPAN_PANID" value = "0xbabe"/>
     <define name = "TRANSPORT_IPV6_SDDS_PORT" value = "23234"/>
     <define name = "TRANSPORT_IPV6_SDDS_BUILTIN_MULTICAST_PORT_OFF" value = "50"/>

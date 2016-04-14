@@ -2,6 +2,7 @@
 #include <sys/time.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <thread.h>
 #include "riot_throughput_pub_sdds_impl.h"
 
 #define SEC_USEC 1000000
@@ -19,7 +20,10 @@ int main()
     static Throughput throughput_pub;
 
     uint64_t msg_size_bit = THROUGHPUT_MSG_SIZE * 8;
-    uint64_t max_delay = ((SEC_USEC * msg_size_bit)  / (THROUGHPUT_MAX_MBIT * 1000000));
+	//uint64_t max_delay = ((SEC_USEC * msg_size_bit)  / (THROUGHPUT_MAX_MBIT * 
+	//1000000));
+	// change to kbit for 6LoWPAN
+    uint64_t max_delay = ((SEC_USEC * msg_size_bit)  / (THROUGHPUT_MAX_MBIT * 1000));
 
     memset(&throughput_pub, 'x', THROUGHPUT_MSG_SIZE);
 
