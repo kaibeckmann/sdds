@@ -15,7 +15,7 @@
 
     <define name = "SDDS_6LOWPAN_RPL_ENABLED" />
     <!-- SDDS_6LOWPAN_RPL_ROOT_NODE_ADDR only one node in network-->
-    <define name = "SDDS_6LOWPAN_RPL_ROOT_NODE_ADDR" value = "2001:db8::1/64"/>
+    <!--<define name = "SDDS_6LOWPAN_RPL_ROOT_NODE_ADDR" value = "2001:db8::1/64"/>-->
 
     <define name = "SDDS_NET_MAX_BUF_SIZE" value = "128"/>
     <define name = "SDDS_QOS_HISTORY_DEPTH" value = "3"/>

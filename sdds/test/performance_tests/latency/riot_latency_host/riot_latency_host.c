@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <xtimer.h>
 #include <stdint.h>
+#include <thread.h>
 #include "riot_latency_host_sdds_impl.h"
 
 int main()
@@ -18,13 +19,25 @@ int main()
     static LatencyEcho latencyEcho_sub;
     LatencyEcho* latencyEcho_sub_p = &latencyEcho_sub;
 
-    static uint64_t start_time;
-    static uint64_t end_time;
-    static uint64_t duration;
+    static uint32_t start_time;
+    static uint32_t end_time;
+    static uint32_t duration;
     static int msg_count = 0;
 
+    static uint32_t t1;
+    static uint32_t t2;
+    static uint32_t t3;
+
+    t1 = xtimer_now();
+    t2 = xtimer_now();
+
+
+    fprintf(stderr, "START t1 %lu t2 %lu : %lu\n", t1, t2, (t2-t1)); 
+    fprintf(stderr, "# msg_count;start_time;end_time;one_trip_time\n" ); 
+    
+
     while (msg_count < LATENCY_MSG_COUNT+1) {
-        start_time = xtimer_now64();
+        start_time = xtimer_now();
         latency_pub.time = start_time;
 
         ret = DDS_LatencyDataWriter_write (g_Latency_writer, &latency_pub, NULL);
@@ -45,6 +58,7 @@ int main()
                 skip = true;
                 break;
             }
+            thread_yield();
         } while (ret != DDS_RETCODE_OK); 
 
         // make sure it is the right message
@@ -54,11 +68,14 @@ int main()
 
                 // skip first sample
                 if (msg_count != 0) {
-                    fprintf(stderr, "%ld\n", duration); 
+                    fprintf(stderr, "EVAL %lu;%lu;%lu;%lu\n", msg_count, start_time, end_time, duration); 
                 }
                 msg_count++;
         }
     }
+
+    t3 = xtimer_now();
+    fprintf(stderr, "STOP t3 %lu - duration %lu\n", t3, (t3-t2)); 
 
     return 0;
 }
