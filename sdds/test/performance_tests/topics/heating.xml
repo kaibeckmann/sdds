@@ -1,0 +1,13 @@
+<domain id = "1">
+    <topic name = "thermometer" domain = "1" id = "6">
+        The measured room temperature in celsius.
+        <attribute name = "temp_c" type = "DDS_short">temperature in celsius</attribute>
+        <config type = "qos_history" depth = "5" />
+    </topic>
+
+    <topic name = "thermostat" domain = "1" id = "7">
+        The desired room temperature in celsius.
+        <attribute name = "temp_c" type = "DDS_short">temperature in celsius</attribute>
+        <config type = "qos_history" depth = "5" />
+    </topic>
+</domain>

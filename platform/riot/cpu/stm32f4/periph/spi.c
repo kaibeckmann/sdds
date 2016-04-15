@@ -15,6 +15,7 @@
  *
  * @author      Peter Kietzmann <peter.kietzmann@haw-hamburg.de>
  * @author      Fabian Nack <nack@inf.fu-berlin.de>
+ * @author      Hauke Petersen <hauke.petersen@fu-berlin.de>
  *
  * @}
  */
@@ -22,11 +23,11 @@
 
 #include "board.h"
 #include "cpu.h"
+#include "mutex.h"
 #include "periph/spi.h"
 #include "periph_conf.h"
 #include "thread.h"
 #include "sched.h"
-#include "vtimer.h"
 
 #define ENABLE_DEBUG (0)
 #include "debug.h"
@@ -34,13 +35,47 @@
 /* guard this file in case no SPI device is defined */
 #if SPI_NUMOF
 
+/**
+ * @brief Data-structure holding the state for a SPI device
+ */
 typedef struct {
     char(*cb)(char data);
 } spi_state_t;
 
 static inline void irq_handler_transfer(SPI_TypeDef *spi, spi_t dev);
 
+/**
+ * @brief Reserve memory for saving the SPI device's state
+ */
 static spi_state_t spi_config[SPI_NUMOF];
+
+/* static bus div mapping */
+static const uint8_t spi_bus_div_map[SPI_NUMOF] = {
+#if SPI_0_EN
+    [SPI_0] = SPI_0_BUS_DIV,
+#endif
+#if SPI_1_EN
+    [SPI_1] = SPI_1_BUS_DIV,
+#endif
+#if SPI_2_EN
+    [SPI_2] = SPI_2_BUS_DIV,
+#endif
+};
+
+/**
+ * @brief Array holding one pre-initialized mutex for each SPI device
+ */
+static mutex_t locks[] =  {
+#if SPI_0_EN
+    [SPI_0] = MUTEX_INIT,
+#endif
+#if SPI_1_EN
+    [SPI_1] = MUTEX_INIT,
+#endif
+#if SPI_2_EN
+    [SPI_2] = MUTEX_INIT
+#endif
+};
 
 int spi_init_master(spi_t dev, spi_conf_t conf, spi_speed_t speed)
 {
@@ -49,19 +84,19 @@ int spi_init_master(spi_t dev, spi_conf_t conf, spi_speed_t speed)
 
     switch (speed) {
         case SPI_SPEED_100KHZ:
-            return -2;          /* not possible for stm32f4 */
+            return -2;          /* not possible for stm32f4, APB2 minimum is 328 kHz */
             break;
         case SPI_SPEED_400KHZ:
-            speed_devider = 7;  /* makes 656 kHz */
+            speed_devider = 0x05 + spi_bus_div_map[dev];  /* makes 656 kHz */
             break;
         case SPI_SPEED_1MHZ:
-            speed_devider = 6;  /* makes 1.3 MHz */
+            speed_devider = 0x04 + spi_bus_div_map[dev];  /* makes 1.3 MHz */
             break;
         case SPI_SPEED_5MHZ:
-            speed_devider = 4;  /* makes 5.3 MHz */
+            speed_devider = 0x02 + spi_bus_div_map[dev];  /* makes 5.3 MHz */
             break;
         case SPI_SPEED_10MHZ:
-            speed_devider = 3;  /* makes 10.5 MHz */
+            speed_devider = 0x01 + spi_bus_div_map[dev];  /* makes 10.5 MHz */
             break;
         default:
             return -1;
@@ -257,6 +292,24 @@ int spi_conf_pins(spi_t dev)
     return 0;
 }
 
+int spi_acquire(spi_t dev)
+{
+    if ((unsigned int)dev >= SPI_NUMOF) {
+        return -1;
+    }
+    mutex_lock(&locks[dev]);
+    return 0;
+}
+
+int spi_release(spi_t dev)
+{
+    if ((unsigned int)dev >= SPI_NUMOF) {
+        return -1;
+    }
+    mutex_unlock(&locks[dev]);
+    return 0;
+}
+
 int spi_transfer_byte(spi_t dev, char out, char *in)
 {
     SPI_TypeDef *spi_port;
@@ -281,10 +334,10 @@ int spi_transfer_byte(spi_t dev, char out, char *in)
             return -1;
     }
 
-    while (!(spi_port->SR & SPI_SR_TXE));
+    while (!(spi_port->SR & SPI_SR_TXE)) {}
     spi_port->DR = out;
 
-    while (!(spi_port->SR & SPI_SR_RXNE));
+    while (!(spi_port->SR & SPI_SR_RXNE)) {}
 
     if (in != NULL) {
         *in = spi_port->DR;
@@ -294,63 +347,6 @@ int spi_transfer_byte(spi_t dev, char out, char *in)
     }
 
     return 1;
-}
-
-int spi_transfer_bytes(spi_t dev, char *out, char *in, unsigned int length)
-{
-
-    int i, trans_ret, trans_bytes = 0;
-    char in_temp;
-
-    for (i = 0; i < length; i++) {
-        if (out) {
-            trans_ret = spi_transfer_byte(dev, out[i], &in_temp);
-        }
-        else {
-            trans_ret = spi_transfer_byte(dev, 0, &in_temp);
-        }
-        if (trans_ret < 0) {
-            return -1;
-        }
-        if (in != NULL) {
-            in[i] = in_temp;
-        }
-        trans_bytes++;
-    }
-
-    return trans_bytes++;
-}
-
-int spi_transfer_reg(spi_t dev, uint8_t reg, char out, char *in)
-{
-    int trans_ret;
-
-    trans_ret = spi_transfer_byte(dev, reg, in);
-    if (trans_ret < 0) {
-        return -1;
-    }
-    trans_ret = spi_transfer_byte(dev, out, in);
-    if (trans_ret < 0) {
-        return -1;
-    }
-
-    return 1;
-}
-
-int spi_transfer_regs(spi_t dev, uint8_t reg, char *out, char *in, unsigned int length)
-{
-    int trans_ret;
-
-    trans_ret = spi_transfer_byte(dev, reg, in);
-    if (trans_ret < 0) {
-        return -1;
-    }
-    trans_ret = spi_transfer_bytes(dev, out, in, length);
-    if (trans_ret < 0) {
-        return -1;
-    }
-
-    return trans_ret;
 }
 
 void spi_transmission_begin(spi_t dev, char reset_val)
@@ -401,19 +397,19 @@ void spi_poweroff(spi_t dev)
     switch (dev) {
 #if SPI_0_EN
         case SPI_0:
-            while (SPI_0_DEV->SR & SPI_SR_BSY);
+            while (SPI_0_DEV->SR & SPI_SR_BSY) {}
             SPI_0_CLKDIS();
             break;
 #endif
 #if SPI_1_EN
         case SPI_1:
-            while (SPI_1_DEV->SR & SPI_SR_BSY);
+            while (SPI_1_DEV->SR & SPI_SR_BSY) {}
             SPI_1_CLKDIS();
             break;
 #endif
 #if SPI_2_EN
         case SPI_2:
-            while (SPI_2_DEV->SR & SPI_SR_BSY);
+            while (SPI_2_DEV->SR & SPI_SR_BSY) {}
             SPI_2_CLKDIS();
             break;
 #endif

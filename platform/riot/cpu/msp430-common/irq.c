@@ -10,7 +10,7 @@
  * @ingroup     cpu
 * @{
  *
- * @file        irq.c
+ * @file
  * @brief       ISR related functions
  *
  * @author      Kaspar Schleiser <kaspar@schleiser.de>
@@ -22,35 +22,44 @@
 #include "irq.h"
 #include "cpu.h"
 
-unsigned int disableIRQ(void)
+volatile int __irq_is_in = 0;
+
+char __isr_stack[MSP430_ISR_STACK_SIZE];
+
+unsigned int irq_disable(void)
 {
     unsigned int state;
     __asm__("mov.w r2,%0" : "=r"(state));
     state &= GIE;
 
     if (state) {
-        dINT();
+        __disable_irq();
     }
 
     return state;
 }
 
-unsigned int enableIRQ(void)
+unsigned int irq_enable(void)
 {
     unsigned int state;
     __asm__("mov.w r2,%0" : "=r"(state));
     state &= GIE;
 
     if (!state) {
-        eINT();
+        __enable_irq();
     }
 
     return state;
 }
 
-void restoreIRQ(unsigned int state)
+void irq_restore(unsigned int state)
 {
     if (state) {
-        eINT();
+        __enable_irq();
     }
+}
+
+int irq_is_in(void)
+{
+    return __irq_is_in;
 }

@@ -1,3 +1,4 @@
-INCLUDES += -I$(RIOTBASE)/cpu/arm7_common/include/
+# Target architecture for the build. Use arm-none-eabi if you are unsure.
+export TARGET_ARCH ?= arm-none-eabi
 
-export UNDEF += $(BINDIR)arm7_common/syscalls.o
+INCLUDES += -I$(RIOTBASE)/cpu/arm7_common/include/

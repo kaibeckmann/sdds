@@ -34,7 +34,6 @@
 
 #include <stdio.h>
 
-#include "kernel.h"
 
 #define ENABLE_DEBUG (0)
 #include "debug.h"
@@ -98,10 +97,10 @@ static void rtc_irq_handler(uint8_t irq_num)
     (void) irq_num; /* == PIC_NUM_RTC */
 
     uint8_t c = x86_cmos_read(RTC_REG_C);
-    DEBUG("RTC: c = 0x%02x, IRQ=%u, A=%u, P=%u, U=%u\n", c, c & RTC_REG_C_IRQ ? 1 : 0,
-                                                            c & RTC_REG_C_IRQ_ALARM ? 1 : 0,
-                                                            c & RTC_REG_C_IRQ_PERIODIC ? 1 : 0,
-                                                            c & RTC_REG_C_IRQ_UPDATE ? 1 : 0);
+    DEBUG("RTC: c = 0x%02x, IRQ=%u, A=%u, P=%u, U=%u\n", c, (c & RTC_REG_C_IRQ) ? 1 : 0,
+                                                            (c & RTC_REG_C_IRQ_ALARM) ? 1 : 0,
+                                                            (c & RTC_REG_C_IRQ_PERIODIC) ? 1 : 0,
+                                                            (c & RTC_REG_C_IRQ_UPDATE) ? 1 : 0);
     if (!(c & RTC_REG_C_IRQ)) {
         return;
     }
@@ -162,7 +161,7 @@ bool x86_rtc_read(x86_rtc_data_t *dest)
         return false;
     }
 
-    unsigned old_status = disableIRQ();
+    unsigned old_status = irq_disable();
 
     while (is_update_in_progress()) {
         asm volatile ("pause");
@@ -194,7 +193,7 @@ bool x86_rtc_read(x86_rtc_data_t *dest)
         dest->hour = ((dest->hour & 0x7F) + 12) % 24;
     }
 
-    restoreIRQ(old_status);
+    irq_restore(old_status);
     return true;
 }
 
@@ -204,7 +203,7 @@ bool x86_rtc_set_alarm(const x86_rtc_data_t *when, uint32_t msg_content, kernel_
         return false;
     }
 
-    unsigned old_status = disableIRQ();
+    unsigned old_status = irq_disable();
     bool result;
     if (target_pid == KERNEL_PID_UNDEF) {
         result = true;
@@ -234,7 +233,7 @@ bool x86_rtc_set_alarm(const x86_rtc_data_t *when, uint32_t msg_content, kernel_
         }
     }
     rtc_irq_handler(0);
-    restoreIRQ(old_status);
+    irq_restore(old_status);
     return result;
 }
 
@@ -244,7 +243,7 @@ bool x86_rtc_set_periodic(uint8_t hz, uint32_t msg_content, kernel_pid_t target_
         return false;
     }
 
-    unsigned old_status = disableIRQ();
+    unsigned old_status = irq_disable();
     bool result;
     if (target_pid == KERNEL_PID_UNDEF || hz == RTC_REG_A_HZ_OFF) {
         result = true;
@@ -266,7 +265,7 @@ bool x86_rtc_set_periodic(uint8_t hz, uint32_t msg_content, kernel_pid_t target_
         }
     }
     rtc_irq_handler(0);
-    restoreIRQ(old_status);
+    irq_restore(old_status);
     return result;
 }
 
@@ -276,7 +275,7 @@ bool x86_rtc_set_update(uint32_t msg_content, kernel_pid_t target_pid, bool allo
         return false;
     }
 
-    unsigned old_status = disableIRQ();
+    unsigned old_status = irq_disable();
     bool result;
     if (target_pid == KERNEL_PID_UNDEF) {
         result = true;
@@ -294,6 +293,6 @@ bool x86_rtc_set_update(uint32_t msg_content, kernel_pid_t target_pid, bool allo
         }
     }
     rtc_irq_handler(0);
-    restoreIRQ(old_status);
+    irq_restore(old_status);
     return result;
 }

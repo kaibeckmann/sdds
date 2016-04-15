@@ -283,13 +283,14 @@ static bool add_pages_to_pool(uint64_t start, uint64_t end)
 
 static void init_free_pages(void)
 {
-    printf("Kernel memory: %p - %p\r\n", &_kernel_memory_start, &_kernel_memory_end);
-    printf("  .text:   %p - %p\r\n", &_section_text_start, &_section_text_end);
-    printf("  .rodata: %p - %p\r\n", &_section_rodata_start, &_section_rodata_end);
-    printf("  .data:   %p - %p\r\n", &_section_data_start, &_section_data_end);
-    printf("  .bss:    %p - %p\r\n", &_section_bss_start, &_section_bss_end);
-    printf("Unmapped memory: %p - %p\r\n", &_kernel_memory_end, &_heap_start);
-    printf("Heap start: %p\r\n", &_heap_start);
+    printf("Kernel memory: %p - %p\r\n",
+           (void *)&_kernel_memory_start, (void *)&_kernel_memory_end);
+    printf("  .text:   %p - %p\r\n", (void *)&_section_text_start, (void *)&_section_text_end);
+    printf("  .rodata: %p - %p\r\n", (void *)&_section_rodata_start, (void *)&_section_rodata_end);
+    printf("  .data:   %p - %p\r\n", (void *)&_section_data_start, (void *)&_section_data_end);
+    printf("  .bss:    %p - %p\r\n", (void *)&_section_bss_start, (void *)&_section_bss_end);
+    printf("Unmapped memory: %p - %p\r\n", (void *)&_kernel_memory_end, (void *)&_heap_start);
+    printf("Heap start: %p\r\n", (void *)&_heap_start);
 
     unsigned long cnt = 0;
     uint64_t start, len;
@@ -371,13 +372,13 @@ static void pagefault_handler(uint8_t intr_num, struct x86_pushad *orig_ctx, uns
     }
 #endif
     else if (error_code & PF_EC_P) {
-        printf("Page fault: access violation while %s present page.\n", error_code & PF_EC_W ? "writing to" : "reading from");
+        printf("Page fault: access violation while %s present page.\n", (error_code & PF_EC_W) ? "writing to" : "reading from");
         x86_print_registers(orig_ctx, error_code);
         puts("Halting.");
         x86_hlt();
     }
     else {
-        printf("Page fault: access violation while %s non-present page.\n", error_code & PF_EC_W ? "writing to" : "reading from");
+        printf("Page fault: access violation while %s non-present page.\n", (error_code & PF_EC_W) ? "writing to" : "reading from");
         x86_print_registers(orig_ctx, error_code);
         puts("Halting.");
         x86_hlt();

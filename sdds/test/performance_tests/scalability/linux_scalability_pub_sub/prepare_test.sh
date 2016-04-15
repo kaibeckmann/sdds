@@ -1,0 +1,1 @@
+../../scripts/prepare_scalability_test.sh

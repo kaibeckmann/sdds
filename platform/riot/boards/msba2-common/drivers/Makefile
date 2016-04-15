@@ -1,4 +1,3 @@
-MODULE =$(BOARD)_base
-include $(RIOTBOARD)/$(BOARD)/Makefile.include
+MODULE = msba2-common-drivers
 
 include $(RIOTBASE)/Makefile.base

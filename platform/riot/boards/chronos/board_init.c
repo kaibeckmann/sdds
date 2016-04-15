@@ -16,7 +16,7 @@
  * @brief       eZ430-chronos board initialization
  *
  * @author      Oliver Hahm <oliver.hahm@inria.fr>
- * @author      Ludwig Ortmann <ludwig.ortmann@fu-berlin.de>
+ * @author      Ludwig Knüpfer <ludwig.knuepfer@fu-berlin.de>
  *
  */
 
@@ -93,7 +93,7 @@ void cc430_cpu_init(void)
     // Disable write-access to port mapping registers:
     PMAPPWD = 0;
     // Re-enable all interrupts
-    enableIRQ();
+    irq_enable();
 
 }
 

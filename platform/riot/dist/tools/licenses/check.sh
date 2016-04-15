@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright 2014 Ludwig Ortmann <ludwig.ortmann@fu-berlin.de>
+# Copyright 2014 Ludwig Knüpfer <ludwig.knuepfer@fu-berlin.de>
 #
 # This file is subject to the terms and conditions of the GNU Lesser
 # General Public License v2.1. See the file LICENSE in the top level
@@ -12,6 +12,9 @@ LICENSEDIR="${CHECKROOT}/patterns"
 OUTPUT="${CHECKROOT}/out"
 UNKNOWN="${OUTPUT}/unknown"
 TMP="${CHECKROOT}/.tmp"
+
+# Needed for compatibility with BSD sed
+TAB_CHAR="$(printf '\t')"
 
 # prepare
 ROOT=$(git rev-parse --show-toplevel)
@@ -63,7 +66,7 @@ fi
 # categorize files
 for FILE in ${FILES}; do
     FAIL=1
-    head -100 "${ROOT}/${FILE}" | sed -e 's/[\/\*\t]/ /g' -e 's/$/ /' | tr -d '\r\n' | sed -e 's/  */ /g' > "${TMP}"
+    head -100 "${ROOT}/${FILE}" | sed -e 's/[\/\*'"${TAB_CHAR}"']/ /g' -e 's/$/ /' | tr -d '\r\n' | sed -e 's/  */ /g' > "${TMP}"
     for LICENSE in ${LICENSES}; do
         if pcregrep -q -f "${LICENSEDIR}/${LICENSE}" "${TMP}"; then
             echo "${FILE}" >> "${OUTPUT}/${LICENSE}"

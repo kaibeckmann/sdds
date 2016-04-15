@@ -34,7 +34,6 @@
 #include "x86_threading.h"
 #include "cpu.h"
 #include "irq.h"
-#include "kernel_internal.h"
 #include "ucontext.h"
 #include "sched.h"
 #include "stdbool.h"
@@ -55,25 +54,27 @@ static kernel_pid_t fpu_owner = KERNEL_PID_UNDEF;
 
 //static ucontext_t *cur_ctx, *isr_ctx;
 
-int inISR(void)
+static struct x86_fxsave initial_fpu_state;
+
+int irq_is_in(void)
 {
     return x86_in_isr;
 }
 
-unsigned disableIRQ(void)
+unsigned irq_disable(void)
 {
     unsigned long eflags = x86_pushf_cli();
     return (eflags & X86_IF) != 0;
 }
 
-unsigned enableIRQ(void)
+unsigned irq_enable(void)
 {
     unsigned long eflags;
     asm volatile ("pushf; pop %0; sti" : "=g"(eflags));
     return (eflags & X86_IF) != 0;
 }
 
-void restoreIRQ(unsigned state)
+void irq_restore(unsigned state)
 {
     if (state) {
         asm volatile ("sti");
@@ -83,7 +84,7 @@ void restoreIRQ(unsigned state)
     }
 }
 
-int inISR(void);
+int irq_is_in(void);
 
 static void __attribute__((noreturn)) isr_thread_yield(void)
 {
@@ -105,7 +106,7 @@ void thread_yield_higher(void)
         isr_thread_yield();
     }
 
-    unsigned old_intr = disableIRQ();
+    unsigned old_intr = irq_disable();
 
     x86_in_isr = true;
     isr_context.uc_stack.ss_sp = isr_stack;
@@ -113,7 +114,7 @@ void thread_yield_higher(void)
     makecontext(&isr_context, isr_thread_yield, 0);
     swapcontext((ucontext_t *) sched_active_thread->sp, &isr_context);
 
-    restoreIRQ(old_intr);
+    irq_restore(old_intr);
 }
 
 void isr_cpu_switch_context_exit(void)
@@ -140,7 +141,7 @@ void isr_cpu_switch_context_exit(void)
 
 void cpu_switch_context_exit(void)
 {
-    dINT();
+    irq_disable();
 
     if (!x86_in_isr) {
         x86_in_isr = true;
@@ -169,6 +170,7 @@ char *thread_stack_init(thread_task_func_t task_func, void *arg, void *stack_sta
     p->uc_stack.ss_size = stacksize;
     p->uc_link = &end_context;
     p->uc_context.flags |= X86_IF;
+    p->__fxsave = initial_fpu_state;
     makecontext(p, (makecontext_fun_t) task_func, 1, arg);
 
     return (char *) p;
@@ -203,7 +205,7 @@ static void fpu_used_interrupt(uint8_t intr_num, struct x86_pushad *orig_ctx, un
 
 static void x86_thread_exit(void)
 {
-    dINT();
+    irq_disable();
     if (fpu_owner == sched_active_pid) {
         fpu_owner = KERNEL_PID_UNDEF;
     }
@@ -218,6 +220,7 @@ void x86_init_threading(void)
     makecontext(&end_context, x86_thread_exit, 0);
 
     x86_interrupt_handler_set(X86_INT_NM, fpu_used_interrupt);
+    asm volatile ("fxsave (%0)" :: "r"(&initial_fpu_state));
 
     DEBUG("Threading initialized\n");
 }
