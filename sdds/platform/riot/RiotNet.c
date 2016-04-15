@@ -74,19 +74,40 @@
 rc_t
 _initMulticast(void);
 
+/**
+ * Initialises the unicast connection
+ */
 rc_t
 _initUnicast(void);
 
+/**
+ * adds a IPv6 address to the network interface.
+ * The address can be global, multicast or unique local
+ *
+ */
 rc_t
 _addIPv6Address(char* addr_str, ipv6_addr_t* addr_out, bool isMulticast, bool isGlobal, bool isUniqueLocal);
 
-void*
-_receiverThreadFunction(void* arg);
+/**
+ * sets the Tx Power of the transceiver in dBm
+ *
+ */
+rc_t
+_setTxPower(uint16_t);
+
 
 #ifdef SDDS_6LOWPAN_RPL_ENABLED
 rc_t
 _initRouting(void);
 #endif
+
+
+void*
+_receiverThreadFunction(void* arg);
+
+
+
+
 
 
 
@@ -246,6 +267,7 @@ rc_t
 _initUnicast(void) {
 	rc_t rc;
 
+#ifdef PLATFORM_RIOT_SDDS_IP_ADDRESS
     char ULA_addr[IPV6_ADDR_MAX_STR_LEN];
     strcpy(ULA_addr, SDDS_APP_ULA);
 
@@ -255,6 +277,7 @@ _initUnicast(void) {
     if (rc != SDDS_RT_OK) {
         Log_info("%s is not a Unqiue local address, skipping ...", ULA_addr);
     }
+#endif
 
 	// create unicast server socket
 	Log_debug("Create UDP unicast connection for port %d \n", TRANSPORT_IPV6_SDDS_PORT);
@@ -270,7 +293,7 @@ _initUnicast(void) {
     // create receive thread
     net.uniReceiveThreadPid = thread_create(stackReceiveThreadUnicast,
                                             sizeof(stackReceiveThreadUnicast),
-                                            THREAD_PRIORITY_MAIN,
+                                            THREAD_PRIORITY_MAIN -1,
                                             THREAD_CREATE_STACKTEST, //  flags
                                             _receiverThreadFunction,
                                             (void*) &para,
@@ -348,7 +371,7 @@ _initMulticast(void)  {
     // create receive thread
     net.multiReceiveThreadPid = thread_create(stackReceiveThreadMulticast,
                                             sizeof(stackReceiveThreadMulticast),
-                                            THREAD_PRIORITY_MAIN,
+                                            THREAD_PRIORITY_MAIN - 1,
                                             THREAD_CREATE_STACKTEST, //  flags
                                             _receiverThreadFunction,
                                             (void*) &para,
@@ -385,7 +408,7 @@ _addIPv6Address(char* addr_in, ipv6_addr_t* addr_out, bool isMulticast, bool isG
     char addr_str[(IPV6_ADDR_MAX_STR_LEN  + 4 + 1)];
     strcpy(addr_str, addr_in);
 
-    uint8_t flags;
+    uint8_t flags = 0;
     uint8_t prefix_len = ipv6_addr_split_prefix(addr_str);
 
     // parse IPv6 address
@@ -496,11 +519,11 @@ Network_init(void) {
 	msg_init_queue(_main_msg_queue, MAIN_QUEUE_SIZE);
 
 	kernel_pid_t ifs[GNRC_NETIF_NUMOF];
-        size_t numof = gnrc_netif_get(ifs);
+    size_t numof = gnrc_netif_get(ifs);
 
-        for (size_t i = 0; i < numof && i < GNRC_NETIF_NUMOF; i++) {
-            RiotNetHelper_netif_list(ifs[i]);
-        }
+        //for (size_t i = 0; i < numof && i < GNRC_NETIF_NUMOF; i++) {
+        //    RiotNetHelper_netif_list(ifs[i]);
+        //}
 
 	// get link local unicast address
 //	kernel_pid_t ifs[GNRC_NETIF_NUMOF];
@@ -527,14 +550,26 @@ Network_init(void) {
     // set pan id
     RiotNetHelper_set_nid(net.netif, SDDS_6LOWPAN_PANID);
 
+    // get pan id
 	uint16_t panId;
 	RiotNetHelper_get_nid(net.netif, &panId);
 	Log_debug("6LowPAN pan id: 0x%x\n", panId);
 
+    // get tx power
+    int16_t tx_power;
+    RiotNetHelper_get_tx_power(net.netif, &tx_power);
+    Log_debug("6LowPAN Tx power: %" PRIi16 " dBm\n", tx_power);
+
+#ifdef TRANSPORT_6LOWPAN_SDDS_TXPOWER
+    tx_power = TRANSPORT_6LOWPAN_SDDS_TXPOWER;
+    RiotNetHelper_set_tx_power(net.netif, tx_power);
+    RiotNetHelper_get_tx_power(net.netif, &tx_power);
+    Log_debug("6LowPAN set to Tx power: %" PRIi16 " dBm\n", tx_power);
+#endif
 
     char ipv6_addr[IPV6_ADDR_MAX_STR_LEN];
     ipv6_addr_to_str(ipv6_addr, &net.lua, IPV6_ADDR_MAX_STR_LEN);
-    printf("My LUA address is %s\n", ipv6_addr);
+    Log_debug("My LUA address is %s\n", ipv6_addr);
 
     // init rpl if configured
     #ifdef SDDS_6LOWPAN_RPL_ENABLED
@@ -564,14 +599,11 @@ Network_init(void) {
     sema_wait(&net.initThreadSema);
 #endif
 
-    ps();
-
-//	RiotNetHelper_printAllAddresses();
-
-    for (size_t i = 0; i < numof && i < GNRC_NETIF_NUMOF; i++) {
-        RiotNetHelper_netif_list(ifs[i]);
-    }
-
+// list processes
+    //ps();
+    
+// list all addresses on the interface
+//    RiotNetHelper_netif_list(net.netif->pid);
 
     sema_destroy(&net.initThreadSema);
 
