@@ -3,13 +3,32 @@
 #  language. See https://github.com/imatix/gsl for details.
 
 #   Resolve XML includes
-function resolve_topics ()
+function resolve_profiles ()
     for project.include
         if defined (include.filename)
-            my.topic_file = project.load_file (filename)
-            if defined (my.topic_file)
-                for my.topic_file.topic where count (project.role, role.topic = topic.name)
+            my.profile_file = project.load_file (filename)
+            if defined (my.profile_file)
+# if there are includes within the profile spec
+                for my.profile_file.include
+                    my.topic_file = project.load_file (filename)
+                    if defined (my.topic_file)
+                        move my.topic_file after include
+                    endif
+                endfor
+                for my.profile_file.role
+                    move role after include
+                endfor
+                for my.profile_file.topic where count (project.role, role.topic = topic.name)
                     move topic after include
+                endfor
+                for my.profile_file.datatype
+                    move datatype after include
+                endfor
+                for my.profile_file.enum
+                    move enum after include
+                endfor
+                for my.profile_file.struct
+                    move struct after include
                 endfor
             else
                 echo "E: error loading include file: $(filename): $(xml.error?)"
@@ -17,7 +36,7 @@ function resolve_topics ()
         endif
     endfor
 endfunction
-resolve_topics ()
+resolve_profiles ()
 
 project.description ?= "$(string.trim (project.?""):left)"
 project.iface ?= ""
@@ -42,6 +61,8 @@ project.generated_warning_header ?= "\
 .   gsl from "sdds_make_netbsd.gsl"
 .elsif project.os = "contiki"
 .   gsl from "sdds_make_contiki.gsl"
+.elsif project.os = "riot"
+.   gsl from "sdds_make_riot.gsl"
 .else
 .   echo "W: Cannot generate makefiles for '$(project.os)'. It's not supported by makefile generator!"
 .endif
