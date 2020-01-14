@@ -1,7 +1,7 @@
 #ifndef TRACE_H
 #define TRACE_H
 
-#include <local_constants.h>
+#include <sDDS.h>
 #include "SSW.h"
 #include "sdds_types.h"
 
